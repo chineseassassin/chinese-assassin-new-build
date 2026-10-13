@@ -1780,6 +1780,23 @@
       window._toastTimer = setTimeout(() => t.classList.remove('visible'), 2000);
     }
 
+    // --- 2B. Global Media Playback State Synchronizers (Hoisted) ---
+    function updateVideoPlayState(isPlaying) {
+      const vidPlayIcon = document.getElementById('caVidPlayIcon');
+      const vidPauseIcon = document.getElementById('caVidPauseIcon');
+      if (vidPlayIcon) vidPlayIcon.style.display = isPlaying ? 'none' : 'block';
+      if (vidPauseIcon) vidPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    }
+    window.updateVideoPlayState = updateVideoPlayState;
+
+    function updateAudioPlayIcon(isPlaying) {
+      const audioHeroPlayIcon = document.getElementById('audioHeroPlayIcon');
+      const audioHeroPauseIcon = document.getElementById('audioHeroPauseIcon');
+      if (audioHeroPlayIcon) audioHeroPlayIcon.style.display = isPlaying ? 'none' : 'block';
+      if (audioHeroPauseIcon) audioHeroPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    }
+    window.updateAudioPlayIcon = updateAudioPlayIcon;
+
     // --- 3. WebAudio Hydraulic & DJ FX Synthesizer ---
     let audioCtx = null;
     let sourceNode = null;
@@ -1966,6 +1983,8 @@
         }
 
         if (audioElem) {
+          audioElem.muted = false;
+          audioElem.volume = 1.0;
           const playPromise = audioElem.play();
           if (playPromise !== undefined) {
             playPromise.catch(err => {
@@ -2021,11 +2040,14 @@
       animateParallax();
 
       // Open Video & Part Doors (Small Play Button)
+      let isStartingVideo = false;
       function startPlayback() {
+        if (isStartingVideo) return;
+        isStartingVideo = true;
+        setTimeout(() => { isStartingVideo = false; }, 400);
+
         if (audioElem && !audioElem.paused) pauseAudioPlayback();
         lastPlayTime = Date.now();
-        initWebAudio(video);
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         playHydraulicSound('open');
         document.body.classList.add('in-playback-mode');
 
@@ -2042,14 +2064,23 @@
           laser.classList.add('ignite');
         }
 
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(function (err) {
-            console.warn("Autoplay block detected, retrying muted:", err);
-            video.muted = true;
-            video.play();
-          });
+        if (video) {
+          video.muted = false;
+          video.volume = 1.0;
+          initWebAudio(video);
+          if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(function (err) {
+              console.warn("Autoplay with sound prevented by browser policy, trying muted:", err);
+              video.muted = true;
+              video.play().catch(e => console.warn("Video play fallback error:", e));
+            });
+          }
         }
+        updateVideoPlayState(true);
         showToast('▶ LAUNCHING AURA FUNNY VIDEO');
       }
 
@@ -2073,15 +2104,13 @@
 
       // Small Play Button Hotspot (Direct trigger for Aura 2.0 video popup)
       if (upperPlayBtn) {
-        const triggerAuraVideo = (e) => {
+        upperPlayBtn.onclick = (e) => {
           if (e) {
             e.preventDefault();
             e.stopPropagation();
           }
           startPlayback();
         };
-        upperPlayBtn.addEventListener('click', triggerAuraVideo);
-        upperPlayBtn.addEventListener('pointerdown', triggerAuraVideo);
       }
 
       // Big Play Button Hotspot (Direct trigger for BG-1-BLUE PRINT Audio Player popup)
@@ -2626,7 +2655,13 @@
       video.onclick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        pausePlayback();
+        if (video.paused) {
+          video.play();
+          updateVideoPlayState(true);
+        } else {
+          video.pause();
+          updateVideoPlayState(false);
+        }
       };
 
       video.addEventListener('ended', () => {
@@ -2808,7 +2843,7 @@
         // Pause media if playing
         const pAudio = document.getElementById('caAudioElem');
         if (pAudio && !pAudio.paused) pAudio.pause();
-        const pVideo = document.getElementById('caVidElem');
+        const pVideo = document.getElementById('caVideo');
         if (pVideo && !pVideo.paused) pVideo.pause();
 
         playHydraulicSound('open');
