@@ -1983,8 +1983,10 @@
         }
 
         if (audioElem) {
-          audioElem.muted = false;
-          audioElem.volume = 1.0;
+          // Preserve user volume settings (do not force 100%)
+          if (audioVolSlider && audioVolSlider.value) {
+            audioElem.volume = parseFloat(audioVolSlider.value);
+          }
           const playPromise = audioElem.play();
           if (playPromise !== undefined) {
             playPromise.catch(err => {
@@ -2065,8 +2067,14 @@
         }
 
         if (video) {
-          video.muted = false;
-          video.volume = 1.0;
+          // Preserve user volume settings (do not force 100%)
+          if (vidVolSlider && vidVolSlider.value) {
+            video.volume = parseFloat(vidVolSlider.value);
+          }
+          // Only unmute if not explicitly muted by user
+          if (video.muted && vidMuteBtn && !vidMuteBtn.classList.contains('active-muted')) {
+            video.muted = false;
+          }
           initWebAudio(video);
           if (audioCtx && audioCtx.state === 'suspended') {
             audioCtx.resume();
@@ -2074,9 +2082,13 @@
           const playPromise = video.play();
           if (playPromise !== undefined) {
             playPromise.catch(function (err) {
-              console.warn("Autoplay with sound prevented by browser policy, trying muted:", err);
-              video.muted = true;
-              video.play().catch(e => console.warn("Video play fallback error:", e));
+              console.warn("Playback error diagnosed:", err.name, err.message);
+              // Only fall back to muted if browser autoplay policy explicitly blocked unmuted playback
+              if (err.name === 'NotAllowedError') {
+                console.warn("Autoplay with sound prevented by browser policy, attempting muted fallback");
+                video.muted = true;
+                video.play().catch(e => console.warn("Muted playback fallback error:", e));
+              }
             });
           }
         }
