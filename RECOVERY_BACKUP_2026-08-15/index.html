@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chinese Assassin | VIP Universe</title>
+    <!-- Google Fonts: Outfit, Cinzel Decorative, Space Grotesk, Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;600;800;900&family=Orbitron:wght@600;800;900&family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="portal-home-active">
+    <div id="app">
+      <!-- 3D Canvas Background for Dimensions / Visualizer -->
+      <canvas id="webgl-canvas"></canvas>
+
+      <!-- Site Global Header (when not on Portal Home) -->
+      <header class="site-header" id="siteHeader" style="display:none">
+        <div class="logo-wrapper">
+          <span class="logo-icon">⛩</span>
+          <h1 class="logo-text">CHINESE ASSASSIN</h1>
+          <span class="logo-badge">VIP UNIVERSE</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#portal-home" id="home-link" class="nav-link active">HOME</a>
+          <a href="#radio" class="nav-link">LIVE RADIO</a>
+          <a href="#streaming" class="nav-link">STREAMING</a>
+          <a href="#tv" class="nav-link">VIP TV</a>
+          <a href="#vault" class="nav-link">SECRET VAULT</a>
+        </nav>
+      </header>
+
+      <!-- ── SECTION: FLOATING ICON PAGE (DIMENSION HUB) ───────────────── -->
+      <div id="dimension-hub" class="dimension-hub">
+        <div class="dh-header">
+          <h2 class="dh-title">SELECT YOUR DIMENSION</h2>
+          <p class="dh-subtitle">EXPLORE THE CHINESE ASSASSIN MULTIVERSE</p>
+        </div>
+
+        <div class="dh-grid" id="dhGrid">
+          <!-- CARD 1: LIVE RADIO -->
+          <div class="dh-card" data-dimension="radio">
+            <div class="dh-card-inner">
+              <div class="dh-icon">📻</div>
+              <h3 class="dh-card-title">LIVE RADIO</h3>
+              <p class="dh-card-desc">24/7 Hardcore Dancehall, Reggae & Exclusive Mixtapes.</p>
+              <button class="dh-btn" id="dhBtnRadio">TUNE IN LIVE</button>
+            </div>
+          </div>
+
+          <!-- CARD 2: STREAMING HUB -->
+          <div class="dh-card" data-dimension="streaming">
+            <div class="dh-card-inner">
+              <div class="dh-icon">🎧</div>
+              <h3 class="dh-card-title">STREAMING</h3>
+              <p class="dh-card-desc">Full Discography, Soundclash Remastered Audio & Stems.</p>
+              <button class="dh-btn" id="dhBtnStreaming">OPEN HUB</button>
+            </div>
+          </div>
+
+          <!-- CARD 3: THE MIX KITCHEN / BEAT MACHINE -->
+          <div class="dh-card dh-card--highlight" data-dimension="kitchen">
+            <div class="dh-card-inner">
+              <div class="dh-icon">🎛️</div>
+              <h3 class="dh-card-title">THE MIX KITCHEN</h3>
+              <p class="dh-card-desc">16-Pad MPC Drum Machine, Soundboard & Custom Dubplate Sampler.</p>
+              <button class="dh-btn dh-btn--pulse" id="dhBtnKitchen">LAUNCH BEAT MACHINE</button>
+            </div>
+          </div>
+
+          <!-- CARD 4: VIP TV -->
+          <div class="dh-card" data-dimension="tv">
+            <div class="dh-card-inner">
+              <div class="dh-icon">📺</div>
+              <h3 class="dh-card-title">VIP TV & CINEMA</h3>
+              <p class="dh-card-desc">4K Visualizers, Soundclash Archive & Live Concert Feeds.</p>
+              <button class="dh-btn" id="dhBtnTv">WATCH NOW</button>
+            </div>
+          </div>
+
+          <!-- CARD 5: FLASH DRIVE MIXES -->
+          <div class="dh-card" data-dimension="usb">
+            <div class="dh-card-inner">
+              <div class="dh-icon">💾</div>
+              <h3 class="dh-card-title">FLASH DRIVE MIXES</h3>
+              <p class="dh-card-desc">Official Collector's USB Drives with Uncompressed Audio.</p>
+              <button class="dh-btn" id="dhBtnUsb">CUSTOMIZE USB</button>
+            </div>
+          </div>
+
+          <!-- CARD 6: PODCASTS & INTERVIEWS -->
+          <div class="dh-card" data-dimension="podcasts">
+            <div class="dh-card-inner">
+              <div class="dh-icon">🎙️</div>
+              <h3 class="dh-card-title">PODCASTS</h3>
+              <p class="dh-card-desc">Behind the scenes, Soundclash History & Artist Spotlight.</p>
+              <button class="dh-btn" id="dhBtnPodcasts">LISTEN NOW</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ==========================================================================
+           PORTAL HOME PAGE — THE MASTER MEDIA HUB (THEPORTALHOMEPAGE.png)
+           ========================================================================== -->
+      <div id="portal-home-page" class="portal-home-page active">
+        <!-- ── SECTION 1: THE PORTAL HERO GATEWAY ───────────────────────── -->
+        <section class="portal-hero-section" id="portal-hero">
+
+          <!--
+            INVISIBLE ANCHOR HOTSPOT — sits exactly over the printed PLAY ▶ button
+            in the artwork image.
+          -->
+          <a class="ph-play-anchor" id="ph-play-anchor" role="button" aria-label="Play portal video" title="Play"></a>
+
+          <!--
+            PORTAL CIRCLE VIDEO OVERLAY — hidden by default.
+            Shown when PLAY is clicked; clicking it again pauses and hides it.
+          -->
+          <div class="ph-portal-circle-wrap" id="ph-portal-circle-wrap" aria-hidden="true">
+            <div class="ph-portal-circle-inner" id="ph-portal-circle-inner">
+              <video
+                id="ph-portal-video"
+                class="ph-portal-video"
+                src="/portal_video.mp4"
+                onerror="this.onerror=null; this.src='/AURA 2.O.mp4';"
+                preload="auto"
+                playsinline
+                loop
+                muted
+              ></video>
+              <!-- Radial vignette blends edges into the artwork's neon ring -->
+              <div class="ph-portal-vignette"></div>
+              <!-- CRT scanlines for cinematic feel -->
+              <div class="ph-portal-scanlines"></div>
+              <!-- Sound toggle pill -->
+              <button class="ph-portal-sound-btn" id="ph-portal-sound-btn" title="Toggle sound">
+                <span class="ph-portal-sound-icon">🔇</span>
+              </button>
+              <!-- Close / Stop button -->
+              <button class="ph-portal-close-btn" id="ph-portal-close-btn" title="Close video">✕</button>
+            </div>
+          </div>
+
+          <div class="ph-hero-overlay">
+            <a href="#portal-dashboard" class="ph-scroll-indicator" id="ph-scroll-trigger">
+              <span class="ph-scroll-text">SCROLL TO ENTER</span>
+              <div class="ph-scroll-mouse">
+                <div class="ph-scroll-wheel"></div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+
+        <!-- ── SECTION 2: THE ULTIMATE MEDIA HUB DASHBOARD ────────────────── -->
+        <section class="portal-dashboard-section" id="portal-dashboard">
+          
+          <!-- Back to top floating pill -->
+          <a href="#portal-hero" class="ph-back-to-top" id="phBackToTop" title="Back to Top">
+            <span>▲</span> TOP
+          </a>
+
+          <!-- Dashboard Layout Container: Sidebar + Content Canvas -->
+          <div class="ph-hub-container">
+
+            <!-- 1. LEFT SIDEBAR NAVIGATION -->
+            <aside class="ph-hub-sidebar">
+              <div class="ph-sidebar-logo">
+                <span class="ph-logo-icon">⛩</span>
+                <span class="ph-logo-text">CHINESE ASSASSIN<br><small>MEDIA HUB</small></span>
+              </div>
+
+              <nav class="ph-sidebar-nav">
+                <a href="#home" class="ph-nav-item active" data-tab="home">
+                  <span class="ph-nav-icon">🏠</span>
+                  <span class="ph-nav-label">Home</span>
+                </a>
+                <a href="#radio" class="ph-nav-item" data-tab="radio">
+                  <span class="ph-nav-icon">((•))</span>
+                  <span class="ph-nav-label">Live Radio</span>
+                </a>
+                <a href="#streaming" class="ph-nav-item" data-tab="streaming">
+                  <span class="ph-nav-icon">▷</span>
+                  <span class="ph-nav-label">Streaming</span>
+                </a>
+                <a href="#tv" class="ph-nav-item" data-tab="tv">
+                  <span class="ph-nav-icon">📺</span>
+                  <span class="ph-nav-label">TV</span>
+                </a>
+                <a href="#usb" class="ph-nav-item" data-tab="usb">
+                  <span class="ph-nav-icon">💾</span>
+                  <span class="ph-nav-label">Flash Drive Mixes</span>
+                </a>
+                <a href="#kitchen" class="ph-nav-item" data-tab="kitchen">
+                  <span class="ph-nav-icon">🎛️</span>
+                  <span class="ph-nav-label">The Mix Kitchen</span>
+                </a>
+                <a href="#podcasts" class="ph-nav-item" data-tab="podcasts">
+                  <span class="ph-nav-icon">🎙</span>
+                  <span class="ph-nav-label">Podcasts</span>
+                </a>
+                <a href="#mixtapes" class="ph-nav-item" data-tab="mixtapes">
+                  <span class="ph-nav-icon">📼</span>
+                  <span class="ph-nav-label">Mixtapes</span>
+                </a>
+                <a href="#news" class="ph-nav-item" data-tab="news">
+                  <span class="ph-nav-icon">📰</span>
+                  <span class="ph-nav-label">News</span>
+                </a>
+                <a href="#events" class="ph-nav-item" data-tab="events">
+                  <span class="ph-nav-icon">📅</span>
+                  <span class="ph-nav-label">Events</span>
+                </a>
+                <a href="#community" class="ph-nav-item" data-tab="community">
+                  <span class="ph-nav-icon">👥</span>
+                  <span class="ph-nav-label">Community</span>
+                </a>
+                <a href="#downloads" class="ph-nav-item" data-tab="downloads">
+                  <span class="ph-nav-icon">⬇</span>
+                  <span class="ph-nav-label">Downloads</span>
+                </a>
+                <a href="#premium" class="ph-nav-item" data-tab="premium">
+                  <span class="ph-nav-icon">👑</span>
+                  <span class="ph-nav-label">Premium</span>
+                </a>
+              </nav>
+
+              <div class="ph-sidebar-socials">
+                <a href="https://twitter.com" target="_blank" class="ph-social-link" title="Twitter">𝕏</a>
+                <a href="https://instagram.com" target="_blank" class="ph-social-link" title="Instagram">📷</a>
+                <a href="https://youtube.com" target="_blank" class="ph-social-link" title="YouTube">▶</a>
+                <a href="https://discord.com" target="_blank" class="ph-social-link" title="Discord">💬</a>
+              </div>
+            </aside>
+
+
+            <!-- 2. MAIN MEDIA HUB CONTENT AREA -->
+            <main class="ph-hub-main">
+
+              <!-- TOP WELCOME & SEARCH BAR -->
+              <div class="ph-topbar">
+                <div class="ph-user-status">
+                  <div class="ph-user-avatar">
+                    <img src="/LOGO.png" alt="CA Nation" />
+                  </div>
+                  <div class="ph-user-meta">
+                    <span class="ph-welcome-text">WELCOME BACK,</span>
+                    <span class="ph-user-name">CA NATION <span class="ph-verified">✔</span> <span class="ph-tier-badge">👑 PREMIUM MEMBER</span></span>
+                  </div>
+                </div>
+
+                <div class="ph-search-bar">
+                  <span class="ph-search-icon">🔍</span>
+                  <input type="text" placeholder="Search mixes, shows, artists, podcasts..." class="ph-search-input" />
+                </div>
+
+                <div class="ph-topbar-actions">
+                  <button class="ph-action-btn" title="Messages">✉</button>
+                  <button class="ph-action-btn ph-action-badge" title="Notifications">
+                    🔔 <span class="ph-badge-count">3</span>
+                  </button>
+                  <div class="ph-profile-pill">
+                    <img src="/LOGO.png" alt="Avatar" class="ph-pill-avatar" />
+                    <span class="ph-pill-arrow">▼</span>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- DASHBOARD GRID: 2 MAIN COLUMNS -->
+              <div class="ph-dashboard-grid">
+
+                <!-- LEFT / CENTER COLUMN: RADIO, SHOWS, MIXES -->
+                <div class="ph-grid-left">
+
+                  <!-- ROW 1: LIVE RADIO + FEATURED SHOW + UPCOMING -->
+                  <div class="ph-row-trio">
+
+                    <!-- CARD 1: LIVE RADIO -->
+                    <div class="ph-card ph-card-radio">
+                      <div class="ph-card-header">
+                        <span class="ph-badge-live">LIVE RADIO</span>
+                        <span class="ph-live-tag">● LIVE</span>
+                      </div>
+                      <div class="ph-radio-body">
+                        <div class="ph-cover-art">
+                          <img src="/WARRIOR.png" alt="Dragon's Call" />
+                          <button class="ph-play-fab" id="phRadioPlayBtn" title="Play Live Radio">▶</button>
+                        </div>
+                        <div class="ph-radio-info">
+                          <h4 class="ph-track-title">Dragon's Call</h4>
+                          <p class="ph-track-subtitle">Chinese Assassin Radio</p>
+                          <div class="ph-on-air-meta">
+                            <span class="ph-on-air-label">ON AIR ·</span>
+                            <span class="ph-dj-name">DJ SHADOW</span>
+                          </div>
+                          <span class="ph-listeners-count">14,293 LISTENERS</span>
+                        </div>
+                      </div>
+                      <!-- Waveform visualizer strip -->
+                      <div class="ph-waveform-mini">
+                        <span class="ph-wave-bar"></span><span class="ph-wave-bar"></span><span class="ph-wave-bar"></span>
+                        <span class="ph-wave-bar"></span><span class="ph-wave-bar"></span><span class="ph-wave-bar"></span>
+                        <span class="ph-wave-bar"></span><span class="ph-wave-bar"></span><span class="ph-wave-bar"></span>
+                        <span class="ph-wave-bar"></span><span class="ph-wave-bar"></span><span class="ph-wave-bar"></span>
+                        <span class="ph-wave-bar"></span><span class="ph-wave-bar"></span><span class="ph-wave-bar"></span>
+                      </div>
+                    </div>
+
+                    <!-- CARD 2: FEATURED LIVE SHOW -->
+                    <div class="ph-card ph-card-featured-show">
+                      <div class="ph-card-header">
+                        <span class="ph-card-title-label">FEATURED LIVE SHOW</span>
+                        <span class="ph-live-tag">● LIVE</span>
+                      </div>
+                      <div class="ph-featured-body">
+                        <div class="ph-featured-cover">
+                          <img src="/WARRIOR.png" alt="The Assassin Hour" />
+                          <button class="ph-play-fab" id="phFeaturedPlayBtn" title="Play Featured Show">▶</button>
+                        </div>
+                        <div class="ph-featured-info">
+                          <h4 class="ph-show-title">THE ASSASSIN HOUR</h4>
+                          <p class="ph-show-host">With Chinese Assassin</p>
+                          <p class="ph-show-desc">The dopest in Dancehall, Hip-Hop and Caribbean Culture.</p>
+                          <span class="ph-show-time">10:00 AM - 12:00 PM</span>
+                          <button class="ph-tune-in-btn" id="phTuneInBtn">TUNE IN LIVE</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 3: UPCOMING SHOWS SCHEDULE -->
+                    <div class="ph-card ph-card-schedule">
+                      <div class="ph-card-header">
+                        <span class="ph-card-title-label">UPCOMING SHOWS</span>
+                        <a href="#schedule" class="ph-view-all">VIEW ALL</a>
+                      </div>
+                      <div class="ph-schedule-list">
+                        <div class="ph-schedule-item">
+                          <span class="ph-sched-time">12:00 PM</span>
+                          <div class="ph-sched-thumb"><img src="/WARRIOR.png" alt="Show" /></div>
+                          <div class="ph-sched-info">
+                            <span class="ph-sched-name">DJ SHADOW</span>
+                            <span class="ph-sched-desc">The Shadow Mix</span>
+                          </div>
+                          <button class="ph-reminder-btn">Set Reminder</button>
+                        </div>
+                        <div class="ph-schedule-item">
+                          <span class="ph-sched-time">02:00 PM</span>
+                          <div class="ph-sched-thumb"><img src="/WARRIOR.png" alt="Show" /></div>
+                          <div class="ph-sched-info">
+                            <span class="ph-sched-name">KILLA TONE</span>
+                            <span class="ph-sched-desc">Hip-Hop Takeover</span>
+                          </div>
+                          <button class="ph-reminder-btn">Set Reminder</button>
+                        </div>
+                        <div class="ph-schedule-item">
+                          <span class="ph-sched-time">04:00 PM</span>
+                          <div class="ph-sched-thumb"><img src="/WARRIOR.png" alt="Show" /></div>
+                          <div class="ph-sched-info">
+                            <span class="ph-sched-name">JAH LIFE</span>
+                            <span class="ph-sched-desc">Roots & Culture</span>
+                          </div>
+                          <button class="ph-reminder-btn">Set Reminder</button>
+                        </div>
+                        <div class="ph-schedule-item">
+                          <span class="ph-sched-time">06:00 PM</span>
+                          <div class="ph-sched-thumb"><img src="/WARRIOR.png" alt="Show" /></div>
+                          <div class="ph-sched-info">
+                            <span class="ph-sched-name">QUEEN ELLE</span>
+                            <span class="ph-sched-desc">Afrobeats Heat</span>
+                          </div>
+                          <button class="ph-reminder-btn">Set Reminder</button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+                  <!-- ROW 2: TRENDING SONGS / ARTISTS -->
+                  <div class="ph-row-section">
+                    <div class="ph-section-header">
+                      <h3 class="ph-section-title">TRENDING SONGS</h3>
+                      <a href="#trending" class="ph-view-all">VIEW ALL</a>
+                    </div>
+                    <div class="ph-trending-row">
+                      <div class="ph-artist-circle">
+                        <div class="ph-artist-avatar-wrap">
+                          <img src="/LOGO.png" alt="Popcaan" />
+                        </div>
+                        <span class="ph-artist-name">Popcaan</span>
+                        <span class="ph-artist-followers">1.2M Followers</span>
+                      </div>
+                      <div class="ph-artist-circle">
+                        <div class="ph-artist-avatar-wrap">
+                          <img src="/LOGO.png" alt="Vybz Kartel" />
+                        </div>
+                        <span class="ph-artist-name">Vybz Kartel</span>
+                        <span class="ph-artist-followers">980K Followers</span>
+                      </div>
+                      <div class="ph-artist-circle">
+                        <div class="ph-artist-avatar-wrap">
+                          <img src="/LOGO.png" alt="Skillibeng" />
+                        </div>
+                        <span class="ph-artist-name">Skillibeng</span>
+                        <span class="ph-artist-followers">845K Followers</span>
+                      </div>
+                      <div class="ph-artist-circle">
+                        <div class="ph-artist-avatar-wrap">
+                          <img src="/LOGO.png" alt="Masicka" />
+                        </div>
+                        <span class="ph-artist-name">Masicka</span>
+                        <span class="ph-artist-followers">730K Followers</span>
+                      </div>
+                      <div class="ph-artist-circle">
+                        <div class="ph-artist-avatar-wrap">
+                          <img src="/LOGO.png" alt="Shenseea" />
+                        </div>
+                        <span class="ph-artist-name">Shenseea</span>
+                        <span class="ph-artist-followers">690K Followers</span>
+                      </div>
+                      <div class="ph-artist-circle">
+                        <div class="ph-artist-avatar-wrap">
+                          <img src="/LOGO.png" alt="Chronic Law" />
+                        </div>
+                        <span class="ph-artist-name">Chronic Law</span>
+                        <span class="ph-artist-followers">620K Followers</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <!-- ROW 3: LATEST MIXES + RECENTLY PLAYED -->
+                  <div class="ph-row-split">
+
+                    <!-- LATEST MIXES -->
+                    <div class="ph-split-mixes">
+                      <div class="ph-section-header">
+                        <h3 class="ph-section-title">LATEST MIXES</h3>
+                        <a href="#mixes" class="ph-view-all">VIEW ALL</a>
+                      </div>
+                      <div class="ph-mixes-grid">
+                        <div class="ph-mix-card" data-track="DANCEHALL HEARTWAVE">
+                          <div class="ph-mix-thumb">
+                            <img src="/WARRIOR.png" alt="Dancehall Heartwave" />
+                            <span class="ph-mix-duration">52:21</span>
+                          </div>
+                          <span class="ph-mix-title">DANCEHALL HEARTWAVE</span>
+                          <span class="ph-mix-author">DJ Blaze</span>
+                        </div>
+                        <div class="ph-mix-card" data-track="STREET CERTIFIED">
+                          <div class="ph-mix-thumb">
+                            <img src="/WARRIOR.png" alt="Street Certified" />
+                            <span class="ph-mix-duration">42:18</span>
+                          </div>
+                          <span class="ph-mix-title">STREET CERTIFIED</span>
+                          <span class="ph-mix-author">Killa Tone</span>
+                        </div>
+                        <div class="ph-mix-card" data-track="ROOTS REVIVAL">
+                          <div class="ph-mix-thumb">
+                            <img src="/WARRIOR.png" alt="Roots Revival" />
+                            <span class="ph-mix-duration">1:00:35</span>
+                          </div>
+                          <span class="ph-mix-title">ROOTS REVIVAL</span>
+                          <span class="ph-mix-author">Jah Life</span>
+                        </div>
+                        <div class="ph-mix-card" data-track="AFRO POWER">
+                          <div class="ph-mix-thumb">
+                            <img src="/WARRIOR.png" alt="Afro Power" />
+                            <span class="ph-mix-duration">48:55</span>
+                          </div>
+                          <span class="ph-mix-title">AFRO POWER</span>
+                          <span class="ph-mix-author">Queen Elle</span>
+                        </div>
+                        <div class="ph-mix-card" data-track="THE CYPHER VOL 5">
+                          <div class="ph-mix-thumb">
+                            <img src="/WARRIOR.png" alt="The Cypher Vol 5" />
+                            <span class="ph-mix-duration">38:40</span>
+                          </div>
+                          <span class="ph-mix-title">THE CYPHER VOL 5</span>
+                          <span class="ph-mix-author">DJ Shadow</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- RECENTLY PLAYED LIST -->
+                    <div class="ph-split-recent">
+                      <div class="ph-section-header">
+                        <h3 class="ph-section-title">RECENTLY PLAYED</h3>
+                      </div>
+                      <div class="ph-recent-list">
+                        <div class="ph-recent-item" data-track="Gymman - Road">
+                          <img src="/LOGO.png" alt="Track" class="ph-recent-thumb" />
+                          <div class="ph-recent-meta">
+                            <span class="ph-recent-name">Gymman - Road</span>
+                          </div>
+                          <span class="ph-recent-dur">2:58</span>
+                          <button class="ph-recent-play" title="Play">▶</button>
+                        </div>
+                        <div class="ph-recent-item" data-track="Popcaan - We Caa Done">
+                          <img src="/LOGO.png" alt="Track" class="ph-recent-thumb" />
+                          <div class="ph-recent-meta">
+                            <span class="ph-recent-name">Popcaan - We Caa Done</span>
+                          </div>
+                          <span class="ph-recent-dur">3:33</span>
+                          <button class="ph-recent-play" title="Play">▶</button>
+                        </div>
+                        <div class="ph-recent-item" data-track="Drake - First Person Shooter">
+                          <img src="/LOGO.png" alt="Track" class="ph-recent-thumb" />
+                          <div class="ph-recent-meta">
+                            <span class="ph-recent-name">Drake - First Person Shooter</span>
+                          </div>
+                          <span class="ph-recent-dur">4:11</span>
+                          <button class="ph-recent-play" title="Play">▶</button>
+                        </div>
+                        <div class="ph-recent-item" data-track="Tommy Lee Sparta - Dutty Brew">
+                          <img src="/LOGO.png" alt="Track" class="ph-recent-thumb" />
+                          <div class="ph-recent-meta">
+                            <span class="ph-recent-name">Tommy Lee Sparta - Dutty Brew</span>
+                          </div>
+                          <span class="ph-recent-dur">3:44</span>
+                          <button class="ph-recent-play" title="Play">▶</button>
+                        </div>
+                        <div class="ph-recent-item" data-track="Burnaboy - Last Last">
+                          <img src="/LOGO.png" alt="Track" class="ph-recent-thumb" />
+                          <div class="ph-recent-meta">
+                            <span class="ph-recent-name">Burnaboy - Last Last</span>
+                          </div>
+                          <span class="ph-recent-dur">3:23</span>
+                          <button class="ph-recent-play" title="Play">▶</button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <!-- RIGHT FLANK COLUMN: LIVE CHAT + TOP FANS -->
+                <div class="ph-grid-right">
+
+                  <!-- 1. LIVE CHAT STREAM -->
+                  <div class="ph-card ph-card-chat">
+                    <div class="ph-card-header">
+                      <span class="ph-card-title-label">LIVE CHAT</span>
+                      <span class="ph-chat-online">● 512</span>
+                    </div>
+                    <div class="ph-chat-messages" id="phChatMessages">
+                      <div class="ph-chat-msg">
+                        <img src="/LOGO.png" alt="User" class="ph-msg-avatar" />
+                        <div class="ph-msg-content">
+                          <span class="ph-msg-author">Ras_Kingston</span>
+                          <span class="ph-msg-time">just now</span>
+                          <p>This mix is fire! 🔥🔥🔥</p>
+                        </div>
+                      </div>
+                      <div class="ph-chat-msg">
+                        <img src="/LOGO.png" alt="User" class="ph-msg-avatar" />
+                        <div class="ph-msg-content">
+                          <span class="ph-msg-author">IslandGyal</span>
+                          <span class="ph-msg-time">just now</span>
+                          <p>Big up Chinese Assassin! 👑</p>
+                        </div>
+                      </div>
+                      <div class="ph-chat-msg">
+                        <img src="/LOGO.png" alt="User" class="ph-msg-avatar" />
+                        <div class="ph-msg-content">
+                          <span class="ph-msg-author">DjBlaze</span>
+                          <span class="ph-msg-time">1 min ago</span>
+                          <p>Where my dancehall lovers at?</p>
+                        </div>
+                      </div>
+                      <div class="ph-chat-msg">
+                        <img src="/LOGO.png" alt="User" class="ph-msg-avatar" />
+                        <div class="ph-msg-content">
+                          <span class="ph-msg-author">CA_Nation</span>
+                          <span class="ph-msg-time">1 min ago</span>
+                          <p>We worldwide! 🌍</p>
+                        </div>
+                      </div>
+                      <div class="ph-chat-msg">
+                        <img src="/LOGO.png" alt="User" class="ph-msg-avatar" />
+                        <div class="ph-msg-content">
+                          <span class="ph-msg-author">Realest1</span>
+                          <span class="ph-msg-time">2 min ago</span>
+                          <p>Respect! Gymman - Road is a banger</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <form class="ph-chat-form" id="phChatForm">
+                      <input type="text" placeholder="Type a message..." class="ph-chat-input" id="phChatInput" />
+                      <button type="button" class="ph-request-song-btn" id="phRequestSongBtn">
+                        🎵 REQUEST A SONG
+                      </button>
+                    </form>
+                  </div>
+
+                  <!-- 2. TOP FANS LEADERBOARD -->
+                  <div class="ph-card ph-card-fans">
+                    <div class="ph-card-header">
+                      <span class="ph-card-title-label">TOP FANS</span>
+                      <span class="ph-fans-filter">THIS WEEK ▼</span>
+                    </div>
+                    <div class="ph-fans-list">
+                      <div class="ph-fan-item">
+                        <span class="ph-fan-rank">1</span>
+                        <img src="/LOGO.png" alt="Fan" class="ph-fan-thumb" />
+                        <span class="ph-fan-name">Ras_Kingston</span>
+                        <span class="ph-fan-crown">👑</span>
+                        <span class="ph-fan-pts">9,850 pts</span>
+                      </div>
+                      <div class="ph-fan-item">
+                        <span class="ph-fan-rank">2</span>
+                        <img src="/LOGO.png" alt="Fan" class="ph-fan-thumb" />
+                        <span class="ph-fan-name">IslandGyal</span>
+                        <span class="ph-fan-crown">⭐</span>
+                        <span class="ph-fan-pts">7,420 pts</span>
+                      </div>
+                      <div class="ph-fan-item">
+                        <span class="ph-fan-rank">3</span>
+                        <img src="/LOGO.png" alt="Fan" class="ph-fan-thumb" />
+                        <span class="ph-fan-name">CA_Nation</span>
+                        <span class="ph-fan-crown">⭐</span>
+                        <span class="ph-fan-pts">6,310 pts</span>
+                      </div>
+                      <div class="ph-fan-item">
+                        <span class="ph-fan-rank">4</span>
+                        <img src="/LOGO.png" alt="Fan" class="ph-fan-thumb" />
+                        <span class="ph-fan-name">DjBlaze</span>
+                        <span class="ph-fan-crown">⭐</span>
+                        <span class="ph-fan-pts">5,210 pts</span>
+                      </div>
+                      <div class="ph-fan-item">
+                        <span class="ph-fan-rank">5</span>
+                        <img src="/LOGO.png" alt="Fan" class="ph-fan-thumb" />
+                        <span class="ph-fan-name">Realest1</span>
+                        <span class="ph-fan-crown">⭐</span>
+                        <span class="ph-fan-pts">4,780 pts</span>
+                      </div>
+                    </div>
+                    <a href="#leaderboard" class="ph-view-leaderboard-link">VIEW LEADERBOARD</a>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </main>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- ── PERSISTENT BOTTOM MASTER PLAYER DECK (HUB & FLOATING PAGES) ── -->
+      <div id="caDragonDeck" class="hub-master-player-bar">
+        <div class="cadp-player-inner">
+
+          <!-- 1. Track Info & Favorite -->
+          <div class="cadp-track-cluster">
+            <div class="cadp-cover-wrap">
+              <img src="/WARRIOR.png" alt="Track Cover" id="cadpCover" />
+              <div class="cadp-spin-ring"></div>
+            </div>
+            <div class="cadp-meta">
+              <div class="cadp-title-row">
+                <span class="cadp-track-name" id="cadpTitle">Dragon's Call</span>
+                <button class="cadp-fav-btn" id="cadpFavBtn" title="Favorite">♡</button>
+              </div>
+              <span class="cadp-artist-name" id="cadpArtist">Chinese Assassin Radio</span>
+            </div>
+          </div>
+
+          <!-- 2. Central Player Controls + Waveform Timeline -->
+          <div class="cadp-center-controls">
+            <div class="cadp-transport-row">
+              <button class="cadp-ctrl-btn" id="cadpShuffle" title="Shuffle">🔀</button>
+              <button class="cadp-ctrl-btn" id="cadpPrev" title="Previous">⏮</button>
+              <button class="cadp-ctrl-play" id="cadpPlay" title="Play / Pause">▶</button>
+              <button class="cadp-ctrl-btn" id="cadpNext" title="Next">⏭</button>
+              <button class="cadp-ctrl-btn" id="cadpRepeat" title="Repeat">🔁</button>
+            </div>
+
+            <!-- Waveform Timeline Scrubber -->
+            <div class="cadp-scrubber-row">
+              <span class="cadp-time" id="cadpCurrentTime">2:15</span>
+              <div class="cadp-waveform-track" id="cadpWaveTrack">
+                <div class="cadp-wave-progress" id="cadpWaveProgress" style="width: 45%;"></div>
+                <div class="cadp-wave-bars">
+                  <span style="height:40%"></span><span style="height:70%"></span><span style="height:55%"></span>
+                  <span style="height:90%"></span><span style="height:60%"></span><span style="height:80%"></span>
+                  <span style="height:45%"></span><span style="height:100%"></span><span style="height:75%"></span>
+                  <span style="height:60%"></span><span style="height:85%"></span><span style="height:50%"></span>
+                  <span style="height:95%"></span><span style="height:70%"></span><span style="height:40%"></span>
+                  <span style="height:80%"></span><span style="height:65%"></span><span style="height:90%"></span>
+                </div>
+              </div>
+              <span class="cadp-time" id="cadpDuration">4:48</span>
+            </div>
+          </div>
+
+          <!-- 3. Volume & Utility Toggles -->
+          <div class="cadp-right-tools">
+            <div class="cadp-vol-cluster">
+              <button class="cadp-tool-btn" id="cadpVolMute" title="Mute">🔊</button>
+              <input type="range" min="0" max="1" step="0.01" value="0.8" class="cadp-vol-range" id="cadpVolumeSlider" />
+            </div>
+            <button class="cadp-tool-btn" id="cadpQueueBtn" title="Playlist Queue">☰</button>
+            <button class="cadp-tool-btn" id="cadpLyricsBtn" title="Lyrics">💬</button>
+            <button class="cadp-tool-btn" id="cadpFullscreenBtn" title="Fullscreen">⛶</button>
+          </div>
+
+          <!-- 4. 16-PAD MPC DRUM MACHINE (Hardware Edition) -->
+          <div class="cadp-drum-machine" id="cadpDrumMachine">
+            <div class="cdm-header">
+              <div class="cdm-logo-row">
+                <span class="cdm-brand">C·A</span>
+                <span class="cdm-title">BEAT MACHINE</span>
+              </div>
+              <div class="cdm-controls-row">
+                <button id="cdmBankA" class="cdm-bank-btn active" title="Bank A">A</button>
+                <button id="cdmBankB" class="cdm-bank-btn" title="Bank B">B</button>
+                <div class="cdm-vol-wrap" title="Pad Volume">
+                  <span class="cdm-vol-label">VOL</span>
+                  <input type="range" id="cdmPadVolume" min="0" max="1" step="0.01" value="0.85" class="cdm-vol-knob" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 4×4 Pad Grid -->
+            <div class="cdm-pad-grid" id="cdmPadGrid">
+              <!-- ROW 4 (top) — Pads 13–16 -->
+              <button class="cdm-pad" data-pad="13" data-label="CRASH" data-key="Q" title="Pad 13 · Crash · Q">
+                <span class="cdm-pad-num">13</span>
+                <span class="cdm-pad-name">CRASH</span>
+                <span class="cdm-pad-key">Q</span>
+              </button>
+              <button class="cdm-pad" data-pad="14" data-label="OPEN HH" data-key="W" title="Pad 14 · Open HH · W">
+                <span class="cdm-pad-num">14</span>
+                <span class="cdm-pad-name">OPEN HH</span>
+                <span class="cdm-pad-key">W</span>
+              </button>
+              <button class="cdm-pad" data-pad="15" data-label="CLO HH" data-key="E" title="Pad 15 · Closed HH · E">
+                <span class="cdm-pad-num">15</span>
+                <span class="cdm-pad-name">CLO HH</span>
+                <span class="cdm-pad-key">E</span>
+              </button>
+              <button class="cdm-pad" data-pad="16" data-label="TAMBR" data-key="R" title="Pad 16 · Tambourine · R">
+                <span class="cdm-pad-num">16</span>
+                <span class="cdm-pad-name">TAMBR</span>
+                <span class="cdm-pad-key">R</span>
+              </button>
+
+              <!-- ROW 3 — Pads 9–12 -->
+              <button class="cdm-pad" data-pad="9" data-label="RIM" data-key="A" title="Pad 9 · Rim · A">
+                <span class="cdm-pad-num">9</span>
+                <span class="cdm-pad-name">RIM</span>
+                <span class="cdm-pad-key">A</span>
+              </button>
+              <button class="cdm-pad" data-pad="10" data-label="CLAP" data-key="S" title="Pad 10 · Clap · S">
+                <span class="cdm-pad-num">10</span>
+                <span class="cdm-pad-name">CLAP</span>
+                <span class="cdm-pad-key">S</span>
+              </button>
+              <button class="cdm-pad" data-pad="11" data-label="SNARE 2" data-key="D" title="Pad 11 · Snare 2 · D">
+                <span class="cdm-pad-num">11</span>
+                <span class="cdm-pad-name">SNARE 2</span>
+                <span class="cdm-pad-key">D</span>
+              </button>
+              <button class="cdm-pad" data-pad="12" data-label="TOM HI" data-key="F" title="Pad 12 · Hi Tom · F">
+                <span class="cdm-pad-num">12</span>
+                <span class="cdm-pad-name">TOM HI</span>
+                <span class="cdm-pad-key">F</span>
+              </button>
+
+              <!-- ROW 2 — Pads 5–8 -->
+              <button class="cdm-pad" data-pad="5" data-label="KICK 2" data-key="Z" title="Pad 5 · Kick 2 · Z">
+                <span class="cdm-pad-num">5</span>
+                <span class="cdm-pad-name">KICK 2</span>
+                <span class="cdm-pad-key">Z</span>
+              </button>
+              <button class="cdm-pad" data-pad="6" data-label="PERC" data-key="X" title="Pad 6 · Perc · X">
+                <span class="cdm-pad-num">6</span>
+                <span class="cdm-pad-name">PERC</span>
+                <span class="cdm-pad-key">X</span>
+              </button>
+              <button class="cdm-pad" data-pad="7" data-label="TOM LO" data-key="C" title="Pad 7 · Lo Tom · C">
+                <span class="cdm-pad-num">7</span>
+                <span class="cdm-pad-name">TOM LO</span>
+                <span class="cdm-pad-key">C</span>
+              </button>
+              <button class="cdm-pad" data-pad="8" data-label="FX HIT" data-key="V" title="Pad 8 · FX Hit · V">
+                <span class="cdm-pad-num">8</span>
+                <span class="cdm-pad-name">FX HIT</span>
+                <span class="cdm-pad-key">V</span>
+              </button>
+
+              <!-- ROW 1 (bottom) — Pads 1–4 -->
+              <button class="cdm-pad" data-pad="1" data-label="KICK" data-key="1" title="Pad 1 · Kick · 1">
+                <span class="cdm-pad-num">1</span>
+                <span class="cdm-pad-name">KICK</span>
+                <span class="cdm-pad-key">1</span>
+              </button>
+              <button class="cdm-pad" data-pad="2" data-label="SNARE" data-key="2" title="Pad 2 · Snare · 2">
+                <span class="cdm-pad-num">2</span>
+                <span class="cdm-pad-name">SNARE</span>
+                <span class="cdm-pad-key">2</span>
+              </button>
+              <button class="cdm-pad" data-pad="3" data-label="BASS" data-key="3" title="Pad 3 · Bass · 3">
+                <span class="cdm-pad-num">3</span>
+                <span class="cdm-pad-name">BASS</span>
+                <span class="cdm-pad-key">3</span>
+              </button>
+              <button class="cdm-pad" data-pad="4" data-label="SUB DRP" data-key="4" title="Pad 4 · Sub Drop · 4">
+                <span class="cdm-pad-num">4</span>
+                <span class="cdm-pad-name">SUB DRP</span>
+                <span class="cdm-pad-key">4</span>
+              </button>
+            </div>
+
+            <!-- VU Meters + Status Strip -->
+            <div class="cdm-footer-strip">
+              <div class="cdm-vu-pair">
+                <div class="cdm-vu-bar"><div class="cdm-vu-fill" id="cdmVuLeft"></div></div>
+                <div class="cdm-vu-bar"><div class="cdm-vu-fill" id="cdmVuRight"></div></div>
+              </div>
+              <div id="cdmStatus" class="cdm-status">READY &mdash; PRESS ANY PAD</div>
+              <div class="cdm-vu-pair">
+                <div class="cdm-vu-bar"><div class="cdm-vu-fill" id="cdmVuRight2"></div></div>
+                <div class="cdm-vu-bar"><div class="cdm-vu-fill" id="cdmVuLeft2"></div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Secret Chamber / VIP Modal -->
+      <div id="secret-chamber-modal" class="sc-modal-overlay">
+        <div class="sc-modal-glass">
+          <button id="sc-modal-close" class="sc-close-btn">&times;</button>
+          <div class="sc-modal-header">
+            <div class="sc-reticle-ring">
+              <svg viewBox="0 0 24 24" width="36" height="36">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="#ff203a" stroke-width="2" />
+                <circle cx="12" cy="12" r="4" fill="#ff203a" />
+                <line x1="12" y1="2" x2="12" y2="6" stroke="#ff203a" stroke-width="2" />
+                <line x1="12" y1="18" x2="12" y2="22" stroke="#ff203a" stroke-width="2" />
+                <line x1="2" y1="12" x2="6" y2="12" stroke="#ff203a" stroke-width="2" />
+                <line x1="18" y1="12" x2="22" y2="12" stroke="#ff203a" stroke-width="2" />
+              </svg>
+            </div>
+            <h2 class="sc-modal-title">THE SECRET CHAMBER</h2>
+            <p class="sc-modal-subtitle">ACCESS GRANTED &mdash; VIP UNRELEASED VAULT 2026</p>
+          </div>
+          <div class="sc-modal-body">
+            <div class="sc-vip-card">
+              <img src="/vip_new.png" alt="VIP Pass" class="sc-vip-img">
+              <div class="sc-vip-info">
+                <h3>Chinese Assassin VIP Pass</h3>
+                <p>Unlock 100+ Exclusive Dubplates, Stems & Live Sets</p>
+                <div class="sc-badge">AUTHENTICATED</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Container -->
+      <div id="cadpToast" class="cadp-toast"></div>
+
+    </div>
+
+    <!-- Main Module Script -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

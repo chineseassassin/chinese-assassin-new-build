@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chinese Assassin | VIP Universe</title>
+    <link rel="stylesheet" href="./src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <!-- ==========================================================================
+         AAA BLOCKBUSTER CINEMATIC ANIMATED INTRO PAGE
+         ========================================================================== -->
+    <div id="cinematic-intro">
+      <!-- Scene Canvas -->
+      <canvas id="cinematic-intro-canvas"></canvas>
+
+      <!-- EFFECT 2: Film Grain + Chromatic Aberration Canvas (renders on top) -->
+      <canvas id="grain-canvas"></canvas>
+
+
+
+      <!-- Lightning Flash & Bloom Overlay -->
+      <div id="cinematic-lightning-flash"></div>
+
+      <!-- Swirling Red Vortex Seamless Transition Overlay -->
+      <div id="vortex-transition-overlay"></div>
+
+      <!-- Temple Doors Layer -->
+      <div id="cinematic-temple-doors" style="display:none; opacity:0;">
+        <div class="intro-door left-door"></div>
+        <div class="intro-door right-door"></div>
+        <div class="door-ui-wrap">
+          <!-- Initial Button State -->
+          <button id="door-enter-btn" class="door-enter-btn" style="display:none;">ENTER THE PORTAL</button>
+
+          <!-- Biometric FaceID Scanner Box Modal (Appears after clicking ENTER THE PORTAL) -->
+          <div class="portal-faceid-box" id="portal-faceid-box" style="display:none; opacity:0;">
+            <div class="hud-corner top-left"></div>
+            <div class="hud-corner top-right"></div>
+            <div class="hud-corner bottom-left"></div>
+            <div class="hud-corner bottom-right"></div>
+
+            <div class="faceid-header">
+              <span class="faceid-lock-icon">🔒</span>
+              <span class="faceid-title">BIOMETRIC IDENTITY SCANNER</span>
+            </div>
+
+            <!-- Scanning Box with Image Port -->
+            <div class="faceid-viewport">
+              <div class="faceid-img-frame">
+                <img id="faceid-scan-img" src="/FACEID1.jpg" onerror="this.onerror=null; this.src='/FACEID1.JPG.png';" alt="Biometric Face Scanner" class="faceid-img">
+                <div class="faceid-laser-sweep"></div>
+                <div class="faceid-grid-overlay"></div>
+                <div class="faceid-match-badge" id="faceid-match-badge">SCANNING 1/4</div>
+              </div>
+            </div>
+
+            <!-- Progress & Status Readout -->
+            <div class="faceid-hud-bottom">
+              <div class="faceid-status-text" id="faceid-status-text">ANALYZING BIOMETRIC SUBJECT 1/4...</div>
+              <div class="faceid-progress-track">
+                <div class="faceid-progress-fill" id="faceid-progress-fill"></div>
+              </div>
+              <div class="faceid-details-row">
+                <span id="faceid-pct-text">0%</span>
+                <span>ENCRYPTING VIP SESSION</span>
+                <span id="faceid-granted-text" class="faceid-granted" style="display:none;">ACCESS GRANTED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Skip Intro Button (always visible, centered) -->
+      <button id="skip-intro-btn" class="skip-intro-btn">
+        SKIP INTRO
+      </button>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         PAGE 1 — FLOATING GLASS STAGE CARD (Chinese Assassin Design)
+         Slides open into fullscreen AURA 2.0 video player on PLAY click.
+         Closes/collapses when video is stopped.
+         ════════════════════════════════════════════════════════════════ -->
+    <div id="stage">
+
+      <!-- ── GLASS CARD: Artwork Poster + Hero UI ───────────────────── -->
+      <div class="nf-screen-unit">
+
+        <!-- Artwork backdrop image (WICKED3.jpg) -->
+        <img class="nf-screen-img" src="/WICKED3.jpg" alt="Chinese Assassin Artwork" onerror="this.onerror=null;this.src='/MHP.JPG';">
+
+        <!-- Video element (hidden until PLAY clicked) -->
+        <video
+          id="nf-main-video"
+          class="nf-main-video"
+          src="/AURA 2.O.mp4"
+          onerror="this.onerror=null;this.src='/aura.mp4';"
+          preload="auto"
+          playsinline
+        ></video>
+
+        <!-- Minimal Hero Overlay: Title, Synopsis, Action Buttons -->
+        <div class="ca-minimal-hero-ui">
+          <div class="ca-hero-badge-row">
+            <span class="ca-hero-badge-pill">⛩ VIP ORIGINALS</span>
+            <span id="nf-meta-match" class="ca-hero-match-pill">99% Match</span>
+          </div>
+          <h1 id="nf-video-title" class="ca-hero-title">CHINESE ASSASSIN</h1>
+          <p id="nf-video-tagline" class="ca-hero-tagline">EXCLUSIVE SERIES • VIP ORIGINALS</p>
+          <p id="nf-video-synopsis" class="ca-hero-synopsis">A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes.</p>
+          <div class="ca-hero-meta-row">
+            <span id="nf-meta-rating" class="meta-badge">18+</span>
+            <span id="nf-meta-year" class="meta-badge">2026</span>
+            <span id="nf-meta-duration" class="meta-badge">4K Ultra HD</span>
+          </div>
+          <div class="ca-hero-actions">
+            <button id="nf-hero-play-btn" class="ca-play-btn">
+              <svg id="nf-hero-play-icon" viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M8 5v14l11-7z"/></svg>
+              <span id="nf-hero-play-text">PLAY AURA 2.0</span>
+            </button>
+            <button id="ca-desc-toggle-btn" class="ca-info-btn">
+              <svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              MORE INFO
+            </button>
+            <button id="nf-audio-btn" class="ca-audio-btn" title="Toggle sound">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Description Slide Panel -->
+        <div id="ca-description-panel" class="ca-description-panel">
+          <button id="ca-desc-close-btn" class="ca-desc-close-btn">&times;</button>
+          <div class="ca-desc-content">
+            <h2>CHINESE ASSASSIN</h2>
+            <p>A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes. When the VIP portal opens, only the worthy unlock the golden master tapes and claim their destiny.</p>
+            <div class="ca-details-grid">
+              <div><strong>Genres:</strong> <span id="nf-details-genres">Martial Arts • Cinematic Bass • DJ Turntablism</span></div>
+              <div><strong>Cast:</strong> <span id="nf-details-cast">Master DJ, Clan of Assassins, VIP Universe Sound Lab</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Navigation (OVERVIEW / EPISODES & TRACKS / DETAILS) -->
+        <nav class="ca-tab-nav">
+          <a class="ca-nav-item active" data-tab="overview">OVERVIEW</a>
+          <a class="ca-nav-item" data-tab="episodes">EPISODES &amp; TRACKS</a>
+          <a class="ca-nav-item" data-tab="details">DETAILS &amp; CREDITS</a>
+        </nav>
+
+        <!-- Tab Panes -->
+        <div id="nf-pane-episodes" class="ca-tab-pane"></div>
+        <div id="nf-pane-details" class="ca-tab-pane">
+          <div class="nf-details-pane">
+            <div><strong>Genres:</strong> <span id="nf-details-genres-pane">Martial Arts • Cinematic Bass • DJ Turntablism</span></div>
+            <div><strong>Cast:</strong> <span id="nf-details-cast-pane">Master DJ, Clan of Assassins, VIP Universe Sound Lab</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FULLSCREEN VIDEO HUD (hidden until PLAY) ───────────────── -->
+      <div id="nf-player-hud" class="nf-player-hud">
+        <div class="nf-hud-top-bar">
+          <button id="nf-hud-back-btn" class="nf-hud-icon-btn" title="Exit Fullscreen">
+            <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          </button>
+          <span id="nf-hud-title" class="nf-hud-title-text">CHINESE ASSASSIN</span>
+          <div class="nf-hud-top-right">
+            <button id="nf-hud-mute-btn" class="nf-hud-icon-btn" title="Mute / Unmute">
+              <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="nf-hud-bottom-bar">
+          <div id="nf-hud-progress-track" class="nf-progress-track">
+            <div id="nf-hud-progress-fill" class="nf-progress-fill"></div>
+            <div id="nf-hud-progress-thumb" class="nf-progress-thumb"></div>
+          </div>
+          <div class="nf-hud-controls-row">
+            <div class="nf-hud-left-controls">
+              <button id="nf-hud-rewind-btn" class="nf-hud-icon-btn" title="-10s">
+                <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="9" y="15" font-size="5" fill="white">10</text></svg>
+              </button>
+              <button id="nf-hud-play-btn" class="nf-hud-play-btn" title="Play / Pause">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path id="nf-hud-play-icon" d="M8 5v14l11-7z"/></svg>
+              </button>
+              <button id="nf-hud-forward-btn" class="nf-hud-icon-btn" title="+10s">
+                <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+              </button>
+              <div class="nf-hud-volume-wrap">
+                <input type="range" id="nf-hud-volume-slider" class="nf-vol-slider" min="0" max="1" step="0.02" value="1">
+              </div>
+              <span id="nf-hud-time-display" class="nf-time-display">0:00 / 0:00</span>
+            </div>
+            <div class="nf-hud-right-controls">
+              <button id="nf-hud-fullscreen-btn" class="nf-hud-icon-btn" title="Toggle Fullscreen">
+                <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ENTER CA UNIVERSE BUTTON (transitions to temple doors) ─── -->
+      <div id="page3-glass-btn-container" class="page3-glass-btn-container">
+        <button id="nf-enter-universe-btn" class="enter-universe-btn">
+          ENTER CA UNIVERSE ➔
+        </button>
+      </div>
+
+      <!-- Edit metadata modal -->
+      <div id="nf-edit-modal" class="nf-edit-modal-overlay">
+        <div class="nf-edit-modal-box">
+          <button class="nf-edit-close" onclick="document.getElementById('nf-edit-modal').classList.remove('active')">&times;</button>
+          <h3>Edit Description &amp; Details</h3>
+          <label>Title<input id="nf-edit-title-input" class="nf-edit-input" type="text"></label>
+          <label>Tagline<input id="nf-edit-tagline-input" class="nf-edit-input" type="text"></label>
+          <label>Synopsis<textarea id="nf-edit-synopsis-input" class="nf-edit-input" rows="3"></textarea></label>
+          <label>Match Score<input id="nf-edit-match-input" class="nf-edit-input" type="text"></label>
+          <label>Age Rating<input id="nf-edit-rating-input" class="nf-edit-input" type="text"></label>
+          <label>Year<input id="nf-edit-year-input" class="nf-edit-input" type="text"></label>
+          <label>Duration / Format<input id="nf-edit-dur-input" class="nf-edit-input" type="text"></label>
+          <label>Genres<input id="nf-edit-genres-input" class="nf-edit-input" type="text"></label>
+          <label>Cast<input id="nf-edit-cast-input" class="nf-edit-input" type="text"></label>
+          <div class="nf-edit-presets">
+            <button class="nf-preset-btn" data-preset="assassin">Chinese Assassin</button>
+            <button class="nf-preset-btn" data-preset="djset">VIP DJ Set</button>
+            <button class="nf-preset-btn" data-preset="heist">The Heist</button>
+          </div>
+          <div class="nf-edit-actions">
+            <button onclick="document.getElementById('nf-edit-modal').classList.remove('active')" class="nf-edit-cancel-btn">Cancel</button>
+            <button id="nf-edit-save-btn" class="nf-edit-save-btn">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end #stage -->
+
+    <div id="app">
+      <!-- Floating Mega Menu Header -->
+      <header class="site-header floating-header">
+        <div class="logo-wrapper">
+          <div class="logo-rotator" id="rotating-logo">
+            <img src="./logo.png1.png" class="site-logo-img rot-active" alt="Logo 1">
+            <img src="./logo.png2.png" class="site-logo-img" alt="Logo 2">
+            <img src="./logo.png3.png" class="site-logo-img" alt="Logo 3">
+            <img src="./logo.png4.png" class="site-logo-img" alt="Logo 4">
+          </div>
+          <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        </div>
+
+        <nav class="desktop-nav">
+          <div class="nav-item"><a href="#" id="home-link" class="nav-active">HOME</a></div>
+          <div class="nav-item has-mega-menu">
+            <a href="#">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+            <div class="mega-menu">
+              <div class="mega-menu-content">
+                <div class="mega-col">
+                  <h4>VIP Exclusives</h4>
+                  <ul>
+                    <li><a href="#">Street Kings 2026</a></li>
+                    <li><a href="#">Techno Riddim Vol 4</a></li>
+                    <li><a href="#">Assassin Dubplates</a></li>
+                    <li><a href="#">Secret Stash Vol 1</a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <h4>Mix Gallery</h4>
+                  <div class="mix-gallery-grid">
+                    <div class="mix-thumb"><img src="/riddim_new.png" alt="Mix 1"></div>
+                    <div class="mix-thumb"><img src="/vip_new.png" alt="Mix 2"></div>
+                    <div class="mix-thumb"><img src="/mobile_mix_bg.png" alt="Mix 3"></div>
+                    <div class="mix-thumb"><img src="/tv_new.png" alt="Mix 4"></div>
+                  </div>
+                </div>
+                <div class="mega-col featured-set">
+                  <h4>Live Preview (30s)</h4>
+                  <div class="preview-player-wrap">
+                    <div class="featured-img" style="background-image: url('./mobile_mix_bg.png');">
+                      <button class="mega-preview-btn" id="mega-preview-play">
+                         <svg viewBox="0 0 24 24" width="30" height="30"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                      </button>
+                    </div>
+                    <h5>ASSASSIN ELITE MIX</h5>
+                    <p style="font-size: 0.8rem; color: #666;">Flashy transition and heavy bass.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nav-item"><a href="#">SHOP</a></div>
+          <div class="nav-item"><a href="#">ABOUT US</a></div>
+          <div class="nav-item"><a href="#">CONTACT</a></div>
+        </nav>
+
+        <!-- Right Header Action Group: Search | SIGN IN | Hamburger Menu -->
+        <div class="header-actions">
+          <button class="icon-btn search-btn" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </button>
+          <a href="#" class="sign-in-btn" id="sign-in-btn">SIGN IN</a>
+          <button class="icon-btn menu-toggle-btn" aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Full-Screen Mobile Navigation Drawer -->
+      <div id="mobile-nav-drawer" class="mobile-drawer-overlay">
+        <div class="mobile-drawer-card">
+          <div class="mobile-drawer-header">
+            <div class="logo">CHINESE<span>ASSASSIN</span></div>
+            <button id="mobile-drawer-close" class="mobile-drawer-close-btn">&times;</button>
+          </div>
+
+          <nav class="mobile-drawer-nav">
+            <a href="#" id="mobile-home-link" class="mobile-nav-item active"><span class="m-icon">🏠</span> HOME</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">🕹️</span> EXCLUSIVE</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">🛍️</span> SHOP</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">ℹ️</span> ABOUT US</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">📞</span> CONTACT</a>
+            <button class="mobile-nav-btn sign-in-btn" id="mobile-sign-in-btn">🔑 SIGN IN TO PORTAL</button>
+          </nav>
+
+          <div class="mobile-drawer-footer">
+            <span>© 2026 CHINESE ASSASSIN VIP UNIVERSE</span>
+          </div>
+        </div>
+      </div>
+      <!-- 3D Background -->
+      <canvas id="webgl-canvas"></canvas>
+      <div id="atmosphere-overlay"></div>
+
+      <!-- ==========================================================================
+           SIGN-IN MODAL  (scanner phase -> auth form phase)
+           ========================================================================== -->
+      <div id="sign-in-modal" class="signin-modal-overlay">
+
+        <!-- —— PHASE 1 : BIOMETRIC SCANNER —————————————————————————— -->
+        <div id="signin-scanner-phase" class="signin-phase active">
+          <div id="biometric-scanner" class="active">
+            <div class="scanner-backdrop"></div>
+            <div class="scanner-top-hud">
+              <div class="hud-bracket left-bracket"></div>
+              <div class="hud-title-wrap">
+                <span class="hud-icon">🔒</span>
+                <span class="hud-text">BIOMETRIC IDENTITY VERIFICATION</span>
+              </div>
+              <div class="hud-bracket right-bracket"></div>
+            </div>
+            <div class="scanner-hero-wrap">
+              <div class="scanner-ring outer-ring"></div>
+              <div class="scanner-ring middle-ring"></div>
+              <div class="scanner-ring inner-ring"></div>
+              <div class="scanner-portrait-container">
+                <img src="/assassin_scanner.jpg" onerror="this.onerror=null; this.src='/Images/assassin_scanner.jpg';" alt="Chinese Assassin" class="scanner-portrait">
+                <div class="scanner-laser-line"></div>
+                <div class="scanner-grid-overlay"></div>
+              </div>
+              <div class="hud-corner top-left"></div>
+              <div class="hud-corner top-right"></div>
+              <div class="hud-corner bottom-left"></div>
+              <div class="hud-corner bottom-right"></div>
+            </div>
+            <div class="scanner-hud-bottom">
+              <div class="scanner-status-tag" id="scanner-status-text">VERIFYING IDENTITY...</div>
+              <div class="scanner-progress-bar-wrap">
+                <div class="scanner-progress-fill" id="signin-progress-fill"></div>
+              </div>
+              <div class="scanner-details-row">
+                <span>CHINESE ASSASSIN PORTAL</span>
+                <span class="scanner-match-text">ENCRYPTING SESSION</span>
+                <span class="scanner-access-granted">ACCESS: GRANTED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- —— PHASE 2 : AUTH FORM —————————————————————————————————————— -->
+        <div id="signin-auth-phase" class="signin-phase" style="display:none;">
+          <div class="auth-modal-card">
+
+            <!-- Close X -->
+            <button class="auth-close-btn" id="auth-close-btn" aria-label="Close">&times;</button>
+
+            <!-- Logo / Title -->
+            <div class="auth-header">
+              <div class="auth-logo-ring">
+                <img src="/assassin_scanner.jpg" onerror="this.onerror=null; this.src='/Images/assassin_scanner.jpg';" alt="Logo" class="auth-logo-img">
+              </div>
+              <h2 class="auth-title">CHINESE <span>ASSASSIN</span></h2>
+              <p class="auth-subtitle">VIP UNIVERSE PORTAL</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+              <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">SIGN IN</button>
+              <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">CREATE ACCOUNT</button>
+            </div>
+
+            <!-- —— LOGIN PANEL —— -->
+            <div class="auth-panel" id="panel-login">
+              <!-- Google -->
+              <button class="google-btn" id="google-signin-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+              </button>
+
+              <div class="auth-divider"><span>OR</span></div>
+
+              <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+                <div class="auth-field">
+                  <label>EMAIL ADDRESS</label>
+                  <input type="email" id="login-email" placeholder="assassin@vip.com" autocomplete="email" required>
+                </div>
+                <div class="auth-field">
+                  <label>PASSWORD</label>
+                  <div class="password-wrap">
+                    <input type="password" id="login-password" placeholder="••••••••••" autocomplete="current-password" required>
+                    <button type="button" class="pwd-toggle" onclick="togglePwd('login-password', this)">👁</button>
+                  </div>
+                </div>
+                <div class="auth-options-row">
+                  <label class="auth-remember">
+                    <input type="checkbox" id="remember-me"> Remember me
+                  </label>
+                  <a href="#" class="auth-forgot">Forgot password?</a>
+                </div>
+                <button type="submit" class="auth-submit-btn">ENTER THE PORTAL</button>
+              </form>
+            </div>
+
+            <!-- —— REGISTER PANEL —— -->
+            <div class="auth-panel" id="panel-register" style="display:none;">
+              <!-- Google -->
+              <button class="google-btn" id="google-register-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Sign up with Google
+              </button>
+
+              <div class="auth-divider"><span>OR</span></div>
+
+              <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+                <div class="auth-field">
+                  <label>DISPLAY NAME</label>
+                  <input type="text" id="reg-name" placeholder="Assassin Name" autocomplete="name" required>
+                </div>
+                <div class="auth-field">
+                  <label>EMAIL ADDRESS</label>
+                  <input type="email" id="reg-email" placeholder="assassin@vip.com" autocomplete="email" required>
+                </div>
+                <div class="auth-field">
+                  <label>PASSWORD</label>
+                  <div class="password-wrap">
+                    <input type="password" id="reg-password" placeholder="Min 8 characters" autocomplete="new-password" required minlength="8">
+                    <button type="button" class="pwd-toggle" onclick="togglePwd('reg-password', this)">👁</button>
+                  </div>
+                </div>
+                <div class="auth-field">
+                  <label>CONFIRM PASSWORD</label>
+                  <div class="password-wrap">
+                    <input type="password" id="reg-confirm" placeholder="Repeat password" autocomplete="new-password" required minlength="8">
+                    <button type="button" class="pwd-toggle" onclick="togglePwd('reg-confirm', this)">👁</button>
+                  </div>
+                </div>
+                <button type="submit" class="auth-submit-btn">CREATE ACCOUNT</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3D Navigation Hub -->
+      <div id="dimension-hub">
+        <div id="hub-container">
+          <!-- Layer 1: Single Master Hero & Background (AAA.jpg) -->
+          <div class="central-master-hero">
+            <div class="master-rim-light rim-red"></div>
+            <div class="master-rim-light rim-cyan"></div>
+            <img src="/Images/ICON PAGE-5.png" onerror="this.onerror=null; this.src='/ICON PAGE-5.png';" alt="Chinese Assassin" class="master-img">
+            <div class="master-vignette-overlay"></div>
+          </div>
+
+          <!-- Fingertip Energy Strands Canvas -->
+          <canvas id="fingertip-energy-canvas"></canvas>
+
+          <!-- Crimson Lightning Strike Flash Canvas -->
+          <canvas id="lightning-flash-canvas"></canvas>
+
+          <!-- Continuous 360° Holographic Music Halo Rings (Saturn's Ring / Doctor Strange Portal Effect) -->
+          <div class="hologram-ring-back"></div>
+          <div class="hologram-ring-front"></div>
+
+          <!-- Floating Curved 3D Glass Cards -->
+          <a class="realm-portal glass-card card-red" href="/vip" data-orbit-index="0">
+            <div class="glass-card-thumb">
+              <img src="/vip_new.png" alt="VIP Citadel">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">VIP Citadel</div>
+                  <div class="portal-artist">Chinese Assassin VIP</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:01</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:35%"></div></div>
+                <span class="time-label">4:22</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/streaming" data-orbit-index="1">
+            <div class="glass-card-thumb">
+              <img src="/mobile.jpg" alt="Streaming">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">24/7 Stream</div>
+                  <div class="portal-artist">Nonstop Reggae &amp; Dancehall</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:12</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:55%"></div></div>
+                <span class="time-label">LIVE</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/tv" data-orbit-index="2">
+            <div class="glass-card-thumb">
+              <img src="/tv_new.png" alt="Chinese Assassin TV">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Assassin TV</div>
+                  <div class="portal-artist">HD Concerts &amp; Documentaries</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">8:30</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:20%"></div></div>
+                <span class="time-label">45:12</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/mobile/" data-orbit-index="3">
+            <div class="glass-card-thumb">
+              <img src="/mobile_mix_bg.png" alt="Mobile Mixes">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Mobile Mixes</div>
+                  <div class="portal-artist">On-The-Go Mixtape Vault</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:02</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:15%"></div></div>
+                <span class="time-label">2:35</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/radio.html" data-orbit-index="4">
+            <div class="glass-card-thumb">
+              <img src="/radio.png" alt="Radio">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Assassin Radio</div>
+                  <div class="portal-artist">Global Live Broadcast</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:01</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:42%"></div></div>
+                <span class="time-label">LIVE</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/lab" data-orbit-index="5">
+            <div class="glass-card-thumb">
+              <img src="/producer_lab.png" alt="Producer Lab">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Producer Lab</div>
+                  <div class="portal-artist">Exclusive Stems &amp; Samples</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">1:05</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:60%"></div></div>
+                <span class="time-label">3:18</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/exclusive" data-orbit-index="6">
+            <div class="glass-card-thumb">
+              <img src="/exclusive.jpg" alt="Exclusives">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Unreleased Stash</div>
+                  <div class="portal-artist">VIP Mixes 2026</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:02</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:25%"></div></div>
+                <span class="time-label">4:55</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/riddim" data-orbit-index="7">
+            <div class="glass-card-thumb">
+              <img src="/riddim_new.png" alt="Riddim Mixes">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">The Vault</div>
+                  <div class="portal-artist">Heavy Bass Techno Riddims</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:02</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:10%"></div></div>
+                <span class="time-label">5:33</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red flash-drive-trigger" href="#usb-builder" id="card-flashdrive-mixes" data-orbit-index="8">
+            <div class="glass-card-thumb">
+              <img src="/Images/FLASHDRIVEBANNER.png" onerror="this.src='/FLASHDRIVEBANNER.png'" alt="Exclusive Flash Drive Mixes">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Flash Drive Mixes</div>
+                  <div class="portal-artist">Custom USB Mixtape Builder</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:01</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:5%"></div></div>
+                <span class="time-label">1:12:44</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- (bottom bar moved to direct body child below - position:fixed requires no transform ancestor) -->
+
+      <!-- Live Crimson Lightning Flash Canvas Layer -->
+      <canvas id="lightning-flash-canvas"></canvas>
+
+    </div>
+    <!-- BOTTOM BAR: Direct child of body so position:fixed works (CSS perspective on parent breaks fixed) -->
+    <div id="home-dj-deck">
+      <div class="bottom-bar-wrapper">
+        <!-- Left: Cyber-Deck Mini HUD (Player & EQ Toggle) -->
+        <div class="cyber-deck-widget" id="cyber-deck">
+          <!-- Top Micro Bar: Brand & Segmented Switch -->
+          <div class="cd-top-bar">
+            <div class="cd-brand">CHINESE ASSASSIN</div>
+            <div class="cd-tab-switch">
+              <button class="cd-tab active" id="cd-tab-player">PLAYER</button>
+              <button class="cd-tab" id="cd-tab-eq">EQ</button>
+            </div>
+          </div>
+
+          <!-- VIEW 1: PLAYER HUD -->
+          <div class="cd-view cd-player-view active" id="cd-view-player">
+            <div class="cd-disc-thumb" id="cd-play-trigger" title="Click to Play / Pause">
+              <img src="/vip_new.png" alt="Shadow Warrior">
+              <div class="cd-play-overlay">
+                <svg viewBox="0 0 24 24" class="cd-icon-play" width="16" height="16"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                <svg viewBox="0 0 24 24" class="cd-icon-pause" width="16" height="16" style="display:none;"><path fill="#fff" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </div>
+            </div>
+            <div class="cd-meta-wrap">
+              <div class="cd-track-name">Shadow Warrior</div>
+              <div class="cd-artist-sub">Chinese Assassin &bull; <span id="ekho-time-cur">1:45</span> / <span id="ekho-time-total">3:14</span></div>
+              <div class="cd-waveform">
+                <span class="ebar eb1"></span><span class="ebar eb2"></span><span class="ebar eb3"></span>
+                <span class="ebar eb4"></span><span class="ebar eb5"></span><span class="ebar eb6"></span>
+                <span class="ebar eb7"></span><span class="ebar eb8"></span><span class="ebar eb9"></span>
+                <span class="ebar eb10"></span><span class="ebar eb11"></span><span class="ebar eb12"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 2: EQ HUD -->
+          <div class="cd-view cd-eq-view" id="cd-view-eq">
+            <div class="cd-faders-grid">
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="75" class="cd-range" id="eq-bench">
+                  <div class="cd-fader-fill" style="height: 75%;"></div>
+                </div>
+                <span class="cd-lbl">BENCH</span>
+              </div>
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="50" class="cd-range" id="eq-low">
+                  <div class="cd-fader-fill" style="height: 50%;"></div>
+                </div>
+                <span class="cd-lbl">LOW</span>
+              </div>
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="85" class="cd-range" id="eq-mid">
+                  <div class="cd-fader-fill" style="height: 85%;"></div>
+                </div>
+                <span class="cd-lbl">MID</span>
+              </div>
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="65" class="cd-range" id="eq-high">
+                  <div class="cd-fader-fill" style="height: 65%;"></div>
+                </div>
+                <span class="cd-lbl">HIGH</span>
+              </div>
+            </div>
+
+            <!-- Dial Knobs -->
+            <div class="cd-knobs-group">
+              <div class="cd-knob-unit">
+                <div class="cd-dial knob-large" id="knob-bass"><div class="cd-dot"></div></div>
+                <span class="cd-lbl">BASS</span>
+              </div>
+              <div class="cd-knob-unit">
+                <span class="cd-hz-val" id="sat-hz-text">44Hz</span>
+                <div class="cd-dial knob-small" id="knob-sat"><div class="cd-dot"></div></div>
+                <span class="cd-lbl">SAT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Center: DJ Controls -->
+        <div class="deck-controls">
+          <button id="home-play-btn" class="play-circle-btn">
+            <svg viewBox="0 0 24 24" class="icon-play" width="22" height="22"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+            <svg viewBox="0 0 24 24" class="icon-pause" width="22" height="22" style="display:none;"><path fill="#fff" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button id="home-fx-btn" class="fx-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+            <span>HOLD FOR LIVE DJ FILTER</span>
+          </button>
+        </div>
+        <!-- Right: Secret Chamber -->
+        <a href="#" id="secret-chamber-widget" class="secret-chamber-widget">
+          <div class="sc-icon-ring">
+            <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="none" stroke="#ff203a" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#ff203a"/><line x1="12" y1="2" x2="12" y2="6" stroke="#ff203a" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="22" stroke="#ff203a" stroke-width="2"/><line x1="2" y1="12" x2="6" y2="12" stroke="#ff203a" stroke-width="2"/><line x1="18" y1="12" x2="22" y2="12" stroke="#ff203a" stroke-width="2"/></svg>
+          </div>
+          <div class="sc-text">
+            <div class="sc-title">JOIN THE SECRET CHAMBER</div>
+            <div class="sc-sub">Unlock Exclusive Mixes & Content</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Secret Chamber Modal: Also direct body child for z-index isolation -->
+    <div id="secret-chamber-modal" class="sc-modal-overlay">
+      <div class="sc-modal-glass">
+        <button id="sc-modal-close" class="sc-close-btn">&times;</button>
+        <div class="sc-modal-header">
+          <div class="sc-reticle-ring">
+            <svg viewBox="0 0 24 24" width="36" height="36"><circle cx="12" cy="12" r="9" fill="none" stroke="#ff203a" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#ff203a"/><line x1="12" y1="2" x2="12" y2="6" stroke="#ff203a" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="22" stroke="#ff203a" stroke-width="2"/><line x1="2" y1="12" x2="6" y2="12" stroke="#ff203a" stroke-width="2"/><line x1="18" y1="12" x2="22" y2="12" stroke="#ff203a" stroke-width="2"/></svg>
+          </div>
+          <h2 class="sc-modal-title">THE SECRET CHAMBER</h2>
+          <p class="sc-modal-subtitle">ACCESS GRANTED &mdash; VIP UNRELEASED VAULT 2026</p>
+        </div>
+        <div class="sc-modal-body">
+          <div class="sc-vip-card">
+            <img src="/vip_new.png" alt="VIP Pass" class="sc-vip-img">
+            <div class="sc-vip-info">
+              <h3>Chinese Assassin VIP Pass</h3>
+              <p>Unlock 100+ Exclusive Dubplates, Stems & Live Sets</p>
+              <div class="sc-badge">AUTHENTICATED</div>
+            </div>
+          </div>
+          <div class="sc-download-grid">
+            <div class="sc-dl-item">
+              <span class="dl-icon">&#9889;</span>
+              <div class="dl-details">
+                <div class="dl-name">Forbidden Temple Dubplate [24-Bit FLAC]</div>
+                <div class="dl-size">48.2 MB &bull; Unreleased</div>
+              </div>
+              <button class="dl-btn">DOWNLOAD</button>
+            </div>
+            <div class="sc-dl-item">
+              <span class="dl-icon">&#127915;</span>
+              <div class="dl-details">
+                <div class="dl-name">Riddim Techno Stem Pack 2026</div>
+                <div class="dl-size">210 MB &bull; Producer Exclusive</div>
+              </div>
+              <button class="dl-btn">DOWNLOAD</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Auth tab switcher
+      function switchAuthTab(tab) {
+        const loginPanel    = document.getElementById('panel-login');
+        const registerPanel = document.getElementById('panel-register');
+        const tabLogin      = document.getElementById('tab-login');
+        const tabRegister   = document.getElementById('tab-register');
+
+        if (tab === 'login') {
+          loginPanel.style.display    = '';
+          registerPanel.style.display = 'none';
+          tabLogin.classList.add('active');
+          tabRegister.classList.remove('active');
+        } else {
+          loginPanel.style.display    = 'none';
+          registerPanel.style.display = '';
+          tabLogin.classList.remove('active');
+          tabRegister.classList.add('active');
+        }
+      }
+
+      // Password visibility toggle
+      function togglePwd(inputId, btn) {
+        const inp = document.getElementById(inputId);
+        if (!inp) return;
+        if (inp.type === 'password') {
+          inp.type = 'text';
+          btn.textContent = '🙈';
+        } else {
+          inp.type = 'password';
+          btn.textContent = '👁';
+        }
+      }
+
+      // â”€â”€ Login form submit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const pass  = document.getElementById('login-password').value;
+        if (!email || !pass) return;
+        
+        const username = email.split('@')[0] || 'Assassin VIP';
+        if (typeof window.triggerBiometricScanSequence === 'function') {
+          window.triggerBiometricScanSequence(username);
+        } else {
+          alert('Welcome back, ' + username);
+        }
+      }
+
+      // â”€â”€ Register form submit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function handleRegister(e) {
+        e.preventDefault();
+        const name    = document.getElementById('reg-name').value;
+        const email   = document.getElementById('reg-email').value;
+        const pass    = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+        if (pass !== confirm) { alert('Passwords do not match!'); return; }
+        
+        if (typeof window.triggerBiometricScanSequence === 'function') {
+          window.triggerBiometricScanSequence(name);
+        } else {
+          alert(`Account created for ${name}! 🎯`);
+        }
+      }
+
+      // â”€â”€ Google Sign-In callback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function handleGoogleCredential(response) {
+        console.log('Google credential received:', response.credential);
+        if (typeof window.triggerBiometricScanSequence === 'function') {
+          window.triggerBiometricScanSequence('Google Assassin');
+        }
+      }
+
+      // Wire Google buttons via Google Identity Services
+      window.addEventListener('load', () => {
+        const googleBtns = document.querySelectorAll('#google-signin-btn, #google-register-btn');
+        googleBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (window.google && window.google.accounts) {
+              google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+                callback: handleGoogleCredential
+              });
+              google.accounts.id.prompt();
+            } else {
+              // Demo fallback for preview testing
+              if (typeof window.triggerBiometricScanSequence === 'function') {
+                window.triggerBiometricScanSequence('Google Assassin');
+              }
+            }
+          });
+        });
+      });
+    </script>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
+

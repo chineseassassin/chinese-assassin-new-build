@@ -1,0 +1,253 @@
+/* ── Mechanical Slide-Open Card Architecture ── */
+.ca-poster {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 0 35px rgba(220, 15, 35, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9));
+  transition: opacity 0.4s ease;
+}
+
+.ca-card.card-opened .ca-poster {
+  opacity: 0;
+}
+
+/* Glowing Cyber Matrix in Gap */
+.ca-cyber-matrix {
+  position: absolute;
+  top: 10%;
+  left: 6%;
+  width: 88%;
+  height: 80%;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 20, 40, 0.2) 0%, transparent 70%),
+              repeating-linear-gradient(0deg, transparent 0, transparent 18px, rgba(255, 40, 60, 0.08) 19px),
+              repeating-linear-gradient(90deg, transparent 0, transparent 18px, rgba(255, 40, 60, 0.08) 19px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 0.5s ease;
+}
+
+.ca-card.card-opened .ca-cyber-matrix {
+  opacity: 1;
+}
+
+/* Telescoping Crystal Side Pillars */
+.ca-telescoping-pillar {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 14;
+  transform: scaleY(0.95);
+  transition: transform 0.7s cubic-bezier(0.18, 0.9, 0.28, 1.25), opacity 0.35s ease;
+}
+
+.ca-telescoping-pillar img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.ca-card.card-opened .ca-telescoping-pillar {
+  opacity: 1;
+  transform: scaleY(1.06);
+}
+
+/* Sliding Halves */
+.ca-sliding-half {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 15;
+  transition: transform 0.7s cubic-bezier(0.18, 0.9, 0.28, 1.25), opacity 0.35s ease;
+}
+
+.ca-sliding-half img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.ca-top-half {
+  transform: translateY(0);
+}
+
+.ca-bottom-half {
+  transform: translateY(0);
+}
+
+.ca-card.card-opened .ca-sliding-half {
+  opacity: 1;
+}
+
+.ca-card.card-opened .ca-top-half {
+  transform: translateY(-8.5%);
+}
+
+.ca-card.card-opened .ca-bottom-half {
+  transform: translateY(8.5%);
+}
+
+/* Live Dynamic Scrubber & Timestamp on Bottom Deck */
+.ca-live-scrubber-track {
+  position: absolute;
+  left: 26.6%;
+  top: 78.4%;
+  width: 6.8%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 16;
+}
+
+.ca-live-scrubber-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff1a30, #ff5566, #ffffff);
+  box-shadow: 0 0 6px #ff2233;
+  transition: width 0.15s linear;
+}
+
+.ca-live-timestamp {
+  position: absolute;
+  left: 26.6%;
+  top: 75.8%;
+  font-size: 8px;
+  font-family: monospace;
+  font-weight: 700;
+  color: #ff4d60;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  z-index: 16;
+  text-shadow: 0 0 4px rgba(255, 30, 50, 0.8);
+}
+
+/* Laser Energy Conduit Beams */
+.ca-energy-beam {
+  position: absolute;
+  width: 3px;
+  background: linear-gradient(180deg, rgba(255, 30, 50, 0.9) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 30, 50, 0.9) 100%);
+  box-shadow: 0 0 12px rgba(255, 20, 40, 0.9), 0 0 24px rgba(255, 0, 30, 0.7);
+  z-index: 12;
+  opacity: 0;
+  top: 15%;
+  height: 70%;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.7s ease;
+  transform: scaleY(0.2);
+}
+
+.ca-beam-left {
+  left: 7.2%;
+}
+
+.ca-beam-right {
+  right: 7.2%;
+}
+
+.ca-card.card-opened .ca-energy-beam {
+  opacity: 1;
+  transform: scaleY(1);
+  animation: beamFlicker 0.15s infinite alternate;
+}
+
+@keyframes beamFlicker {
+  0% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+/* ── Feature 1: Holographic Screen Chamber (Revealed in the opened mechanical aperture) ── */
+.ca-screen-chamber {
+  position: absolute;
+  top: 14.0%;
+  left: 8.61%;
+  width: 82.78%;
+  height: 68.0%;
+  border-radius: 18px;
+  overflow: hidden;
+  display: none;
+  opacity: 0;
+  z-index: 10;
+  background: #000000;
+  cursor: pointer;
+  box-shadow: 0 0 50px rgba(255, 20, 45, 0.5), inset 0 0 35px rgba(0, 0, 0, 0.95);
+  border: 2px solid rgba(255, 40, 60, 0.55);
+  transform: scale(0.92);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.18, 0.9, 0.28, 1.25);
+}
+
+.ca-screen-chamber.active {
+  display: block;
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* 4 Luxury Crystal Cyber Corner Brackets */
+.ca-corner-bracket {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 3px solid #ff2a40;
+  z-index: 15;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(255, 30, 50, 0.8);
+}
+
+.ca-corner-bracket.tl {
+  top: -2px;
+  left: -2px;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: 18px;
+}
+
+.ca-corner-bracket.tr {
+  top: -2px;
+  right: -2px;
+  border-left: 0;
+  border-bottom: 0;
+  border-top-right-radius: 18px;
+}
+
+.ca-corner-bracket.bl {
+  bottom: -2px;
+  left: -2px;
+  border-right: 0;
+  border-top: 0;
+  border-bottom-left-radius: 18px;
+}
+
+.ca-corner-bracket.br {
+  bottom: -2px;
+  right: -2px;
+  border-left: 0;
+  border-top: 0;
+  border-bottom-right-radius: 18px;
+}
+
+.ca-corner-bracket::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ff1a30;
+}
+
+.ca-corner-bracket.tl::after { top: 3px; left: 3px; }
+.ca-corner-bracket.tr::after { top: 3px; right: 3px; }
+.ca-corner-bracket.bl::after { bottom: 3px; left: 3px; }
+.ca-corner-bracket.br::after { bottom: 3px; right: 3px; }

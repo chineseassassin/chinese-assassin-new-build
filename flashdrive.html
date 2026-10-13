@@ -1,0 +1,3276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Assassin — Custom Flash Drive Mixtape Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- ── DIMENSION HUB FLOATING NAV CSS ─────────────────────────────────────── -->
+  <style>
+    /* ── DIMENSION HUB FLOATING NAVBAR (ported from dimension-hub.html) ── */
+    :root {
+      --primary-neon: #ff1a1a;
+      --glow-pink: rgba(255, 26, 26, 0.5);
+      --header-bg-dh: rgba(10, 10, 10, 0.88);
+      --header-border-dh: rgba(255, 32, 58, 0.35);
+      --mega-bg-dh: rgba(12, 6, 12, 0.96);
+      --mega-border-dh: rgba(255, 32, 58, 0.3);
+      --mega-link-dh: rgba(255, 255, 255, 0.75);
+      --mega-featured-bg-dh: rgba(255, 32, 58, 0.08);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC FLOATING MEGA MENU HEADER (DIMENSION HUB STYLING)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .site-header.floating-header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1320px;
+      height: 52px;
+      background: rgba(10, 4, 12, 0.85);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 32, 58, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 9000;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-rotator {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      perspective: 600px;
+    }
+
+    .site-logo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+      border: 1px solid var(--primary-neon, #ff0055);
+      transform: rotateY(-90deg) scale(1.15);
+      opacity: 0;
+      pointer-events: none;
+      object-fit: cover;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-in;
+    }
+
+    .site-logo-img.rot-active {
+      transform: rotateY(0deg) scale(1.15);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-logo-img.rot-exit {
+      transform: rotateY(90deg) scale(1.15);
+      opacity: 0;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-out;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .logo span {
+      color: var(--primary-neon, #ff0055);
+      text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-item > a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 4px;
+      position: relative;
+    }
+
+    .nav-item > a::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-neon, #ff0055);
+      transition: width 0.25s ease;
+    }
+
+    .nav-item > a:hover::after,
+    .nav-item > a.active::after {
+      width: 100%;
+    }
+
+    .nav-item > a:hover,
+    .nav-item > a.active {
+      color: var(--primary-neon, #ff0055);
+    }
+
+    .nav-item.has-mega-menu:hover .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .chevron {
+      font-size: 0.7rem;
+      margin-left: 5px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.has-mega-menu:hover .chevron {
+      transform: rotate(180deg);
+    }
+
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 780px;
+      background: rgba(14, 6, 12, 0.96);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1.5px solid rgba(255, 32, 58, 0.4);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 32, 58, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 9100;
+    }
+
+    .mega-menu-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    .mega-col {
+      flex: 1;
+    }
+
+    .mega-col h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary-neon, #ff0055);
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .mega-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mega-col ul a {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: block;
+      padding: 5px 0;
+    }
+
+    .mega-col ul a:hover {
+      color: var(--primary-neon, #ff0055);
+      transform: translateX(4px);
+    }
+
+    .mega-col.featured-set {
+      flex: 1.3;
+      background: rgba(255, 32, 58, 0.06);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 32, 58, 0.2);
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 95px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 32, 58, 0.3);
+    }
+
+    .mix-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mix-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s;
+    }
+
+    .mix-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--primary-neon, #ff0055);
+    }
+
+    .mix-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: #ff203a;
+      transform: scale(1.1);
+    }
+
+    .sign-in-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid #ff203a;
+      color: #ff203a !important;
+      font-size: 0.70rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-decoration: none;
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 10px rgba(255, 32, 58, 0.25);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sign-in-btn:hover {
+      background: #ff203a;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-drawer-card {
+      width: min(340px, 85vw);
+      height: 100%;
+      background: rgba(14, 6, 12, 0.98);
+      border-left: 1.5px solid rgba(255, 32, 58, 0.4);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-drawer-close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mobile-drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .mobile-nav-item {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: rgba(255, 32, 58, 0.4);
+      color: #ff203a;
+    }
+
+    .dh-flash-drive-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255, 32, 58, 0.18);
+      border: 1px solid var(--primary-neon);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.35);
+    }
+  </style>
+  <style>
+    :root {
+      --bg-dark: #050408;
+      --glass-surface: rgba(16, 10, 22, 0.58);
+      --glass-surface-hover: rgba(28, 16, 36, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-specular: rgba(255, 255, 255, 0.35);
+      --primary-red: #ff203a;
+      --neon-red: #ff0044;
+      --neon-ruby: #ff1a40;
+      --glow-red: rgba(255, 32, 58, 0.55);
+      --glow-subtle: rgba(255, 32, 58, 0.22);
+      --text-main: #ffffff;
+      --text-muted: #9595aa;
+      --accent-gold: #ffb703;
+      --accent-cyan: #00e5ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      position: relative;
+    }
+
+    /* ── AMBIENT GLASS BACKGROUND ORBS & GRID ────────────────────────────── */
+    .ambient-orbs-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glass-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.6;
+      animation: orbFloat 14s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #ff1a40 0%, rgba(180, 10, 30, 0.3) 60%, transparent 80%);
+      top: -150px;
+      left: 20%;
+      animation-duration: 12s;
+    }
+
+    .orb-2 {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, #5a0820 0%, rgba(60, 4, 30, 0.4) 50%, transparent 80%);
+      bottom: -200px;
+      right: 5%;
+      animation-duration: 18s;
+    }
+
+    .orb-3 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #300618 0%, rgba(200, 20, 50, 0.2) 60%, transparent 80%);
+      top: 40%;
+      left: 60%;
+      animation-duration: 15s;
+    }
+
+    @keyframes orbFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(40px, -30px) scale(1.08); }
+      100% { transform: translate(-30px, 35px) scale(0.95); }
+    }
+
+    .ambient-grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(8, 4, 10, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 32, 58, 0.35);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 10px var(--primary-red);
+    }
+
+    /* ── MASTER DASHBOARD LAYOUT ────────────────────────────────────────── */
+    .dashboard-container {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 240px 1fr 340px;
+      grid-template-rows: 68px 1fr 76px;
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      padding-top: 84px; /* clearance for floating pill nav */
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* ── TOP HEADER BAR (CRYSTAL GLASS) ─────────────────────────────────── */
+    .top-header {
+      grid-column: 1 / -1;
+      grid-row: 1 / 2;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 26px;
+      background: rgba(10, 5, 14, 0.65);
+      border: none !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
+      z-index: 100;
+    }
+
+    /* Search Bar (Frosted Capsule Centered in Middle) */
+    .top-search-wrap {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      max-width: 520px;
+      margin: 0;
+    }
+
+    .top-search-input {
+      width: 100%;
+      padding: 9px 18px 9px 42px;
+      background: rgba(22, 14, 30, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .top-search-input:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(255, 183, 3, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      background: rgba(30, 18, 40, 0.85);
+    }
+
+    .top-search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      font-size: 0.9rem;
+    }
+
+    /* Top Right Actions */
+    .top-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .top-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(255, 183, 3, 0.1);
+      border: 1.5px solid rgba(255, 183, 3, 0.6);
+      border-radius: 20px;
+      color: var(--accent-gold);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.22s ease;
+    }
+
+    .top-action-btn:hover {
+      background: var(--accent-gold);
+      color: #000000;
+      box-shadow: 0 0 22px rgba(255, 183, 3, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      transform: translateY(-1px) scale(1.03);
+    }
+
+    .top-user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 14px 5px 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 30px;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+    }
+    .top-user-pill:hover {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 15px var(--glow-subtle);
+    }
+
+    .top-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--primary-red);
+      object-fit: cover;
+    }
+
+    .top-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-user-name {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .top-user-role {
+      font-size: 0.62rem;
+      color: var(--primary-red);
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* ── LEFT SIDEBAR (TRANSLUCENT ACRYLIC) ───────────────────────────────── */
+    .sidebar-nav {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+      min-height: 0;
+      background: rgba(10, 6, 14, 0.55);
+      border-right: 1px solid var(--glass-border);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .nav-link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: all 0.18s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link-item .nav-icon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      opacity: 0.75;
+    }
+
+    .nav-link-item:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateX(3px);
+    }
+
+    .nav-link-item.active {
+      color: #ffffff;
+      background: linear-gradient(90deg, rgba(255, 32, 58, 0.32) 0%, rgba(255, 32, 58, 0.08) 100%);
+      border-left: 3px solid var(--primary-red);
+      border-top: 1px solid rgba(255, 32, 58, 0.4);
+      border-bottom: 1px solid rgba(255, 32, 58, 0.4);
+      box-shadow: inset 0 0 15px rgba(255, 32, 58, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-link-item.active .nav-icon {
+      opacity: 1;
+      color: var(--primary-red);
+      filter: drop-shadow(0 0 8px var(--primary-red));
+    }
+
+    .nav-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      margin: 8px 4px;
+    }
+
+    /* ── CENTER MAIN CONTENT ────────────────────────────────────────────── */
+    .main-workspace {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+      min-height: 0;
+      padding: 14px 20px 14px 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ── DUAL SECTION: BANNER / VIDEO SCREEN ─────────────────────────── */
+    .hero-dual-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    /* 1. Banner Mode Card */
+    .hero-banner-card {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(32, 10, 20, 0.7) 0%, rgba(12, 4, 12, 0.62) 100%);
+      border: 1px solid var(--glass-border-specular);
+      padding: 42px 52px;
+      overflow: hidden;
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.45),
+        inset 0 0 35px rgba(255, 32, 58, 0.22),
+        0 20px 50px rgba(0, 0, 0, 0.85),
+        0 0 30px var(--glow-subtle);
+      backdrop-filter: blur(32px) saturate(180%);
+      -webkit-backdrop-filter: blur(32px) saturate(180%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .hero-dual-wrapper.video-active .hero-banner-card {
+      display: none;
+    }
+
+    .hero-banner-content {
+      max-width: 65%;
+      z-index: 2;
+      position: relative;
+    }
+
+    .hero-subtitle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: #ff3b53;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      text-shadow: 0 0 14px rgba(255, 59, 83, 0.7);
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.8rem, 3.6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 0 12px rgba(255, 255, 255, 0.2);
+      white-space: normal;
+    }
+
+    .hero-tagline {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--primary-red);
+      letter-spacing: 2.5px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      text-shadow: 0 0 28px rgba(255, 32, 58, 0.9);
+    }
+
+    .hero-desc {
+      font-size: 1.0rem;
+      color: #dedee8;
+      margin-bottom: 18px;
+      line-height: 1.52;
+      max-width: 560px;
+    }
+
+    .hero-perks-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .hero-perk {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(16, 8, 20, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 10px 20px;
+      border-radius: 28px;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.22s ease;
+    }
+    .hero-perk:hover {
+      border-color: var(--primary-red);
+      background: rgba(255, 32, 58, 0.22);
+      box-shadow: 0 0 20px rgba(255, 32, 58, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .hero-perk-icon {
+      color: var(--primary-red);
+      font-size: 1.15rem;
+      filter: drop-shadow(0 0 6px var(--primary-red));
+    }
+
+    .hero-perk strong {
+      display: block;
+      color: #ffffff;
+      font-size: 0.76rem;
+      letter-spacing: 0.8px;
+    }
+
+    .hero-perk span {
+      display: block;
+      color: #a8a8ba;
+      font-size: 0.66rem;
+    }
+
+    .hero-video-launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: linear-gradient(90deg, #ff203a 0%, #a8001e 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      border-radius: 28px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--glow-red), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+      transition: all 0.25s ease;
+    }
+
+    .hero-video-launch-btn:hover {
+      background: #ff0044;
+      box-shadow: 0 0 35px var(--primary-red), inset 0 1px 2px #ffffff;
+      transform: scale(1.04);
+    }
+
+    .hero-video-launch-btn .hero-play-ico {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #b00020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      padding-left: 2px;
+    }
+
+    .hero-banner-image-wrap {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 52%;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 0 22px 22px 0;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 20%, black 100%);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 20%, black 100%);
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      filter: drop-shadow(0 0 35px rgba(255, 32, 58, 0.5));
+    }
+
+    /* 2. Video Screen Mode Card */
+    .hero-video-screen-card {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 540px;
+      border-radius: 22px;
+      background: #000000;
+      border: 1.5px solid var(--primary-red);
+      overflow: hidden;
+      box-shadow: 0 0 40px var(--glow-red), 0 20px 60px rgba(0, 0, 0, 0.95);
+      animation: videoScreenFadeIn 0.35s ease forwards;
+    }
+
+    .hero-dual-wrapper.video-active .hero-video-screen-card {
+      display: block;
+    }
+
+    @keyframes videoScreenFadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero-cinematic-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Video HUD Overlay Header */
+    .video-hud-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .video-hud-live-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
+      background: rgba(20, 8, 16, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+    }
+
+    .live-pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary-red);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--primary-red);
+      animation: liveDotPulse 1s infinite alternate ease-in-out;
+    }
+    @keyframes liveDotPulse {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      100% { transform: scale(1.3); opacity: 1; }
+    }
+
+    .video-hud-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .video-hud-btn {
+      background: rgba(16, 10, 20, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+    }
+    .video-hud-btn:hover {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    .video-hud-btn.stop-btn {
+      background: rgba(255, 32, 58, 0.3);
+      border-color: var(--primary-red);
+      color: #ffffff;
+      box-shadow: 0 0 15px var(--glow-red);
+    }
+    .video-hud-btn.stop-btn:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 25px var(--primary-red);
+    }
+
+    /* Video HUD Overlay Footer Controls */
+    .video-hud-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    .video-hud-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .video-ctrl-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .video-ctrl-btn:hover {
+      background: var(--primary-red);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 10px var(--primary-red);
+    }
+
+    .video-time-track {
+      font-family: monospace;
+      font-size: 0.72rem;
+      color: #ff99aa;
+      font-weight: 700;
+    }
+
+    .video-progress-container {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff203a 0%, #ff7700 100%);
+      box-shadow: 0 0 10px var(--primary-red);
+      border-radius: 6px;
+      transition: width 0.1s linear;
+    }
+
+    .video-hud-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .video-stop-banner-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 32, 58, 0.2);
+      border: 1px solid var(--primary-red);
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    .video-stop-banner-btn:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 20px var(--primary-red);
+      transform: scale(1.04);
+    }
+
+    /* Filter Tabs Bar */
+    .filter-tabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 5px 12px;
+      border-radius: 16px;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+    }
+
+    .filter-pill:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .filter-pill.active {
+      background: linear-gradient(135deg, #ff203a 0%, #a0051e 100%);
+      border-color: rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      box-shadow: 0 0 20px var(--glow-red), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    /* ── SELECT CAPACITY ROW (3D CRYSTAL CARDS) ─────────────────────────── */
+    .section-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .capacity-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .capacity-card {
+      position: relative;
+      background: rgba(18, 12, 24, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 10px 8px 8px 8px;
+      text-align: center;
+      cursor: pointer;
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 8px 24px rgba(0, 0, 0, 0.6);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .capacity-card:hover {
+      border-color: rgba(255, 60, 90, 0.6);
+      background: rgba(30, 16, 38, 0.75);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--glow-subtle);
+    }
+
+    .capacity-card.active {
+      border-color: var(--primary-red);
+      background: linear-gradient(180deg, rgba(60, 12, 25, 0.8) 0%, rgba(20, 8, 18, 0.9) 100%);
+      box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.6),
+        inset 0 0 25px rgba(255, 32, 58, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.8),
+        0 0 25px var(--glow-red);
+    }
+
+    .capacity-badge {
+      position: absolute;
+      top: -8px;
+      background: var(--primary-red);
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px var(--glow-red), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .capacity-svg {
+      width: 24px;
+      height: 24px;
+      fill: rgba(255, 255, 255, 0.6);
+      margin-bottom: 2px;
+      transition: all 0.2s ease;
+    }
+    .capacity-card.active .capacity-svg {
+      fill: var(--primary-red);
+      filter: drop-shadow(0 0 8px var(--primary-red));
+    }
+
+    .capacity-size {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .capacity-price {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #c4c4d4;
+    }
+    .capacity-card.active .capacity-price {
+      color: #ff99aa;
+    }
+
+    /* ── DRIVE BUILDER STATS & STORAGE BAR (FROSTED CHASSIS) ────────────── */
+    .builder-stats-box {
+      background: rgba(16, 10, 22, 0.58);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      backdrop-filter: blur(24px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .builder-storage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .builder-header-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+
+    .builder-storage-ratio {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--primary-red);
+      text-shadow: 0 0 10px var(--glow-red);
+    }
+
+    .storage-progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .storage-progress-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #ff203a 0%, #ff6600 100%);
+      box-shadow: 0 0 16px var(--primary-red);
+      border-radius: 10px;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stats-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat-mini-card {
+      background: rgba(26, 16, 32, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-mini-icon {
+      font-size: 1.2rem;
+      color: var(--primary-red);
+      filter: drop-shadow(0 0 6px var(--primary-red));
+    }
+
+    .stat-mini-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-mini-val {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .stat-mini-lbl {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ── SELECTED MIXES CAROUSEL ────────────────────────────────────────── */
+    .selected-mixes-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mixes-scroll-wrap {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .mix-item-card {
+      position: relative;
+      flex: 0 0 148px;
+      background: rgba(22, 14, 28, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.7);
+      transition: all 0.22s ease;
+    }
+
+    .mix-item-card:hover {
+      border-color: var(--primary-red);
+      transform: translateY(-4px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 12px 30px rgba(0, 0, 0, 0.85), 0 0 20px var(--glow-red);
+    }
+
+    .mix-cover-box {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #000000;
+      overflow: hidden;
+    }
+
+    .mix-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mix-card-remove {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      background: rgba(10, 4, 8, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      cursor: pointer;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+      transition: all 0.15s ease;
+    }
+
+    .mix-card-remove:hover {
+      background: var(--primary-red);
+      border-color: #ffffff;
+      box-shadow: 0 0 10px var(--primary-red);
+      transform: scale(1.15);
+    }
+
+    .mix-genre-badge {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      background: rgba(10, 4, 8, 0.85);
+      border: 1px solid var(--primary-red);
+      color: #ff99aa;
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(8px);
+    }
+
+    .mix-item-info {
+      padding: 8px 10px;
+    }
+
+    .mix-item-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .mix-item-meta {
+      font-size: 0.64rem;
+      color: var(--text-muted);
+    }
+
+    /* Drag & Drop Add More Box (Frosted Outline) */
+    .drag-drop-box {
+      border: 1.5px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.22s ease;
+    }
+
+    .drag-drop-box:hover {
+      border-color: var(--primary-red);
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 20px rgba(255, 32, 58, 0.25);
+    }
+
+    .drag-drop-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 32, 58, 0.2);
+      border: 1px solid var(--primary-red);
+      color: var(--primary-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      box-shadow: 0 0 10px var(--glow-red);
+    }
+
+    .drag-drop-text {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #d8d8e8;
+    }
+    .drag-drop-text span {
+      display: block;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── RIGHT COLUMN: USB ORDER PANEL (DEEP FROSTED GLASS) ─────────────── */
+    .order-sidebar {
+      grid-column: 3 / 4;
+      grid-row: 2 / 3;
+      min-height: 0;
+      background: rgba(14, 8, 18, 0.65);
+      border-left: 1px solid var(--glass-border);
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .order-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-main-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .order-step-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--primary-red);
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px var(--glow-red);
+    }
+
+    .order-section-title {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .order-drive-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(28, 16, 32, 0.55);
+      border: 1px solid rgba(255, 32, 58, 0.35);
+      border-radius: 12px;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .order-drive-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .order-drive-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      object-fit: cover;
+    }
+
+    .order-drive-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .order-drive-name {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .order-drive-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .order-badge-popular {
+      background: var(--primary-red);
+      color: #ffffff;
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 10px var(--glow-red);
+    }
+
+    /* Selected Mixes List in Order */
+    .order-mix-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .order-mix-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .order-mix-row-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .order-mix-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .order-mix-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .order-mix-name {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .order-mix-sub {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+    }
+
+    .order-mix-del {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: color 0.15s;
+    }
+    .order-mix-del:hover {
+      color: var(--primary-red);
+    }
+
+    .order-mix-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding-top: 6px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+
+    /* Order Summary & Checkout Box */
+    .order-summary-box {
+      margin-top: auto;
+      background: rgba(24, 14, 30, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 8px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .summary-calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .summary-calc-row.total {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #ffffff;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 8px;
+    }
+    .summary-calc-row.total span:last-child {
+      color: var(--primary-red);
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 12px var(--glow-red);
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(90deg, #ff203a 0%, #b30022 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      border-radius: 30px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 0 25px var(--glow-red);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .checkout-btn:hover {
+      background: #ff0044;
+      box-shadow: 0 0 35px var(--primary-red), inset 0 1px 2px #ffffff;
+      transform: scale(1.02);
+    }
+
+    .security-badges-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ── BOTTOM PERSISTENT PLAYER BAR (LIQUID GLASS CAPSULE) ─────────────── */
+    .player-dock-bar {
+      grid-column: 1 / -1;
+      grid-row: 3 / 4;
+      background: rgba(10, 5, 14, 0.78);
+      border-top: 1px solid rgba(255, 32, 58, 0.35);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 26px;
+      z-index: 100;
+    }
+
+    .player-left-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 300px;
+    }
+
+    .player-album-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      border: 1.5px solid var(--primary-red);
+      box-shadow: 0 0 15px var(--glow-subtle);
+      object-fit: cover;
+    }
+
+    .player-track-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .player-track-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .player-track-album {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .player-track-time {
+      font-size: 0.65rem;
+      color: var(--primary-red);
+      font-family: monospace;
+      font-weight: 700;
+    }
+
+    /* Audio Waveform Canvas / Mock Bars */
+    .player-waveform-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 24px;
+      margin-left: 10px;
+    }
+
+    .wave-bar {
+      width: 3px;
+      background: var(--primary-red);
+      border-radius: 2px;
+      box-shadow: 0 0 6px var(--primary-red);
+      animation: wavePulse 1.2s infinite ease-in-out alternate;
+    }
+    @keyframes wavePulse {
+      0% { height: 4px; opacity: 0.4; }
+      100% { height: 22px; opacity: 1; }
+    }
+
+    /* Player Controls Center */
+    .player-controls-center {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .player-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .player-btn:hover {
+      color: #ffffff;
+      transform: scale(1.15);
+    }
+
+    .player-play-hero {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff203a 0%, #990022 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.8);
+      color: #ffffff;
+      font-size: 1.2rem;
+      box-shadow: 0 0 25px var(--glow-red), inset 0 1px 2px #ffffff;
+    }
+
+    .player-play-hero:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 35px var(--primary-red);
+    }
+
+    /* Player Right Actions */
+    .player-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dj-filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(255, 32, 58, 0.15);
+      border: 1px solid var(--primary-red);
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 0 15px var(--glow-subtle);
+      transition: all 0.2s ease;
+    }
+
+    .dj-filter-btn:hover, .dj-filter-btn.active {
+      background: var(--primary-red);
+      box-shadow: 0 0 22px var(--glow-red), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .secret-chamber-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #ffffff;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+    }
+
+    .secret-chamber-box:hover {
+      border-color: var(--accent-gold);
+      background: rgba(255, 183, 3, 0.15);
+      box-shadow: 0 0 18px rgba(255, 183, 3, 0.4);
+    }
+
+    .secret-chamber-info strong {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .secret-chamber-info span {
+      display: block;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+    }
+
+    /* Toast HUD */
+    .hud-toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(16, 8, 20, 0.95);
+      border: 1.5px solid var(--primary-red);
+      color: #ffffff;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 0 30px var(--glow-red);
+      display: none;
+      z-index: 10000;
+      backdrop-filter: blur(20px);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       MODERN UI ENHANCEMENTS — ALL 10 NON-DESTRUCTIVE UPGRADES
+       ══════════════════════════════════════════════════════════════════════ */
+
+    /* ── #1 GLASSMORPHISM CAPACITY CARDS ──────────────────────────────────── */
+    .capacity-card {
+      background: rgba(18, 10, 28, 0.42) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(0,0,0,0.3),
+        0 8px 28px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255,255,255,0.04) !important;
+      backdrop-filter: blur(28px) saturate(190%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.32s ease,
+                  border-color 0.32s ease !important;
+    }
+    .capacity-card:hover {
+      transform: translateY(-6px) scale(1.035) !important;
+      border-color: rgba(255, 80, 100, 0.65) !important;
+      background: rgba(38, 16, 44, 0.72) !important;
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.48),
+        0 18px 44px rgba(0, 0, 0, 0.88),
+        0 0 28px rgba(255, 32, 58, 0.28) !important;
+    }
+    @keyframes activeCardPulseRing {
+      0%, 100% { box-shadow: inset 0 1.5px 2px rgba(255,255,255,0.62), inset 0 0 30px rgba(255,32,58,0.45), 0 0 0 2px rgba(255,32,58,0.55), 0 0 30px rgba(255,32,58,0.45), 0 14px 36px rgba(0,0,0,0.88); }
+      50%       { box-shadow: inset 0 1.5px 2px rgba(255,255,255,0.62), inset 0 0 30px rgba(255,32,58,0.45), 0 0 0 4px rgba(255,32,58,0.25), 0 0 50px rgba(255,32,58,0.6), 0 14px 36px rgba(0,0,0,0.88); }
+    }
+    .capacity-card.active {
+      border-color: var(--primary-red) !important;
+      background: linear-gradient(160deg, rgba(65, 12, 28, 0.85) 0%, rgba(20, 6, 18, 0.92) 100%) !important;
+      animation: activeCardPulseRing 2.4s ease-in-out infinite !important;
+    }
+
+    /* ── #2 ANIMATED STORAGE PROGRESS BAR ────────────────────────────────── */
+    .storage-progress-track {
+      height: 10px !important;
+      border-radius: 12px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.08) !important;
+    }
+    .storage-progress-fill {
+      height: 100% !important;
+      border-radius: 12px !important;
+      transition: width 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    .storage-progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+      animation: storageSweep 2s ease-in-out infinite;
+    }
+    @keyframes storageSweep {
+      0%   { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    /* ── #3 LIVE CANVAS WAVEFORM ─────────────────────────────────────────── */
+    #waveformCanvas {
+      height: 24px;
+      width: 80px;
+      display: block;
+    }
+
+    /* ── #4 MIX CARDS 3D TILT ────────────────────────────────────────────── */
+    .mix-item-card {
+      transform-style: preserve-3d !important;
+      will-change: transform !important;
+      transition: transform 0.12s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
+    }
+    .mix-item-card:hover {
+      box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.4),
+        0 20px 50px rgba(0,0,0,0.9),
+        0 0 30px var(--glow-red),
+        0 0 0 1px rgba(255,32,58,0.4) !important;
+    }
+
+    /* ── #5 HERO PARTICLE CANVAS ─────────────────────────────────────────── */
+    #heroParticleCanvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      border-radius: 22px;
+    }
+
+    /* ── #6 GLOWING CHECKOUT CTA SHIMMER ─────────────────────────────────── */
+    .checkout-btn {
+      background: linear-gradient(100deg, #ff203a 0%, #cc0028 40%, #ff3a52 80%, #cc0028 100%) !important;
+      background-size: 200% auto !important;
+      animation: checkoutShimmer 3s linear infinite !important;
+      position: relative !important;
+      overflow: hidden !important;
+      box-shadow:
+        0 0 28px rgba(255, 32, 58, 0.55),
+        inset 0 1px 1px rgba(255,255,255,0.65) !important;
+    }
+    @keyframes checkoutShimmer {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    .checkout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    }
+    .checkout-btn:hover::before {
+      animation: checkoutSwipe 0.55s ease forwards;
+    }
+    @keyframes checkoutSwipe {
+      0%   { left: -60%; }
+      100% { left: 130%; }
+    }
+    .checkout-btn:hover {
+      transform: translateY(-2px) scale(1.025) !important;
+      box-shadow:
+        0 0 50px rgba(255, 32, 58, 0.75),
+        0 8px 24px rgba(0,0,0,0.8),
+        inset 0 1px 2px #ffffff !important;
+    }
+    .checkout-btn:active { transform: scale(0.97) !important; }
+
+    /* ── #7 MASONRY-STYLE MIX GRID ───────────────────────────────────────── */
+    .mixes-scroll-wrap {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(134px, 1fr)) !important;
+      gap: 12px !important;
+      overflow-x: unset !important;
+      overflow-y: visible !important;
+    }
+    .mixes-scroll-wrap .mix-item-card { flex: unset !important; }
+
+    /* ── #8 ANIMATED FILTER PILL SLIDING INDICATOR ───────────────────────── */
+    .filter-tabs-bar { position: relative !important; }
+    .filter-tabs-indicator {
+      position: absolute;
+      bottom: 8px;
+      height: 2px;
+      background: linear-gradient(90deg, #ff203a, #ff7700);
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.8);
+      border-radius: 2px;
+      transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .filter-pill {
+      transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease, transform 0.22s ease !important;
+    }
+    .filter-pill.active {
+      background: rgba(255, 32, 58, 0.14) !important;
+      border-color: rgba(255, 32, 58, 0.45) !important;
+      box-shadow: none !important;
+    }
+
+    /* ── #9 SIDEBAR PARALLAX LAYER ───────────────────────────────────────── */
+    .sidebar-nav { will-change: transform; }
+
+    /* ── #10 MODERN TOAST CARD (Positioned Top-Center to NEVER block Proceed to Shipping) ── */
+    .hud-toast {
+      top: 96px !important;
+      bottom: auto !important;
+      left: 50% !important;
+      right: auto !important;
+      transform: translateX(-50%) !important;
+      padding: 0 !important;
+      border-radius: 14px !important;
+      overflow: hidden !important;
+      min-width: 280px !important;
+      max-width: 420px !important;
+      background: rgba(12, 6, 18, 0.96) !important;
+      border: 1.5px solid rgba(255, 32, 58, 0.6) !important;
+      box-shadow:
+        0 0 35px rgba(255, 32, 58, 0.35),
+        0 20px 60px rgba(0, 0, 0, 0.95),
+        inset 0 1px 0 rgba(255,255,255,0.2) !important;
+      display: flex !important;
+      align-items: stretch !important;
+      z-index: 99999 !important;
+    }
+    .hud-toast.visible { opacity: 1; animation: toastSlideDown 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+    .hud-toast.hiding  { animation: toastSlideUp 0.25s ease forwards !important; }
+    @keyframes toastSlideDown {
+      0%   { opacity: 0; transform: translate(-50%, -20px) scale(0.95); }
+      100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    }
+    @keyframes toastSlideUp {
+      0%   { opacity: 1; transform: translate(-50%, 0); }
+      100% { opacity: 0; transform: translate(-50%, -20px); }
+    }
+    .toast-accent-bar {
+      width: 4px;
+      background: linear-gradient(180deg, #ff203a 0%, #ff6600 100%);
+      box-shadow: 0 0 10px #ff203a;
+      flex-shrink: 0;
+    }
+    .toast-body {
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+    .toast-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      color: #ffffff;
+    }
+    .toast-sub {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AMBIENT GLASS BACKGROUND ORBS & MATRIX -->
+  <div class="ambient-orbs-layer">
+    <div class="glass-orb orb-1"></div>
+    <div class="glass-orb orb-2"></div>
+    <div class="glass-orb orb-3"></div>
+  </div>
+  <div class="ambient-grid-overlay"></div>
+
+  <!-- DASHBOARD MASTER WRAPPER -->
+  <div class="dashboard-container">
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC DIMENSION HUB FLOATING MEGA-MENU HEADER
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <header class="site-header floating-header" id="siteHeader">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="Chinese Assassin Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="Chinese Assassin Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="Chinese Assassin Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="Chinese Assassin Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <div class="nav-item"><a href="/">HOME</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">DIMENSION HUB</a></div>
+
+      <div class="nav-item has-mega-menu">
+        <a href="javascript:void(0)">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+        <div class="mega-menu">
+          <div class="mega-menu-content">
+            <div class="mega-col">
+              <h4>VIP Exclusives</h4>
+              <ul>
+                <li><a href="/mobile-mixes-gateway-v2.html">👑 Street Kings 2026</a></li>
+                <li><a href="/vault-gateway.html">⚡ Techno Riddim Vol 4</a></li>
+                <li><a href="/vault-gateway.html">🗝️ Assassin Dubplates</a></li>
+                <li><a href="/flashdrive.html">💾 Secret Stash Vol 1</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Mix Gallery</h4>
+              <div class="mix-gallery-grid">
+                <div class="mix-thumb"><a href="/vault-gateway.html" title="The Vault"><img src="/VAULT-2.jpg" alt="Riddim Vault"></a></div>
+                <div class="mix-thumb"><a href="/vip-gateway.html" title="VIP Citadel"><img src="/CODE-1.jpg" alt="VIP Citadel"></a></div>
+                <div class="mix-thumb"><a href="/mobile-mixes-gateway-v2.html" title="Mobile Mixes"><img src="/MOBILE_MIXES.png" alt="Mobile Mixes"></a></div>
+                <div class="mix-thumb"><a href="/tv-gateway.html" title="Assassin TV"><img src="/CODE-TV.png" alt="Assassin TV"></a></div>
+              </div>
+            </div>
+            <div class="mega-col featured-set">
+              <h4>Live Preview (30s)</h4>
+              <div class="featured-img" style="background-image: url('/MOBILE_MIXES.png'); background-size: cover; background-position: center;">
+                <button class="mega-preview-btn" onclick="event.stopPropagation(); showToast('▶ Playing Assassin Elite Mix (30s Sample)');" style="background:var(--primary-neon,#ff0055); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255,0,85,0.8);" title="Play 30s Sample">
+                  <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+              <h5 style="font-size:0.85rem; margin-top:8px; color:#fff;">ASSASSIN ELITE MIX</h5>
+              <p style="font-size: 0.75rem; color: #aaa;">Flashy transitions and heavy bass.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item"><a href="/admin-vault.html" style="color:var(--primary-neon,#ff0055) !important; font-weight:800;" title="Master Admin Code Vault">👑 ADMIN VAULT</a></div>
+      <div class="nav-item"><a href="/merch.html">MERCH</a></div>
+      <div class="nav-item"><a href="/flashdrive.html" class="active">SHOP</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">ABOUT US</a></div>
+      <div class="nav-item"><a href="mailto:bookings@chineseassassin.com">CONTACT</a></div>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="header-actions">
+      <button class="icon-btn search-btn" aria-label="Search" onclick="document.getElementById('globalSearchInput')?.focus()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="/admin-vault.html" class="sign-in-btn">SIGN IN</a>
+      <button class="icon-btn menu-toggle-btn" aria-label="Menu" id="mobileDrawerBtn" onclick="toggleMobileDrawer()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-Screen Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-drawer-overlay" onclick="if(event.target===this) toggleMobileDrawer();">
+    <div class="mobile-drawer-card">
+      <div class="mobile-drawer-header">
+        <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        <button class="mobile-drawer-close-btn" onclick="toggleMobileDrawer()">&times;</button>
+      </div>
+      <nav class="mobile-drawer-nav">
+        <a href="/" class="mobile-nav-item">🏠 HOME</a>
+        <a href="/dimension-hub.html" class="mobile-nav-item">🌀 DIMENSION HUB</a>
+        <a href="/streaming-gateway.html" class="mobile-nav-item">🔴 24/7 STREAM</a>
+        <a href="/tv-gateway.html" class="mobile-nav-item">📺 ASSASSIN TV</a>
+        <a href="/mobile-mixes-gateway-v2.html" class="mobile-nav-item">📱 MOBILE MIXES</a>
+        <a href="/mix-kitchen-gateway.html" class="mobile-nav-item">🍳 THE MIX KITCHEN</a>
+        <a href="/radio-gateway.html" class="mobile-nav-item">📻 ASSASSIN RADIO</a>
+        <a href="/vip-gateway.html" class="mobile-nav-item">👑 VIP CITADEL</a>
+        <a href="/merch.html" class="mobile-nav-item">👕 MERCH</a>
+        <a href="/flashdrive.html" class="mobile-nav-item active">🛍️ SHOP / USB FLASH DRIVE</a>
+        <a href="/vault-gateway.html" class="mobile-nav-item">🗝️ THE VAULT</a>
+        <a href="/admin-vault.html" class="mobile-nav-item">🔒 ADMIN VAULT</a>
+      </nav>
+      <div class="mobile-drawer-footer">
+        <span>© 2026 CHINESE ASSASSIN VIP UNIVERSE</span>
+      </div>
+    </div>
+  </div>
+
+    <!-- 1. TOP HEADER (CLEAN GLASS, SEARCH BOX & ALBUM MANAGER) -->
+    <header class="top-header">
+      <!-- Search Box with Search Icon -->
+      <div class="top-search-wrap">
+        <span class="top-search-icon">🔍</span>
+        <input type="text" id="globalSearchInput" class="top-search-input" placeholder="Search unreleased mixes, genres, riddims, dubplates..." oninput="filterMixesByQuery(this.value)" autocomplete="off" />
+      </div>
+
+      <div class="top-right-actions">
+        <a href="/adminAlbumManager.html" class="top-action-btn" onclick="event.preventDefault(); showToast('⛩️ ALBUM MANAGER INITIALIZED');" title="Album Manager">
+          <span>⚙️</span> ALBUM MANAGER
+        </a>
+
+        <div class="top-user-pill" onclick="showToast('👤 CA VIP MEMBER ACCOUNT ACTIVE');">
+          <img src="/FACEID1.JPG.png" alt="User" class="top-user-avatar" onerror="this.src='/FACEID1.jpg'" />
+          <div class="top-user-info">
+            <span class="top-user-name">CA ASSASSIN</span>
+            <span class="top-user-role">VIP MEMBER ▾</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. LEFT SIDEBAR NAVIGATION -->
+    <aside class="sidebar-nav">
+      <a href="/" class="nav-link-item"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); filterCategory('ALL');"><span class="nav-icon">📀</span> All Mixes</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); filterCategory('OLD SCHOOL');"><span class="nav-icon">📼</span> Old School</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); filterCategory('NEW SCHOOL');"><span class="nav-icon">🎧</span> New School</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); filterCategory('REMIXES');"><span class="nav-icon">🎛️</span> Remixes</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); filterCategory('THE VAULT');"><span class="nav-icon">🔒</span> The Vault</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); filterCategory('VIP MIXES');"><span class="nav-icon">👑</span> VIP Mixes</a>
+
+      <div class="nav-divider"></div>
+
+      <a href="/flashdrive.html" class="nav-link-item active"><span class="nav-icon">💾</span> Flash Drive Mixes</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); window.scrollTo({top: 300, behavior:'smooth'});"><span class="nav-icon">⚡</span> Build Your Drive</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); showToast('📦 3 SAVED USB DRIVES FOUND');"><span class="nav-icon">📁</span> My Drives</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); showToast('📋 ORDER HISTORY: 2 ACTIVE ORDERS');"><span class="nav-icon">📑</span> Orders</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); showToast('⬇️ 14 DIRECT FLAC / MP3 DOWNLOADS READY');"><span class="nav-icon">📥</span> Downloads</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); showToast('❤️ 28 FAVORITED TRACKS');"><span class="nav-icon">❤️</span> Favorites</a>
+      <a href="#" class="nav-link-item" onclick="event.preventDefault(); showToast('⚙️ VIP SYSTEM SETTINGS OPEN');"><span class="nav-icon">⚙️</span> Settings</a>
+    </aside>
+
+    <!-- 3. CENTER MAIN WORKSPACE -->
+    <main class="main-workspace">
+
+      <!-- DUAL SECTION: HERO BANNER / CINEMATIC VIDEO SCREEN -->
+      <div class="hero-dual-wrapper" id="heroDualWrapper">
+        <!-- 1. BANNER SCREEN (Default) -->
+        <div class="hero-banner-card" id="heroBannerCard">
+          <div class="hero-banner-content">
+            <div class="hero-subtitle">BUILD YOUR CUSTOM</div>
+            <h1 class="hero-title">FLASH DRIVE MIXTAPE</h1>
+            <div class="hero-tagline">YOUR MUSIC. YOUR WAY.</div>
+            <p class="hero-desc">Curate your ultimate soundclash arsenal. Old School. New School. Remixes.</p>
+
+            <div class="hero-perks-row">
+              <div class="hero-perk">
+                <span class="hero-perk-icon">⚡</span>
+                <div>
+                  <strong>PRE-LOADED MIXES</strong>
+                  <span>Handpicked & Tested</span>
+                </div>
+              </div>
+              <div class="hero-perk">
+                <span class="hero-perk-icon">🔊</span>
+                <div>
+                  <strong>PREMIUM SOUND</strong>
+                  <span>320kbps MP3</span>
+                </div>
+              </div>
+              <div class="hero-perk">
+                <span class="hero-perk-icon">🚚</span>
+                <div>
+                  <strong>SHIPPED WORLDWIDE</strong>
+                  <span>Fast & Discreet</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video Play Launch Trigger -->
+            <button class="hero-video-launch-btn" onclick="startDualVideoScreen()" title="Press Play">
+              <span class="hero-play-ico">▶</span>
+              <span>PRESS PLAY</span>
+            </button>
+          </div>
+
+          <div class="hero-banner-image-wrap">
+            <img src="/FLASHDRIVEBANNER.png" alt="Flash Drive Hero" class="hero-banner-img" onerror="this.src='/FLASH DRIVE BANNER3.png'" />
+          </div>
+        </div>
+
+        <!-- 2. VIDEO SCREEN (Active when Play is pressed) -->
+        <div class="hero-video-screen-card" id="heroVideoScreenCard">
+          <video id="heroCinematicVideo" class="hero-cinematic-video" loop playsinline preload="auto">
+            <source src="/AURA-FUNNY.mp4" type="video/mp4">
+            <source src="/AURA-FUNNY VIDEO..mp4" type="video/mp4">
+            <source src="/CHINESE ASSASSIN PAGE 1.mp4" type="video/mp4">
+            <source src="/WEBSITE INTRO.mp4" type="video/mp4">
+          </video>
+
+          <!-- Top Video HUD -->
+          <div class="video-hud-header">
+            <div class="video-hud-live-tag">
+              <span class="live-pulse-dot"></span>
+              <span>CHINESE ASSASSIN • SOUNDCLASH CINEMATIC</span>
+            </div>
+            <div class="video-hud-actions">
+              <button class="video-hud-btn" onclick="toggleFullscreenVideo()" title="Toggle Fullscreen">⛶ FULLSCREEN</button>
+              <button class="video-hud-btn stop-btn" onclick="stopDualVideoScreen()" title="Stop Video & Return to Banner">⏹ STOP VIDEO</button>
+            </div>
+          </div>
+
+          <!-- Bottom Video HUD Controls -->
+          <div class="video-hud-footer">
+            <div class="video-hud-left">
+              <button class="video-ctrl-btn" id="videoPlayPauseBtn" onclick="toggleVideoPlayback()" title="Play/Pause">⏸</button>
+              <button class="video-ctrl-btn" onclick="stopDualVideoScreen()" title="Stop">⏹</button>
+              <div class="video-time-track" id="videoTimeTrack">00:00 / 00:00</div>
+            </div>
+
+            <div class="video-progress-container" onclick="seekVideo(event)">
+              <div class="video-progress-fill" id="videoProgressFill"></div>
+            </div>
+
+            <div class="video-hud-right">
+              <button class="video-ctrl-btn" id="videoMuteBtn" onclick="toggleVideoAudio()" title="Mute/Unmute">🔊</button>
+              <button class="video-stop-banner-btn" onclick="stopDualVideoScreen()" title="Return to Banner">
+                <span>⛩️ RETURN TO BANNER</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs Bar -->
+      <div class="filter-tabs-bar">
+        <button class="filter-pill active" onclick="setFilter(this, 'ALL')">ALL MIXES</button>
+        <button class="filter-pill" onclick="setFilter(this, 'OLD SCHOOL')">OLD SCHOOL</button>
+        <button class="filter-pill" onclick="setFilter(this, 'NEW SCHOOL')">NEW SCHOOL</button>
+        <button class="filter-pill" onclick="setFilter(this, 'REMIXES')">REMIXES</button>
+        <button class="filter-pill" onclick="setFilter(this, 'THE VAULT')">THE VAULT</button>
+        <button class="filter-pill" onclick="setFilter(this, 'VIP MIXES')">VIP MIXES</button>
+      </div>
+
+      <!-- Select Your Capacity (3D Crystal Cards) -->
+      <div>
+        <div class="section-label">SELECT YOUR CAPACITY</div>
+        <div class="capacity-grid" id="capacityGrid">
+          <div class="capacity-card" onclick="selectCapacity(16, 29.99, 'Starter')">
+            <svg class="capacity-svg" viewBox="0 0 24 24"><path d="M6 2h12v4H6V2zm2 2h2v1H8V4zm6 0h2v1h-2V4zm-7 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zm2 3v2h2v-2H9zm4 0v2h2v-2h-2z"/></svg>
+            <span class="capacity-size">16GB</span>
+            <span class="capacity-price">$29.99</span>
+          </div>
+          <div class="capacity-card" onclick="selectCapacity(32, 39.99, 'POPULAR')">
+            <span class="capacity-badge">POPULAR</span>
+            <svg class="capacity-svg" viewBox="0 0 24 24"><path d="M6 2h12v4H6V2zm2 2h2v1H8V4zm6 0h2v1h-2V4zm-7 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zm2 3v2h2v-2H9zm4 0v2h2v-2h-2z"/></svg>
+            <span class="capacity-size">32GB</span>
+            <span class="capacity-price">$39.99</span>
+          </div>
+          <div class="capacity-card active" onclick="selectCapacity(64, 59.99, 'POPULAR')">
+            <svg class="capacity-svg" viewBox="0 0 24 24"><path d="M6 2h12v4H6V2zm2 2h2v1H8V4zm6 0h2v1h-2V4zm-7 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zm2 3v2h2v-2H9zm4 0v2h2v-2h-2z"/></svg>
+            <span class="capacity-size">64GB</span>
+            <span class="capacity-price">$59.99</span>
+          </div>
+          <div class="capacity-card" onclick="selectCapacity(128, 89.99, 'BEST VALUE')">
+            <span class="capacity-badge" style="background: var(--accent-gold); color:#000;">BEST VALUE</span>
+            <svg class="capacity-svg" viewBox="0 0 24 24"><path d="M6 2h12v4H6V2zm2 2h2v1H8V4zm6 0h2v1h-2V4zm-7 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zm2 3v2h2v-2H9zm4 0v2h2v-2h-2z"/></svg>
+            <span class="capacity-size">128GB</span>
+            <span class="capacity-price">$89.99</span>
+          </div>
+          <div class="capacity-card" onclick="selectCapacity(256, 139.99, 'ULTIMATE')">
+            <svg class="capacity-svg" viewBox="0 0 24 24"><path d="M6 2h12v4H6V2zm2 2h2v1H8V4zm6 0h2v1h-2V4zm-7 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zm2 3v2h2v-2H9zm4 0v2h2v-2h-2z"/></svg>
+            <span class="capacity-size">256GB</span>
+            <span class="capacity-price">$139.99</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drive Builder Stats (Frosted Chassis) -->
+      <div class="builder-stats-box">
+        <div class="builder-storage-header">
+          <span class="builder-header-title">YOUR DRIVE BUILDER</span>
+          <span class="builder-storage-ratio" id="storageRatioLabel">64.0 GB / 64 GB (100%)</span>
+        </div>
+        <div class="storage-progress-track">
+          <div class="storage-progress-fill" id="storageProgressFill" style="width: 100%;"></div>
+        </div>
+
+        <div class="stats-cards-grid">
+          <div class="stat-mini-card">
+            <span class="stat-mini-icon">🎵</span>
+            <div class="stat-mini-info">
+              <span class="stat-mini-val" id="statTracks">245</span>
+              <span class="stat-mini-lbl">TRACKS</span>
+            </div>
+          </div>
+          <div class="stat-mini-card">
+            <span class="stat-mini-icon">💾</span>
+            <div class="stat-mini-info">
+              <span class="stat-mini-val" id="statSpace">64.0 GB</span>
+              <span class="stat-mini-lbl">USED SPACE</span>
+            </div>
+          </div>
+          <div class="stat-mini-card">
+            <span class="stat-mini-icon">⏱️</span>
+            <div class="stat-mini-info">
+              <span class="stat-mini-val" id="statLength">04:32:18</span>
+              <span class="stat-mini-lbl">TOTAL LENGTH</span>
+            </div>
+          </div>
+          <div class="stat-mini-card">
+            <span class="stat-mini-icon">📦</span>
+            <div class="stat-mini-info">
+              <span class="stat-mini-val" id="statMixesCount">08</span>
+              <span class="stat-mini-lbl">MIXES ADDED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Your Selected Mixes Horizontal Carousel -->
+      <div class="selected-mixes-section">
+        <div class="section-label" id="selectedMixesHeader">YOUR SELECTED MIXES (8)</div>
+        <div class="mixes-scroll-wrap" id="mixesScrollWrap">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="drag-drop-box" onclick="addSampleMix()">
+          <div class="drag-drop-icon">+</div>
+          <div class="drag-drop-text">
+            DRAG & DROP MORE MIXES HERE
+            <span>or click to browse and add from your collection</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 4. RIGHT COLUMN: USB ORDER PANEL -->
+    <aside class="order-sidebar">
+      <div class="order-header-row">
+        <span class="order-main-title">YOUR USB ORDER</span>
+        <span class="order-step-tag">STEP 1 OF 3</span>
+      </div>
+
+      <!-- 1. Choose Capacity -->
+      <div>
+        <div class="order-section-title">1. CHOOSE CAPACITY</div>
+        <div class="order-drive-card">
+          <div class="order-drive-left">
+            <img src="/FLASHDRIVEBANNER.png" alt="USB Drive" class="order-drive-img" onerror="this.src='/FLASH DRIVE BANNER3.png'" />
+            <div class="order-drive-info">
+              <span class="order-drive-name" id="orderDriveName">64GB Pro Assassin Drive</span>
+              <span class="order-drive-price" id="orderDrivePrice">$59.99</span>
+            </div>
+          </div>
+          <span class="order-badge-popular">POPULAR</span>
+        </div>
+      </div>
+
+      <!-- 2. Your Mix Selection -->
+      <div style="flex: 1; display: flex; flex-direction: column; min-height: 180px;">
+        <div class="order-section-title">2. YOUR MIX SELECTION</div>
+        <div class="order-mix-list" id="orderMixList">
+          <!-- Populated by JS -->
+        </div>
+        <div class="order-mix-footer">
+          <span id="orderMixCountText">+ 3 More Mixes</span>
+          <span id="orderStorageText" style="color: var(--primary-red);">64.0 GB / 64 GB</span>
+        </div>
+      </div>
+
+      <!-- 3. Order Summary -->
+      <div class="order-summary-box">
+        <div class="order-section-title" style="margin-bottom: 4px;">3. ORDER SUMMARY</div>
+        <div class="summary-calc-row">
+          <span>Subtotal</span>
+          <span id="orderSubtotal">$59.99</span>
+        </div>
+        <div class="summary-calc-row">
+          <span>Shipping</span>
+          <span>$9.99</span>
+        </div>
+        <div class="summary-calc-row total">
+          <span>Total</span>
+          <span id="orderTotal">$69.98</span>
+        </div>
+
+        <button class="checkout-btn" onclick="triggerCheckout()">
+          PROCEED TO SHIPPING &nbsp;›
+        </button>
+
+        <div class="security-badges-row">
+          <span>🔒 SSL Encrypted</span>
+          <span>📦 Discreet Packaging</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 5. BOTTOM PERSISTENT PLAYER BAR -->
+    <footer class="player-dock-bar">
+      <div class="player-left-info">
+        <img src="/Images/FACEID1.jpg" alt="Now Playing" class="player-album-thumb" onerror="this.src='/FACEID1.JPG.png'" />
+        <div class="player-track-meta">
+          <span class="player-track-title">Shadow Warrior</span>
+          <span class="player-track-album">Pro Assassin Drive Mixtape</span>
+          <span class="player-track-time" id="playerTime">01:48 / 03:32</span>
+        </div>
+        <div class="player-waveform-wrap">
+          <span class="wave-bar" style="animation-delay: 0.1s;"></span>
+          <span class="wave-bar" style="animation-delay: 0.3s;"></span>
+          <span class="wave-bar" style="animation-delay: 0.2s;"></span>
+          <span class="wave-bar" style="animation-delay: 0.5s;"></span>
+          <span class="wave-bar" style="animation-delay: 0.15s;"></span>
+          <span class="wave-bar" style="animation-delay: 0.4s;"></span>
+        </div>
+      </div>
+
+      <div class="player-controls-center">
+        <button class="player-btn" onclick="showToast('🔀 SHUFFLE ACTIVE')" title="Shuffle">🔀</button>
+        <button class="player-btn" onclick="showToast('⏮ PREVIOUS TRACK')" title="Previous">⏮</button>
+        <button class="player-btn player-play-hero" id="playHeroBtn" onclick="togglePlayerAudio()" title="Play / Pause">▶</button>
+        <button class="player-btn" onclick="showToast('⏭ NEXT TRACK')" title="Next">⏭</button>
+        <button class="player-btn" onclick="showToast('🔁 LOOP ACTIVE')" title="Repeat">🔁</button>
+      </div>
+
+      <div class="player-right-actions">
+        <button class="dj-filter-btn" id="djFilterBtn" onclick="toggleDjFilter()">
+          <span>🎛️</span> LIVE DJ FILTER
+        </button>
+
+        <a href="/" class="secret-chamber-box" title="Join The Secret Chamber">
+          <span style="font-size: 1.2rem; color: var(--accent-gold);">⛩️</span>
+          <div class="secret-chamber-info">
+            <strong>JOIN THE SECRET CHAMBER ↗</strong>
+            <span>Exclusive Mixes & Content</span>
+          </div>
+        </a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- HUD Toast Alert -->
+  <div class="hud-toast" id="hudToast"></div>
+
+  <!-- Hidden Audio Stream -->
+  <audio id="globalAudio" src="/wulup.mp3" preload="none"></audio>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════════════
+    // 0. ROTATING LOGO & MOBILE DRAWER ENGINE
+    // ════════════════════════════════════════════════════════════════════════
+    (function initRotatingLogo() {
+      const rotator = document.getElementById('rotating-logo');
+      if (!rotator) return;
+      const images = Array.from(rotator.querySelectorAll('.site-logo-img'));
+      if (images.length < 2) return;
+      let currentIdx = 0;
+      setInterval(() => {
+        const prevImg = images[currentIdx];
+        if (prevImg) {
+          prevImg.classList.remove('rot-active');
+          prevImg.classList.add('rot-exit');
+        }
+        currentIdx = (currentIdx + 1) % images.length;
+        const nextImg = images[currentIdx];
+        if (nextImg) {
+          nextImg.classList.remove('rot-exit');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              nextImg.classList.add('rot-active');
+            });
+          });
+        }
+      }, 450);
+    })();
+
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    // ── DATABASE OF MIXES MATCHING BLUEPRINT ──────────────────────────────
+    const MIXES_CATALOG = [
+      { id: 'mix-1', title: "90's Dancehall", genre: "OLD SCHOOL", tracks: 32, sizeGB: 8.5, cover: "/Images/FACEID1.jpg", fallback: "/FACEID1.JPG.png" },
+      { id: 'mix-2', title: "New Dancehall", genre: "NEW SCHOOL", tracks: 30, sizeGB: 7.8, cover: "/Images/FACEID2.jpg", fallback: "/FACEID2.JPG.png" },
+      { id: 'mix-3', title: "Clash Time Vol. 7", genre: "REMIX", tracks: 28, sizeGB: 7.4, cover: "/Images/FACEID3.jpg", fallback: "/FACEID3.JPG.png" },
+      { id: 'mix-4', title: "Reggae Classics", genre: "OLD SCHOOL", tracks: 34, sizeGB: 8.9, cover: "/Images/FACEID4.jpg", fallback: "/FACEID4.JPG.png" },
+      { id: 'mix-5', title: "Soca Heat", genre: "NEW SCHOOL", tracks: 26, sizeGB: 6.8, cover: "/RAISE THE FREQUENCY FRONT1.png", fallback: "/Images/LANDING_PAGE2.png" },
+      { id: 'mix-6', title: "Assassin Dubplates", genre: "THE VAULT", tracks: 35, sizeGB: 9.2, cover: "/WICKED3.jpg", fallback: "/WICKED3.png" },
+      { id: 'mix-7', title: "Kung Fu Master Stems", genre: "VIP MIXES", tracks: 28, sizeGB: 7.6, cover: "/kungfumaster.jpg.png", fallback: "/Images/FACEID1.jpg" },
+      { id: 'mix-8', title: "Techno Riddim Vol 4", genre: "REMIX", tracks: 32, sizeGB: 7.8, cover: "/Images/FACEID2.jpg", fallback: "/FACEID2.JPG.png" }
+    ];
+
+    let selectedCapacity = 64;
+    let selectedPrice = 59.99;
+    let selectedMixes = [...MIXES_CATALOG]; // Initial 8 mixes matching blueprint
+
+    function renderMixes() {
+      const scrollWrap = document.getElementById('mixesScrollWrap');
+      const orderList = document.getElementById('orderMixList');
+      if (!scrollWrap || !orderList) return;
+
+      // Update Horizontal Carousel
+      scrollWrap.innerHTML = selectedMixes.map((mix, idx) => `
+        <div class="mix-item-card">
+          <div class="mix-cover-box">
+            <img src="${mix.cover}" alt="${mix.title}" class="mix-cover-img" onerror="this.src='${mix.fallback}'" />
+            <span class="mix-genre-badge">${mix.genre}</span>
+            <button class="mix-card-remove" onclick="removeMix(${idx})" title="Remove Mix">✕</button>
+          </div>
+          <div class="mix-item-info">
+            <div class="mix-item-title">${mix.title}</div>
+            <div class="mix-item-meta">${mix.tracks} Tracks • ${mix.sizeGB} GB</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Update Order List (Right Column)
+      orderList.innerHTML = selectedMixes.slice(0, 5).map((mix, idx) => `
+        <div class="order-mix-row">
+          <div class="order-mix-row-left">
+            <img src="${mix.cover}" alt="${mix.title}" class="order-mix-thumb" onerror="this.src='${mix.fallback}'" />
+            <div class="order-mix-meta">
+              <span class="order-mix-name">${mix.title}</span>
+              <span class="order-mix-sub">${mix.tracks} Tracks • ${mix.sizeGB} GB</span>
+            </div>
+          </div>
+          <button class="order-mix-del" onclick="removeMix(${idx})" title="Remove">✕</button>
+        </div>
+      `).join('');
+
+      // Update Counters
+      const totalTracks = selectedMixes.reduce((acc, m) => acc + m.tracks, 0);
+      const totalSize = selectedMixes.reduce((acc, m) => acc + m.sizeGB, 0).toFixed(1);
+      const count = selectedMixes.length;
+
+      document.getElementById('statTracks').textContent = totalTracks;
+      document.getElementById('statSpace').textContent = `${totalSize} GB`;
+      document.getElementById('statMixesCount').textContent = count < 10 ? `0${count}` : count;
+      document.getElementById('selectedMixesHeader').textContent = `YOUR SELECTED MIXES (${count})`;
+
+      const overflowCount = count > 5 ? count - 5 : 0;
+      document.getElementById('orderMixCountText').textContent = overflowCount > 0 ? `+ ${overflowCount} More Mixes` : `${count} Mixes Total`;
+      document.getElementById('orderStorageText').textContent = `${totalSize} GB / ${selectedCapacity} GB`;
+
+      // Storage progress bar
+      const pct = Math.min(Math.round((totalSize / selectedCapacity) * 100), 100);
+      document.getElementById('storageProgressFill').style.width = `${pct}%`;
+      document.getElementById('storageRatioLabel').textContent = `${totalSize} GB / ${selectedCapacity} GB (${pct}%)`;
+
+      // Price update
+      document.getElementById('orderDrivePrice').textContent = `$${selectedPrice.toFixed(2)}`;
+      document.getElementById('orderSubtotal').textContent = `$${selectedPrice.toFixed(2)}`;
+      document.getElementById('orderTotal').textContent = `$${(selectedPrice + 9.99).toFixed(2)}`;
+    }
+
+    function removeMix(idx) {
+      if (selectedMixes.length <= 1) {
+        showToast('⚠️ AT LEAST 1 MIX MUST REMAIN ON DRIVE');
+        return;
+      }
+      const removed = selectedMixes.splice(idx, 1)[0];
+      showToast(`🗑️ REMOVED: ${removed.title}`);
+      renderMixes();
+    }
+
+    function addSampleMix() {
+      const randomMix = MIXES_CATALOG[Math.floor(Math.random() * MIXES_CATALOG.length)];
+      selectedMixes.push({ ...randomMix, id: 'mix-' + Date.now() });
+      showToast(`➕ ADDED: ${randomMix.title}`);
+      renderMixes();
+    }
+
+    function selectCapacity(gb, price, name) {
+      selectedCapacity = gb;
+      selectedPrice = price;
+
+      // Update Card Active States
+      document.querySelectorAll('.capacity-card').forEach(card => {
+        card.classList.remove('active');
+        if (card.querySelector('.capacity-size').textContent === `${gb}GB`) {
+          card.classList.add('active');
+        }
+      });
+
+      document.getElementById('orderDriveName').textContent = `${gb}GB Pro Assassin Drive`;
+      showToast(`💾 CAPACITY SELECTED: ${gb}GB ($${price})`);
+      renderMixes();
+    }
+
+    function setFilter(btn, category) {
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showToast(`🔍 FILTERING CATALOG: ${category}`);
+    }
+
+    function filterCategory(category) {
+      showToast(`📁 EXPLORING CATEGORY: ${category}`);
+    }
+
+    function filterMixesByQuery(query) {
+      const q = (query || '').toLowerCase().trim();
+      if (!q) {
+        selectedMixes = [...MIXES_CATALOG];
+      } else {
+        selectedMixes = MIXES_CATALOG.filter(m => 
+          m.title.toLowerCase().includes(q) || 
+          m.genre.toLowerCase().includes(q)
+        );
+      }
+      renderMixes();
+    }
+    window.filterMixesByQuery = filterMixesByQuery;
+
+    function handleSearch(query) {
+      filterMixesByQuery(query);
+    }
+
+    function triggerCheckout() {
+      showToast(`🔒 INITIALIZING VIP SECURE CHECKOUT — TOTAL: $${(selectedPrice + 9.99).toFixed(2)}`);
+    }
+
+    // ── DUAL BANNER / VIDEO SCREEN CONTROLLER ────────────────────────────
+    const heroDualWrapper = document.getElementById('heroDualWrapper');
+    const cinematicVideo = document.getElementById('heroCinematicVideo');
+    const videoProgressFill = document.getElementById('videoProgressFill');
+    const videoTimeTrack = document.getElementById('videoTimeTrack');
+    const videoPlayPauseBtn = document.getElementById('videoPlayPauseBtn');
+    const videoMuteBtn = document.getElementById('videoMuteBtn');
+
+    function startDualVideoScreen() {
+      if (!heroDualWrapper || !cinematicVideo) return;
+      heroDualWrapper.classList.add('video-active');
+      cinematicVideo.currentTime = 0;
+      cinematicVideo.play().then(() => {
+        if (videoPlayPauseBtn) videoPlayPauseBtn.textContent = '⏸';
+        if (playBtn) playBtn.textContent = '⏸';
+        isPlaying = true;
+        showToast('🎬 SOUNDCLASH CINEMATIC VIDEO PLAYING');
+      }).catch(e => {
+        cinematicVideo.muted = true;
+        cinematicVideo.play();
+        if (videoPlayPauseBtn) videoPlayPauseBtn.textContent = '⏸';
+        if (playBtn) playBtn.textContent = '⏸';
+        isPlaying = true;
+        showToast('🎬 SOUNDCLASH VIDEO ACTIVE');
+      });
+    }
+
+    function stopDualVideoScreen() {
+      if (!heroDualWrapper || !cinematicVideo) return;
+      cinematicVideo.pause();
+      cinematicVideo.currentTime = 0;
+      heroDualWrapper.classList.remove('video-active');
+      if (videoPlayPauseBtn) videoPlayPauseBtn.textContent = '▶';
+      if (playBtn) playBtn.textContent = '▶';
+      isPlaying = false;
+      showToast('⛩️ RETURNED TO BANNER MODE');
+    }
+
+    function toggleVideoPlayback() {
+      if (!cinematicVideo) return;
+      if (cinematicVideo.paused) {
+        cinematicVideo.play();
+        if (videoPlayPauseBtn) videoPlayPauseBtn.textContent = '⏸';
+        if (playBtn) playBtn.textContent = '⏸';
+        isPlaying = true;
+        showToast('▶ VIDEO RESUMED');
+      } else {
+        cinematicVideo.pause();
+        if (videoPlayPauseBtn) videoPlayPauseBtn.textContent = '▶';
+        if (playBtn) playBtn.textContent = '▶';
+        isPlaying = false;
+        showToast('⏸ VIDEO PAUSED');
+      }
+    }
+
+    function toggleVideoAudio() {
+      if (!cinematicVideo) return;
+      cinematicVideo.muted = !cinematicVideo.muted;
+      if (videoMuteBtn) {
+        videoMuteBtn.textContent = cinematicVideo.muted ? '🔇' : '🔊';
+      }
+      showToast(cinematicVideo.muted ? '🔇 VIDEO MUTED' : '🔊 VIDEO UNMUTED');
+    }
+
+    function toggleFullscreenVideo() {
+      if (!cinematicVideo) return;
+      if (!document.fullscreenElement) {
+        if (cinematicVideo.requestFullscreen) {
+          cinematicVideo.requestFullscreen();
+        } else if (cinematicVideo.webkitRequestFullscreen) {
+          cinematicVideo.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function seekVideo(e) {
+      if (!cinematicVideo || !cinematicVideo.duration) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = clickX / rect.width;
+      cinematicVideo.currentTime = pct * cinematicVideo.duration;
+    }
+
+    if (cinematicVideo) {
+      cinematicVideo.addEventListener('timeupdate', () => {
+        if (!cinematicVideo.duration) return;
+        const pct = (cinematicVideo.currentTime / cinematicVideo.duration) * 100;
+        if (videoProgressFill) videoProgressFill.style.width = `${pct}%`;
+        
+        const curM = Math.floor(cinematicVideo.currentTime / 60);
+        const curS = Math.floor(cinematicVideo.currentTime % 60);
+        const durM = Math.floor(cinematicVideo.duration / 60);
+        const durS = Math.floor(cinematicVideo.duration % 60);
+        const str = `${curM < 10 ? '0' + curM : curM}:${curS < 10 ? '0' + curS : curS} / ${durM < 10 ? '0' + durM : durM}:${durS < 10 ? '0' + durS : durS}`;
+        if (videoTimeTrack) videoTimeTrack.textContent = str;
+        const playerTime = document.getElementById('playerTime');
+        if (playerTime) playerTime.textContent = str;
+      });
+
+      cinematicVideo.addEventListener('ended', () => {
+        stopDualVideoScreen();
+      });
+    }
+
+    // ── AUDIO PLAYER ENGINE (SYNERGIZED WITH DUAL SCREEN) ────────────────
+    let isPlaying = false;
+    const audio = document.getElementById('globalAudio');
+    const playBtn = document.getElementById('playHeroBtn');
+
+    function togglePlayerAudio() {
+      if (heroDualWrapper && !heroDualWrapper.classList.contains('video-active')) {
+        startDualVideoScreen();
+        return;
+      }
+      toggleVideoPlayback();
+    }
+
+    let djFilterActive = false;
+    function toggleDjFilter() {
+      djFilterActive = !djFilterActive;
+      const btn = document.getElementById('djFilterBtn');
+      if (btn) btn.classList.toggle('active', djFilterActive);
+      showToast(djFilterActive ? '🎛️ LIVE DJ LOWPASS / RESONANCE FILTER ENGAGED' : '🎛️ DJ FILTER BYPASSED (CLEAN 320kbps)');
+    }
+
+    // Toast HUD
+    function showToast(msg) {
+      const toast = document.getElementById('hudToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2200);
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMixes();
+    });
+  </script>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       MODERN UI ENHANCEMENTS — JAVASCRIPT ENGINE
+       ══════════════════════════════════════════════════════════════════════ -->
+  <script>
+  (function() {
+    'use strict';
+
+    // ── #10 UPGRADED TOAST SYSTEM ──────────────────────────────────────────
+    const _originalShowToast = window.showToast;
+    window.showToast = function(msg) {
+      const toast = document.getElementById('hudToast');
+      if (!toast) { if (_originalShowToast) _originalShowToast(msg); return; }
+
+      // Build modern inner markup
+      const icon = msg.match(/^[\u{1F300}-\u{1FFFF}]|^[^\w]/u)?.[0] || '⚡';
+      const text = msg.replace(/^([\u{1F300}-\u{1FFFF}]|[^\w\s])\s*/u, '');
+      toast.innerHTML = `<div class="toast-accent-bar"></div><div class="toast-body"><span class="toast-title">${icon} ${text}</span></div>`;
+      toast.classList.remove('hiding');
+      toast.style.display = 'flex';
+      toast.classList.add('visible');
+
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => { toast.style.display = 'none'; toast.classList.remove('visible', 'hiding'); }, 260);
+      }, 2600);
+    };
+
+    // ── #8 ANIMATED FILTER PILL SLIDING INDICATOR ─────────────────────────
+    function initFilterIndicator() {
+      const bar = document.querySelector('.filter-tabs-bar');
+      if (!bar) return;
+
+      // Create indicator element
+      const indicator = document.createElement('div');
+      indicator.className = 'filter-tabs-indicator';
+      bar.appendChild(indicator);
+
+      function moveIndicatorToActive() {
+        const active = bar.querySelector('.filter-pill.active');
+        if (!active) return;
+        const barRect = bar.getBoundingClientRect();
+        const pillRect = active.getBoundingClientRect();
+        indicator.style.left  = (pillRect.left - barRect.left) + 'px';
+        indicator.style.width = pillRect.width + 'px';
+      }
+
+      // Intercept the existing setFilter calls
+      const pills = bar.querySelectorAll('.filter-pill');
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          requestAnimationFrame(moveIndicatorToActive);
+        });
+      });
+
+      // Position on load
+      setTimeout(moveIndicatorToActive, 80);
+      window.addEventListener('resize', moveIndicatorToActive);
+    }
+
+    // ── #3 LIVE CANVAS WAVEFORM VISUALIZER ────────────────────────────────
+    function initWaveformCanvas() {
+      const waveWrap = document.querySelector('.player-waveform-wrap');
+      if (!waveWrap) return;
+
+      // Replace static bars with canvas
+      waveWrap.innerHTML = '<canvas id="waveformCanvas"></canvas>';
+      const canvas = document.getElementById('waveformCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width  = 80;
+      canvas.height = 24;
+
+      let phase = 0;
+      function drawWave() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const bars = 18;
+        const barW = 3;
+        const gap  = 1;
+        const step = (barW + gap);
+
+        for (let i = 0; i < bars; i++) {
+          const t = phase + i * 0.55;
+          const h = 4 + Math.abs(Math.sin(t)) * 18 + Math.abs(Math.sin(t * 1.8)) * 4;
+          const y = (canvas.height - h) / 2;
+          const alpha = 0.55 + Math.abs(Math.sin(t)) * 0.45;
+
+          const grad = ctx.createLinearGradient(0, y, 0, y + h);
+          grad.addColorStop(0, `rgba(255, 80, 60, ${alpha})`);
+          grad.addColorStop(1, `rgba(255, 32, 58, ${alpha * 0.6})`);
+
+          ctx.fillStyle = grad;
+          ctx.shadowColor = '#ff203a';
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.roundRect(i * step, y, barW, h, 1.5);
+          ctx.fill();
+        }
+        phase += 0.075;
+        requestAnimationFrame(drawWave);
+      }
+      drawWave();
+    }
+
+    // ── #5 HERO PARTICLE DUST ─────────────────────────────────────────────
+    function initHeroParticles() {
+      const heroCard = document.querySelector('.hero-banner-card');
+      if (!heroCard) return;
+
+      const canvas = document.createElement('canvas');
+      canvas.id = 'heroParticleCanvas';
+      heroCard.prepend(canvas);
+
+      const ctx = canvas.getContext('2d');
+      let W = heroCard.offsetWidth;
+      let H = heroCard.offsetHeight;
+      canvas.width  = W;
+      canvas.height = H;
+
+      const NUM = 55;
+      const particles = Array.from({ length: NUM }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 0.6 + Math.random() * 1.8,
+        vy: -(0.18 + Math.random() * 0.55),
+        vx: (Math.random() - 0.5) * 0.25,
+        alpha: 0.1 + Math.random() * 0.55,
+        color: Math.random() < 0.6 ? '#ff203a' : '#ffb703',
+      }));
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 8;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.0015;
+
+          if (p.y < -4 || p.alpha <= 0) {
+            p.x = Math.random() * W;
+            p.y = H + 4;
+            p.alpha = 0.1 + Math.random() * 0.55;
+            p.r = 0.6 + Math.random() * 1.8;
+          }
+        });
+        requestAnimationFrame(drawParticles);
+      }
+      drawParticles();
+
+      // Resize
+      window.addEventListener('resize', () => {
+        W = heroCard.offsetWidth;
+        H = heroCard.offsetHeight;
+        canvas.width  = W;
+        canvas.height = H;
+      });
+    }
+
+    // ── #4 MIX CARDS 3D TILT ─────────────────────────────────────────────
+    function applyTiltToMixCards() {
+      document.querySelectorAll('.mix-item-card').forEach(card => {
+        if (card._tiltBound) return;
+        card._tiltBound = true;
+
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          const cx = r.width / 2;
+          const cy = r.height / 2;
+          const rotX = ((y - cy) / cy) * -10;
+          const rotY = ((x - cx) / cx) * 10;
+          card.style.transform = `perspective(500px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px) scale(1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    // ── #2 ANIMATED STORAGE BAR COLOR SHIFT ──────────────────────────────
+    function updateProgressColor() {
+      const fill = document.getElementById('storageProgressFill');
+      if (!fill) return;
+      const pct = parseFloat(fill.style.width) || 0;
+      if (pct < 50)       fill.style.background = 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)';
+      else if (pct < 80)  fill.style.background = 'linear-gradient(90deg, #ff203a 0%, #ff6600 100%)';
+      else                fill.style.background = 'linear-gradient(90deg, #ff203a 0%, #ff0044 100%)';
+      fill.style.boxShadow = pct > 80 ? '0 0 20px #ff203a' : pct > 50 ? '0 0 16px #ff6600' : '0 0 14px #22c55e';
+    }
+
+    // Observe storage fill width changes
+    function watchStorageBar() {
+      const fill = document.getElementById('storageProgressFill');
+      if (!fill) return;
+      updateProgressColor();
+      const obs = new MutationObserver(updateProgressColor);
+      obs.observe(fill, { attributes: true, attributeFilter: ['style'] });
+    }
+
+    // ── #9 SIDEBAR PARALLAX ───────────────────────────────────────────────
+    function initSidebarParallax() {
+      const sidebar  = document.querySelector('.sidebar-nav');
+      const workspace = document.querySelector('.main-workspace');
+      if (!sidebar || !workspace) return;
+
+      workspace.addEventListener('scroll', () => {
+        const offset = workspace.scrollTop * 0.045;
+        sidebar.style.transform = `translateY(${-offset}px)`;
+      });
+    }
+
+    // ── CHECKOUT BURST PARTICLES ──────────────────────────────────────────
+    function initCheckoutBurst() {
+      const btn = document.querySelector('.checkout-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function(e) {
+        for (let i = 0; i < 18; i++) {
+          const dot = document.createElement('span');
+          const angle = (Math.PI * 2 / 18) * i;
+          const dist  = 40 + Math.random() * 50;
+          dot.style.cssText = `
+            position:fixed;
+            left:${e.clientX}px; top:${e.clientY}px;
+            width:6px; height:6px; border-radius:50%;
+            background:${Math.random() > 0.5 ? '#ff203a' : '#ffb703'};
+            pointer-events:none; z-index:99999;
+            transition: transform 0.55s ease, opacity 0.55s ease;
+            box-shadow: 0 0 8px currentColor;
+          `;
+          document.body.appendChild(dot);
+          requestAnimationFrame(() => {
+            dot.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`;
+            dot.style.opacity = '0';
+          });
+          setTimeout(() => dot.remove(), 600);
+        }
+      });
+    }
+
+    // ── BOOT ALL ENHANCEMENTS ─────────────────────────────────────────────
+    function bootEnhancements() {
+      initFilterIndicator();
+      initWaveformCanvas();
+      initHeroParticles();
+      watchStorageBar();
+      initSidebarParallax();
+      initCheckoutBurst();
+
+      // 3D tilt also applies to dynamically rendered cards
+      const mixContainer = document.getElementById('mixesScrollWrap');
+      if (mixContainer) {
+        const obs = new MutationObserver(applyTiltToMixCards);
+        obs.observe(mixContainer, { childList: true, subtree: true });
+      }
+      applyTiltToMixCards();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootEnhancements);
+    } else {
+      bootEnhancements();
+    }
+  })();
+  </script>
+</body>
+</html>

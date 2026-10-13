@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Chinese Assassin — The Mix Kitchen | Premium Producer's Lab</title>
+  <meta name="description" content="Chinese Assassin Mix Kitchen — Premium Frosted Glass Producer's Lab, Automated Mixing, Multi-Genre Soundclash Production and VIP Private Chef Experience." />
+
+  <!-- Google Fonts & GSAP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --chef-fire: #ff3300;
+      --chef-gold: #ffb703;
+      --chef-red: #ff203a;
+      --chef-amber: #ff9900;
+      --neon-cyan: #00e5ff;
+      --bg-dark: #050207;
+
+      /* Premium Glass Variables */
+      --glass-surface: rgba(18, 8, 16, 0.62);
+      --glass-surface-hover: rgba(35, 14, 28, 0.78);
+      --glass-border: rgba(255, 255, 255, 0.16);
+      --glass-specular: rgba(255, 255, 255, 0.4);
+      --glow-fire: 0 0 28px rgba(255, 51, 0, 0.65);
+      --glow-gold: 0 0 28px rgba(255, 183, 3, 0.65);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+    }
+
+    /* ── AMBIENT GLASS BACKGROUND ORBS LAYER ────────────────────────────── */
+    .ambient-glass-orbs-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(95px);
+      opacity: 0.55;
+      animation: orbFloat 14s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, #ff3300 0%, rgba(180, 20, 0, 0.3) 60%, transparent 80%);
+      top: -160px;
+      left: 15%;
+      animation-duration: 12s;
+    }
+
+    .orb-2 {
+      width: 750px;
+      height: 750px;
+      background: radial-gradient(circle, #ffb703 0%, rgba(150, 40, 10, 0.35) 50%, transparent 80%);
+      bottom: -220px;
+      right: 5%;
+      animation-duration: 18s;
+    }
+
+    .orb-3 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #800020 0%, rgba(200, 20, 50, 0.2) 60%, transparent 80%);
+      top: 35%;
+      left: 65%;
+      animation-duration: 15s;
+    }
+
+    @keyframes orbFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(45px, -35px) scale(1.1); }
+      100% { transform: translate(-35px, 40px) scale(0.92); }
+    }
+
+    /* Full-viewport floating spark canvas */
+    .body-ambient-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      display: block;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC FLOATING MEGA MENU HEADER (DIMENSION HUB STYLING)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .site-header.floating-header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1320px;
+      height: 52px;
+      background: rgba(10, 4, 12, 0.85);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 32, 58, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 5000;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-rotator {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      perspective: 600px;
+    }
+
+    .site-logo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+      border: 1px solid var(--chef-red, #ff203a);
+      transform: rotateY(-90deg) scale(1.15);
+      opacity: 0;
+      pointer-events: none;
+      object-fit: cover;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-in;
+    }
+
+    .site-logo-img.rot-active {
+      transform: rotateY(0deg) scale(1.15);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-logo-img.rot-exit {
+      transform: rotateY(90deg) scale(1.15);
+      opacity: 0;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-out;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .logo span {
+      color: var(--chef-red, #ff203a);
+      text-shadow: 0 0 10px rgba(255, 32, 58, 0.5);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-item > a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 4px;
+      position: relative;
+    }
+
+    .nav-item > a::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--chef-red, #ff203a);
+      transition: width 0.25s ease;
+    }
+
+    .nav-item > a:hover::after,
+    .nav-item > a.active::after {
+      width: 100%;
+    }
+
+    .nav-item > a:hover,
+    .nav-item > a.active {
+      color: var(--chef-red, #ff203a);
+    }
+
+    .nav-item.has-mega-menu:hover .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .chevron {
+      font-size: 0.7rem;
+      margin-left: 5px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.has-mega-menu:hover .chevron {
+      transform: rotate(180deg);
+    }
+
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 780px;
+      background: rgba(14, 6, 12, 0.96);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1.5px solid rgba(255, 32, 58, 0.4);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 32, 58, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 6000;
+    }
+
+    .mega-menu-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    .mega-col {
+      flex: 1;
+    }
+
+    .mega-col h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--chef-red, #ff203a);
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .mega-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mega-col ul a {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: block;
+      padding: 5px 0;
+    }
+
+    .mega-col ul a:hover {
+      color: var(--chef-red, #ff203a);
+      transform: translateX(4px);
+    }
+
+    .mega-col.featured-set {
+      flex: 1.3;
+      background: rgba(255, 32, 58, 0.06);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 32, 58, 0.2);
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 95px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 32, 58, 0.3);
+    }
+
+    .mix-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mix-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s;
+    }
+
+    .mix-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--chef-red, #ff203a);
+    }
+
+    .mix-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: #ff203a;
+      transform: scale(1.1);
+    }
+
+    .sign-in-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid #ff203a;
+      color: #ff203a !important;
+      font-size: 0.70rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-decoration: none;
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 10px rgba(255, 32, 58, 0.25);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sign-in-btn:hover {
+      background: #ff203a;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 6000;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-drawer-card {
+      width: min(340px, 85vw);
+      height: 100%;
+      background: rgba(14, 6, 12, 0.98);
+      border-left: 1.5px solid rgba(255, 32, 58, 0.4);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-drawer-close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mobile-drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .mobile-nav-item {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: rgba(255, 32, 58, 0.4);
+      color: #ff203a;
+    }
+
+    /* ── MASTER 3:2 (1536x1024) STAGE FRAMEWORK (PREMIUM GLASS CHASSIS) ─── */
+    .master-stage-wrapper {
+      position: fixed;
+      top: 68px;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      z-index: 10;
+      padding: 0 16px;
+    }
+
+    .stage-inner-box {
+      position: relative;
+      height: 100%;
+      max-height: 100%;
+      width: auto;
+      aspect-ratio: 3 / 2;
+      max-width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.95),
+        0 0 50px rgba(255, 51, 0, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #000000;
+      transform-style: preserve-3d;
+      transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    }
+
+    .stage-inner-box:hover {
+      box-shadow: 
+        0 30px 95px rgba(0, 0, 0, 0.98),
+        0 0 65px rgba(255, 51, 0, 0.38),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.4);
+    }
+
+    /* ── MASTER ARTWORK BACKGROUND ────────────────────────────────────────── */
+    .kitchen-bg-artwork {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── FROSTED GLASS DYNAMIC HIGHLIGHTS & AMBIENT SHIMMERS ─────────────── */
+    .glass-chef-active-chassis {
+      position: absolute;
+      left: 0.5%;
+      top: 28.5%;
+      width: 10.5%;
+      height: 6.8%;
+      border-radius: 10px;
+      background: rgba(255, 51, 0, 0.12);
+      border: 1.5px solid var(--chef-fire);
+      box-shadow: 
+        0 0 25px rgba(255, 51, 0, 0.7),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5),
+        inset 0 0 15px rgba(255, 51, 0, 0.35);
+      backdrop-filter: blur(12px);
+      pointer-events: none;
+      z-index: 5;
+      transition: top 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s, box-shadow 0.28s;
+    }
+
+    /* Glass Cooking Step Glow Node */
+    .glass-step-glow-node {
+      position: absolute;
+      width: 3.2%;
+      height: 4.8%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 183, 3, 0.7) 0%, rgba(255, 51, 0, 0.4) 60%, transparent 80%);
+      box-shadow: 0 0 20px rgba(255, 183, 3, 0.8), inset 0 0 8px #ffffff;
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease, left 0.3s ease;
+      filter: blur(2px);
+    }
+    .glass-step-glow-node.active {
+      opacity: 1;
+      animation: glassStepPulse 1.2s infinite alternate;
+    }
+    @keyframes glassStepPulse {
+      0%   { transform: scale(0.9); opacity: 0.7; }
+      100% { transform: scale(1.35); opacity: 1.0; filter: blur(4px); box-shadow: 0 0 30px #ff3300; }
+    }
+
+    /* ── INVISIBLE CSS HOTSPOTS CANVAS ──────────────────────────────────── */
+    .hotspots-canvas-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    .hs-spot {
+      position: absolute;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    /* Tactile Premium Glass Hover Reflection */
+    .hs-spot:hover {
+      background: rgba(255, 255, 255, 0.05) !important;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── 1. TOP HEADER ACTIONS ── */
+    .hs-top-logo       { left: 0.8%; top: 1.0%; width: 10.2%; height: 9.0%; }
+    .hs-top-queue      { right: 23.5%; top: 1.8%; width: 9.8%; height: 4.5%; border-radius: 8px; }
+    .hs-top-orders     { right: 13.0%; top: 1.8%; width: 9.8%; height: 4.5%; border-radius: 8px; }
+    .hs-top-add        { right: 9.2%; top: 1.8%; width: 3.2%; height: 4.5%; border-radius: 8px; }
+    .hs-top-bell       { right: 5.5%; top: 1.8%; width: 3.2%; height: 4.5%; border-radius: 8px; }
+    .hs-top-menu       { right: 1.8%; top: 1.8%; width: 3.2%; height: 4.5%; border-radius: 8px; }
+
+    /* ── 2. LEFT KITCHEN SELECTOR CARDS ── */
+    .hs-chef-reggae    { left: 0.5%; top: 13.0%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-hiphop    { left: 0.5%; top: 20.8%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-dancehall { left: 0.5%; top: 28.5%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-soca      { left: 0.5%; top: 36.2%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-afrobeat  { left: 0.5%; top: 44.0%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-rnb       { left: 0.5%; top: 51.8%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-slowjamz  { left: 0.5%; top: 59.5%; width: 10.5%; height: 6.8%; border-radius: 8px; }
+    .hs-chef-private   { left: 0.5%; top: 67.5%; width: 10.5%; height: 20.5%; border-radius: 12px; }
+    .hs-unlock-private-btn { left: 1.4%; top: 78.5%; width: 8.8%; height: 3.8%; border-radius: 8px; }
+
+    /* ── 3. CENTER HERO DJ CONTROLS & RECIPE STEP CHAIN ── */
+    .hs-unlock-now-btn { left: 67.8%; top: 37.0%; width: 8.4%; height: 3.6%; border-radius: 6px; }
+
+    /* 10 Step Chain Hotspots */
+    .hs-step-1  { left: 19.5%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-2  { left: 24.8%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-3  { left: 30.5%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-4  { left: 36.0%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-5  { left: 41.5%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-6  { left: 47.0%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-7  { left: 52.8%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-8  { left: 58.2%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-9  { left: 63.8%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+    .hs-step-10 { left: 69.2%; top: 51.5%; width: 3.2%; height: 6.0%; border-radius: 50%; }
+
+    /* ── 4. MIDDLE-BOTTOM TRACK MENU HOTSPOTS ── */
+    .hs-track-search   { left: 39.5%; top: 59.8%; width: 8.8%; height: 2.6%; }
+    .hs-filter-genres  { left: 49.0%; top: 59.8%; width: 5.2%; height: 2.6%; }
+    .hs-filter-bpm     { left: 54.8%; top: 59.8%; width: 4.5%; height: 2.6%; }
+    .hs-filter-key     { left: 60.0%; top: 59.8%; width: 3.8%; height: 2.6%; }
+    .hs-filter-energy  { left: 64.5%; top: 59.8%; width: 4.5%; height: 2.6%; }
+    .hs-filter-version { left: 69.8%; top: 59.8%; width: 4.5%; height: 2.6%; }
+
+    /* Track Row Play & Add Buttons (Rows 1 to 6) */
+    .hs-track-row-1-play { left: 19.8%; top: 66.2%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-track-row-1-add  { left: 69.8%; top: 66.2%; width: 3.2%; height: 2.8%; border-radius: 4px; }
+
+    .hs-track-row-2-play { left: 19.8%; top: 69.5%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-track-row-2-add  { left: 69.8%; top: 69.5%; width: 3.2%; height: 2.8%; border-radius: 4px; }
+
+    .hs-track-row-3-play { left: 19.8%; top: 72.8%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-track-row-3-add  { left: 69.8%; top: 72.8%; width: 3.2%; height: 2.8%; border-radius: 4px; }
+
+    .hs-track-row-4-play { left: 19.8%; top: 75.8%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-track-row-4-add  { left: 69.8%; top: 75.8%; width: 3.2%; height: 2.8%; border-radius: 4px; }
+
+    .hs-track-row-5-play { left: 19.8%; top: 78.8%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-track-row-5-add  { left: 69.8%; top: 78.8%; width: 3.2%; height: 2.8%; border-radius: 4px; }
+
+    .hs-track-row-6-play { left: 19.8%; top: 81.8%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-track-row-6-add  { left: 69.8%; top: 81.8%; width: 3.2%; height: 2.8%; border-radius: 4px; }
+
+    .hs-page-prev { left: 29.5%; top: 85.0%; width: 1.8%; height: 2.5%; }
+    .hs-page-next { left: 41.5%; top: 85.0%; width: 1.8%; height: 2.5%; }
+
+    /* ── 5. RIGHT COLUMN ORDER PANEL HOTSPOTS ── */
+    .hs-order-clear-all { right: 1.8%; top: 8.2%; width: 5.0%; height: 2.6%; border-radius: 4px; }
+
+    /* 10 Order Item Delete [✕] Buttons */
+    .hs-del-song-1  { right: 2.0%; top: 13.2%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-2  { right: 2.0%; top: 16.2%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-3  { right: 2.0%; top: 19.5%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-4  { right: 2.0%; top: 22.8%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-5  { right: 2.0%; top: 26.0%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-6  { right: 2.0%; top: 29.2%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-7  { right: 2.0%; top: 32.5%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-8  { right: 2.0%; top: 35.8%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-9  { right: 2.0%; top: 39.0%; width: 1.8%; height: 2.6%; }
+    .hs-del-song-10 { right: 2.0%; top: 42.2%; width: 1.8%; height: 2.6%; }
+
+    .hs-order-reorder { right: 15.5%; top: 45.0%; width: 5.5%; height: 3.0%; border-radius: 4px; }
+    .hs-order-remove  { right: 9.5%; top: 45.0%; width: 5.5%; height: 3.0%; border-radius: 4px; }
+    .hs-order-clear   { right: 1.8%; top: 45.0%; width: 7.2%; height: 3.0%; border-radius: 4px; }
+
+    /* ★ HERO AUTOMIX MY ORDER BUTTON WITH SHIMMER ★ */
+    .hs-automix-hero-btn {
+      right: 1.8%;
+      top: 48.5%;
+      width: 19.5%;
+      height: 4.8%;
+      border-radius: 6px;
+    }
+    .hs-automix-hero-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 0 35px rgba(255, 51, 0, 0.7), inset 0 1px 1px #ffffff;
+      transform: scale(1.015);
+    }
+
+    /* ── 6. MIX SETTINGS & INGREDIENTS HOTSPOTS ── */
+    .hs-edit-mix-settings { right: 13.8%; top: 60.0%; width: 2.8%; height: 2.4%; border-radius: 4px; }
+    .hs-edit-ingredients  { right: 1.8%; top: 60.0%; width: 2.8%; height: 2.4%; border-radius: 4px; }
+    .hs-buy-private-perk  { right: 1.8%; top: 86.0%; width: 6.8%; height: 2.8%; border-radius: 6px; }
+
+    /* ── 7. BOTTOM MUSIC PLAYER BAR HOTSPOTS ── */
+    .hs-player-cover      { left: 1.5%; bottom: 1.5%; width: 4.2%; height: 7.5%; border-radius: 6px; }
+    .hs-player-shuffle    { left: 40.0%; bottom: 3.0%; width: 2.2%; height: 3.8%; }
+    .hs-player-prev       { left: 43.2%; bottom: 2.5%; width: 2.5%; height: 4.5%; border-radius: 50%; }
+    .hs-player-play       { left: 46.8%; bottom: 1.8%; width: 3.8%; height: 6.0%; border-radius: 50%; }
+    .hs-player-next       { left: 51.5%; bottom: 2.5%; width: 2.5%; height: 4.5%; border-radius: 50%; }
+    .hs-player-loop       { left: 55.0%; bottom: 3.0%; width: 2.2%; height: 3.8%; }
+
+    .hs-player-download   { right: 19.5%; bottom: 2.2%; width: 8.5%; height: 4.5%; border-radius: 6px; }
+    .hs-player-save       { right: 11.2%; bottom: 2.2%; width: 7.8%; height: 4.5%; border-radius: 6px; }
+    .hs-player-share      { right: 3.0%; bottom: 2.2%; width: 7.8%; height: 4.5%; border-radius: 6px; }
+
+    /* ── FROSTED LIQUID GLASS POPUP MODALS ───────────────────────────────── */
+    .kitchen-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 2, 7, 0.82);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: glassModalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes glassModalFadeIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .kitchen-glass-card {
+      background: linear-gradient(135deg, rgba(26, 10, 20, 0.82) 0%, rgba(10, 4, 12, 0.88) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      box-shadow: 
+        inset 0 1.5px 1.5px rgba(255, 255, 255, 0.45),
+        inset 0 0 35px rgba(255, 51, 0, 0.22),
+        0 25px 65px rgba(0, 0, 0, 0.95),
+        0 0 45px rgba(255, 51, 0, 0.35);
+      backdrop-filter: blur(35px) saturate(220%);
+      -webkit-backdrop-filter: blur(35px) saturate(220%);
+      padding: 32px 38px;
+      max-width: 540px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+    }
+
+    .glass-modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.25);
+      transition: all 0.22s ease;
+    }
+    .glass-modal-close-btn:hover {
+      background: var(--chef-fire);
+      border-color: #ffffff;
+      box-shadow: 0 0 20px var(--chef-fire), inset 0 1px 2px #ffffff;
+      transform: rotate(90deg) scale(1.08);
+    }
+
+    /* Cooking Progress Glass HUD */
+    .cooking-progress-card {
+      max-width: 620px;
+      width: 92%;
+    }
+
+    .cooking-chef-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--chef-gold);
+      box-shadow: 0 0 25px rgba(255, 183, 3, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.5);
+      margin: 0 auto 14px;
+      object-fit: cover;
+    }
+
+    .cooking-status-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .cooking-status-subtitle {
+      font-size: 0.85rem;
+      color: var(--chef-gold);
+      margin-bottom: 22px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 12px rgba(255, 183, 3, 0.5);
+    }
+
+    .cooking-progress-bar-wrap {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    .cooking-progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff3300 0%, #ffb703 100%);
+      box-shadow: 0 0 20px var(--chef-fire);
+      border-radius: 12px;
+      transition: width 0.22s linear;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cooking-progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: barSweep 1.5s ease-in-out infinite;
+    }
+    @keyframes barSweep {
+      0%   { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    .cooking-live-step-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: #ff99aa;
+      letter-spacing: 1.2px;
+      font-weight: 800;
+      text-shadow: 0 0 10px rgba(255, 51, 0, 0.6);
+    }
+
+    /* ── FROSTED GLASS TOAST ALERT ───────────────────────────────────────── */
+    .kitchen-hud-toast {
+      position: fixed;
+      bottom: 82px;
+      right: 28px;
+      background: rgba(14, 6, 16, 0.94);
+      border: 1px solid rgba(255, 51, 0, 0.55);
+      border-radius: 16px;
+      padding: 14px 26px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
+      box-shadow: 
+        inset 0 1px 1px rgba(255,255,255,0.35),
+        0 0 35px var(--glow-fire),
+        0 15px 45px rgba(0,0,0,0.85);
+      display: none;
+      z-index: 10000;
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      animation: toastSlideIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateX(35px) scale(0.94); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC DIMENSION HUB FLOATING MEGA-MENU HEADER
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <header class="site-header floating-header" id="siteHeader">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="Chinese Assassin Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="Chinese Assassin Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="Chinese Assassin Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="Chinese Assassin Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <div class="nav-item"><a href="/">HOME</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">DIMENSION HUB</a></div>
+
+      <div class="nav-item has-mega-menu">
+        <a href="#">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+        <div class="mega-menu">
+          <div class="mega-menu-content">
+            <div class="mega-col">
+              <h4>VIP Exclusives</h4>
+              <ul>
+                <li><a href="/mobile/index.html">Street Kings 2026</a></li>
+                <li><a href="/riddim">Techno Riddim Vol 4</a></li>
+                <li><a href="/riddim">Assassin Dubplates</a></li>
+                <li><a href="/flashdrive.html">Secret Stash Vol 1</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Mix Gallery</h4>
+              <div class="mix-gallery-grid">
+                <div class="mix-thumb"><a href="/riddim"><img src="/riddim_new.png" alt="Riddim Vault"></a></div>
+                <div class="mix-thumb"><a href="/vip-gateway.html"><img src="/vip_new.png" alt="VIP Citadel"></a></div>
+                <div class="mix-thumb"><a href="/mobile/index.html"><img src="/mobile_mix_bg.png" alt="Mobile Mixes"></a></div>
+                <div class="mix-thumb"><a href="/tv-gateway.html"><img src="/tv_new.png" alt="Assassin TV"></a></div>
+              </div>
+            </div>
+            <div class="mega-col featured-set">
+              <h4>Live Preview (30s)</h4>
+              <div class="featured-img" style="background-image: url('/mobile_mix_bg.png');">
+                <button class="mega-preview-btn" onclick="showToast('🍳 PREVIEWING PRIVATE CHEF MIX')" style="background:var(--chef-red,#ff203a); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                  <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+              <h5 style="font-size:0.85rem; margin-top:8px; color:#fff;">ASSASSIN ELITE MIX</h5>
+              <p style="font-size: 0.75rem; color: #aaa;">Flashy transitions and heavy bass.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item"><a href="/flashdrive.html">SHOP</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">ABOUT US</a></div>
+      <div class="nav-item"><a href="mailto:bookings@chineseassassin.com">CONTACT</a></div>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="header-actions">
+      <button class="icon-btn search-btn" aria-label="Search" onclick="showToast('🔍 Search Chinese Assassin Vaults')">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="/admin-vault.html" class="sign-in-btn">SIGN IN</a>
+      <button class="icon-btn menu-toggle-btn" aria-label="Menu" onclick="toggleMobileDrawer()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-Screen Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-drawer-overlay" onclick="if(event.target===this) toggleMobileDrawer();">
+    <div class="mobile-drawer-card">
+      <div class="mobile-drawer-header">
+        <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        <button class="mobile-drawer-close-btn" onclick="toggleMobileDrawer()">&times;</button>
+      </div>
+      <nav class="mobile-drawer-nav">
+        <a href="/" class="mobile-nav-item">🏠 HOME</a>
+        <a href="/dimension-hub.html" class="mobile-nav-item">🌀 DIMENSION HUB</a>
+        <a href="/streaming-gateway.html" class="mobile-nav-item">🔴 24/7 STREAM</a>
+        <a href="/tv-gateway.html" class="mobile-nav-item">📺 ASSASSIN TV</a>
+        <a href="/mobile/index.html" class="mobile-nav-item">📱 MOBILE MIXES</a>
+        <a href="/mix-kitchen.html" class="mobile-nav-item active">🍳 THE MIX KITCHEN</a>
+        <a href="/radio-gateway.html" class="mobile-nav-item">📻 ASSASSIN RADIO</a>
+        <a href="/mood-gateway.html" class="mobile-nav-item">🎭 MOOD METER</a>
+        <a href="/vip-gateway.html" class="mobile-nav-item">👑 VIP CITADEL</a>
+        <a href="/flashdrive.html" class="mobile-nav-item">🛍️ SHOP / FLASH DRIVE</a>
+        <a href="/admin-vault.html" class="mobile-nav-item">🔒 ADMIN VAULT</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ── 1. AMBIENT GLASS BACKGROUND ORBS LAYER ────────────────────────── -->
+  <div class="ambient-glass-orbs-layer">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <!-- ── 2. FULL-VIEWPORT FLOATING AMBIENT SPARK DUST CANVAS ───────────── -->
+  <canvas id="ambientBackgroundCanvas" class="body-ambient-canvas"></canvas>
+
+  <!-- ── 3. MASTER 3:2 STAGE WRAPPER (PREMIUM GLASS CHASSIS) ───────────── -->
+  <div class="master-stage-wrapper" id="masterStage">
+    <div class="stage-inner-box">
+
+      <!-- MASTER ARTWORK IMAGE (THE MIX KITCHEN OPTION 2) -->
+      <img
+        id="kitchenArtwork"
+        class="kitchen-bg-artwork"
+        src="/THE-MIX-KITCHEN-OPTION2.png"
+        alt="Chinese Assassin The Mix Kitchen Producer's Lab"
+        onerror="this.src='/THE MIX KITCHEN OPTION2.png';this.onerror=()=>{this.src='/public/THE-MIX-KITCHEN-OPTION2.png';}"
+      />
+
+      <!-- Frosted Glass Active Chef Indicator Ring -->
+      <div class="glass-chef-active-chassis" id="activeChefIndicator"></div>
+
+      <!-- Live Step Chain Glow Node -->
+      <div class="glass-step-glow-node" id="cookingStepGlow" style="left: 19.5%; top: 51.5%;"></div>
+
+    <!-- ── 4. INVISIBLE CSS HOTSPOTS CANVAS LAYER ──────────────────────── -->
+    <div class="hotspots-canvas-layer" id="hotspotsLayer">
+
+      <!-- 1. Top Header -->
+      <a href="/" class="hs-spot hs-top-logo" title="Chinese Assassin Home"></a>
+      <button class="hs-spot hs-top-queue" onclick="openKitchenQueueModal()" title="Kitchen Queue (3 active mixes)"></button>
+      <button class="hs-spot hs-top-orders" onclick="openMyOrdersModal()" title="My Orders & Mix Recipes"></button>
+      <button class="hs-spot hs-top-add" onclick="triggerCustomTrackUpload()" title="Add Custom Audio / Stems"></button>
+      <button class="hs-spot hs-top-bell" onclick="showToast('🔔 2 NEW RECIPES READY: Dancehall Clash & Roots Dub')" title="Notifications"></button>
+      <a href="/dimension-hub.html" class="hs-spot hs-top-menu" title="Dimension Hub Realms"></a>
+
+      <!-- 2. Left Kitchen Selector Cards -->
+      <button class="hs-spot hs-chef-reggae" onclick="selectChef('REGGAE', 13.0, '#ffb703')" title="Reggae Chef (Roots • Dub • Lovers)"></button>
+      <button class="hs-spot hs-chef-hiphop" onclick="selectChef('HIP HOP', 20.8, '#ff3300')" title="Hip Hop Chef (Boom Bap • Street • Classic)"></button>
+      <button class="hs-spot hs-chef-dancehall" onclick="selectChef('DANCEHALL', 28.5, '#ff203a')" title="Dancehall Chef (Riddim • Juggling • Energy)"></button>
+      <button class="hs-spot hs-chef-soca" onclick="selectChef('SOCA', 36.2, '#00e5ff')" title="Soca Chef (Carnival • Vibes • Energy)"></button>
+      <button class="hs-spot hs-chef-afrobeat" onclick="selectChef('AFRO-BEAT', 44.0, '#ff9900')" title="Afro-Beat Chef (Afro • Groove • Vibes)"></button>
+      <button class="hs-spot hs-chef-rnb" onclick="selectChef('R&B', 51.8, '#d946ef')" title="R&B Chef (Smooth • Soul • Vibes)"></button>
+      <button class="hs-spot hs-chef-slowjamz" onclick="selectChef('SLOW JAMZ', 59.5, '#8b5cf6')" title="Slow Jamz Chef (Romance • Slow • Late Night)"></button>
+      <button class="hs-spot hs-chef-private" onclick="openPrivateChefModal()" title="Private Chef Premium Experience ($19.99)"></button>
+      <button class="hs-spot hs-unlock-private-btn" onclick="openPrivateChefModal()" title="Unlock Private Chef"></button>
+
+      <!-- 3. Center Hero DJ Console & Step Chain -->
+      <button class="hs-spot hs-unlock-now-btn" onclick="openPrivateChefModal()" title="Unlock Private Chef ($19.99)"></button>
+
+      <!-- 10 Step Chain Hotspots -->
+      <button class="hs-spot hs-step-1" onclick="previewStep(1, 'ORDER RECEIVED — Tracks queued in Kitchen DAW', 19.5)" title="Step 1: Order Received"></button>
+      <button class="hs-spot hs-step-2" onclick="previewStep(2, 'ANALYZING TRACKS — BPM, Key & Harmonic Sync', 24.8)" title="Step 2: Analyzing Tracks"></button>
+      <button class="hs-spot hs-step-3" onclick="previewStep(3, 'ARRANGING SET — Energy flow & track sequencing', 30.5)" title="Step 3: Arranging Set"></button>
+      <button class="hs-spot hs-step-4" onclick="previewStep(4, 'MATCHING BEATS — Waveform alignment & grid locking', 36.0)" title="Step 4: Matching Beats"></button>
+      <button class="hs-spot hs-step-5" onclick="previewStep(5, 'COOKING TRANSITIONS — Drop swaps, chops & loop layering', 41.5)" title="Step 5: Cooking Transitions"></button>
+      <button class="hs-spot hs-step-6" onclick="previewStep(6, 'MIXING — EQ sweetening & dynamic balance', 47.0)" title="Step 6: Mixing"></button>
+      <button class="hs-spot hs-step-7" onclick="previewStep(7, 'ADDING FX — Air horn explosions, laser risers & dubplates', 52.8)" title="Step 7: Adding FX"></button>
+      <button class="hs-spot hs-step-8" onclick="previewStep(8, 'MASTERING — Analog tube warmth & limiter punch', 58.2)" title="Step 8: Mastering"></button>
+      <button class="hs-spot hs-step-9" onclick="previewStep(9, 'TASTE TEST — Soundclash quality assurance check', 63.8)" title="Step 9: Taste Test"></button>
+      <button class="hs-spot hs-step-10" onclick="previewStep(10, 'ORDER READY — Flawless 320kbps Master Mix Dispatched!', 69.2)" title="Step 10: Order Ready"></button>
+
+      <!-- 4. Track Menu Search & Filters -->
+      <button class="hs-spot hs-track-search" onclick="searchTrackPrompt()" title="Search 2,345 Tracks"></button>
+      <button class="hs-spot hs-filter-genres" onclick="showToast('🎛️ FILTER: ALL GENRES ACTIVE')" title="Filter Genres"></button>
+      <button class="hs-spot hs-filter-bpm" onclick="showToast('⚡ BPM RANGE: 70 - 135 BPM')" title="Filter BPM"></button>
+      <button class="hs-spot hs-filter-key" onclick="showToast('🎹 HARMONIC KEY: CAMELOT WHEEL SYNC')" title="Filter Key"></button>
+      <button class="hs-spot hs-filter-energy" onclick="showToast('🔥 ENERGY: PEAK SOUNDCLASH LEVEL')" title="Filter Energy"></button>
+      <button class="hs-spot hs-filter-version" onclick="showToast('🎧 VERSION: EXPLICIT & CLEAN STASH')" title="Filter Version"></button>
+
+      <!-- Track Row Play / Add Hotspots -->
+      <button class="hs-spot hs-track-row-1-play" onclick="playTrackRow(0, 'Go Down Deh (Remix)', 'Spice ft. Shaggy')" title="Preview Go Down Deh"></button>
+      <button class="hs-spot hs-track-row-1-add" onclick="addTrackToOrder('Go Down Deh (Remix)', 'Spice ft. Shaggy', '3:25')" title="Add Go Down Deh to Recipe"></button>
+
+      <button class="hs-spot hs-track-row-2-play" onclick="playTrackRow(1, 'Godzilla (Remix)', 'Eminem WRLD')" title="Preview Godzilla"></button>
+      <button class="hs-spot hs-track-row-2-add" onclick="addTrackToOrder('Godzilla (Remix)', 'Eminem WRLD', '3:30')" title="Add Godzilla to Recipe"></button>
+
+      <button class="hs-spot hs-track-row-3-play" onclick="playTrackRow(2, 'Calm Down (Remix)', 'Rema & Selena Gomez')" title="Preview Calm Down"></button>
+      <button class="hs-spot hs-track-row-3-add" onclick="addTrackToOrder('Calm Down (Remix)', 'Rema & Selena Gomez', '3:48')" title="Add Calm Down to Recipe"></button>
+
+      <button class="hs-spot hs-track-row-4-play" onclick="playTrackRow(0, 'One Drop (Remix)', 'Bob Marley & The Wailers')" title="Preview One Drop"></button>
+      <button class="hs-spot hs-track-row-4-add" onclick="addTrackToOrder('One Drop (Remix)', 'Bob Marley & The Wailers', '3:45')" title="Add One Drop to Recipe"></button>
+
+      <button class="hs-spot hs-track-row-5-play" onclick="playTrackRow(1, 'Work (Remix)', 'Rihanna & Drake')" title="Preview Work"></button>
+      <button class="hs-spot hs-track-row-5-add" onclick="addTrackToOrder('Work (Remix)', 'Rihanna & Drake', '3:39')" title="Add Work to Recipe"></button>
+
+      <button class="hs-spot hs-track-row-6-play" onclick="playTrackRow(2, 'Stay With Me (Remix)', 'Sam Smith')" title="Preview Stay With Me"></button>
+      <button class="hs-spot hs-track-row-6-add" onclick="addTrackToOrder('Stay With Me (Remix)', 'Sam Smith', '4:12')" title="Add Stay With Me to Recipe"></button>
+
+      <button class="hs-spot hs-page-prev" onclick="showToast('⏮ PREVIOUS TRACK PAGE')" title="Previous Page"></button>
+      <button class="hs-spot hs-page-next" onclick="showToast('⏭ NEXT TRACK PAGE')" title="Next Page"></button>
+
+      <!-- 5. Right Column Order Panel & AUTOMIX HERO -->
+      <button class="hs-spot hs-order-clear-all" onclick="clearRecipeOrder()" title="Clear All Songs"></button>
+
+      <!-- 10 Item Delete Crosses -->
+      <button class="hs-spot hs-del-song-1" onclick="removeSong(1, 'Fever')" title="Remove Fever"></button>
+      <button class="hs-spot hs-del-song-2" onclick="removeSong(2, 'We Caa Done')" title="Remove We Caa Done"></button>
+      <button class="hs-spot hs-del-song-3" onclick="removeSong(3, 'Gyal You A Party Animal')" title="Remove Gyal You A Party Animal"></button>
+      <button class="hs-spot hs-del-song-4" onclick="removeSong(4, 'Nah Let Go')" title="Remove Nah Let Go"></button>
+      <button class="hs-spot hs-del-song-5" onclick="removeSong(5, 'Pumpkin Belly')" title="Remove Pumpkin Belly"></button>
+      <button class="hs-spot hs-del-song-6" onclick="removeSong(6, 'Lifestyle')" title="Remove Lifestyle"></button>
+      <button class="hs-spot hs-del-song-7" onclick="removeSong(7, 'Look')" title="Remove Look"></button>
+      <button class="hs-spot hs-del-song-8" onclick="removeSong(8, 'Wine Pon It')" title="Remove Wine Pon It"></button>
+      <button class="hs-spot hs-del-song-9" onclick="removeSong(9, 'Nuh Frighten Dem')" title="Remove Nuh Frighten Dem"></button>
+      <button class="hs-spot hs-del-song-10" onclick="removeSong(10, 'Romantic Call')" title="Remove Romantic Call"></button>
+
+      <button class="hs-spot hs-order-reorder" onclick="reorderRecipe()" title="Smart Auto-Sequence"></button>
+      <button class="hs-spot hs-order-remove" onclick="removeLastSong()" title="Remove Last Added"></button>
+      <button class="hs-spot hs-order-clear" onclick="clearRecipeOrder()" title="Clear Order"></button>
+
+      <!-- ★ HERO AUTOMIX MY ORDER BUTTON ★ -->
+      <button class="hs-spot hs-automix-hero-btn" onclick="startAutomixWorkflow()" title="Automix My Order"></button>
+
+      <!-- 6. Mix Settings & Extra Ingredients -->
+      <button class="hs-spot hs-edit-mix-settings" onclick="openMixSettingsModal()" title="Edit Mix Settings"></button>
+      <button class="hs-spot hs-edit-ingredients" onclick="openIngredientsModal()" title="Edit Extra Ingredients"></button>
+      <button class="hs-spot hs-buy-private-perk" onclick="openPrivateChefModal()" title="Add Private Chef Mastering ($19.99)"></button>
+
+      <!-- 7. Bottom Music Player Controls -->
+      <button class="hs-spot hs-player-cover" onclick="togglePlayerAudio()" title="Play / Pause Custom Remix"></button>
+      <button class="hs-spot hs-player-shuffle" onclick="showToast('🔀 SMART SHUFFLE ACTIVE')" title="Shuffle"></button>
+      <button class="hs-spot hs-player-prev" onclick="prevAudioTrack()" title="Previous Track"></button>
+      <button class="hs-spot hs-player-play" onclick="togglePlayerAudio()" title="Play / Pause Audio"></button>
+      <button class="hs-spot hs-player-next" onclick="nextAudioTrack()" title="Next Track"></button>
+      <button class="hs-spot hs-player-loop" onclick="toggleAudioLoop()" title="Loop Track"></button>
+
+      <button class="hs-spot hs-player-download" onclick="downloadMasterMix()" title="Download Custom 320kbps Mix"></button>
+      <button class="hs-spot hs-player-save" onclick="saveRecipeOrder()" title="Save Recipe to My Orders"></button>
+      <button class="hs-spot hs-player-share" onclick="shareRecipeLink()" title="Share Mix Recipe"></button>
+
+    </div><!-- /hotspots-canvas-layer -->
+
+    </div><!-- /stage-inner-box -->
+  </div><!-- /master-stage-wrapper -->
+
+  <!-- ── FROSTED GLASS POPUP 1: AUTOMIX COOKING PIPELINE MODAL ─────────── -->
+  <div class="kitchen-modal-overlay" id="automixProgressModal">
+    <div class="kitchen-glass-card cooking-progress-card">
+      <button class="glass-modal-close-btn" onclick="closeAutomixModal()">✕</button>
+
+      <img src="/FACEID1.JPG.png" alt="Chef" class="cooking-chef-avatar" onerror="this.src='/FACE.JPG.png';" />
+      <div class="cooking-status-title" id="cookingStatusTitle">CHEF COOKING YOUR RECIPE...</div>
+      <div class="cooking-status-subtitle" id="cookingChefName">CHEF DANCEHALL MASTERING ENGINE ACTIVE</div>
+
+      <div class="cooking-progress-bar-wrap">
+        <div class="cooking-progress-bar-fill" id="cookingProgressFill"></div>
+      </div>
+
+      <div class="cooking-live-step-label" id="cookingLiveStepLabel">
+        STEP 1 / 10: ANALYZING HARMONIC BPM & BEAT GRIDS
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FROSTED GLASS POPUP 2: PRIVATE CHEF VIP UPGRADE MODAL ─────────── -->
+  <div class="kitchen-modal-overlay" id="privateChefModal" onclick="if(event.target===this) closePrivateChefModal();">
+    <div class="kitchen-glass-card">
+      <button class="glass-modal-close-btn" onclick="closePrivateChefModal()">✕</button>
+
+      <div style="font-size:2.8rem; margin-bottom:8px; filter:drop-shadow(0 0 12px var(--chef-gold));">👑</div>
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.3rem; font-weight:900; color:var(--chef-gold); margin-bottom:8px; text-shadow:0 0 15px rgba(255,183,3,0.6);">
+        UNLOCK PRIVATE CHEF VIP
+      </div>
+      <div style="font-size:0.82rem; color:#e0e0ec; opacity:0.85; margin-bottom:20px; line-height:1.55;">
+        Get 1-on-1 VIP Producer Mastering, Multi-Genre Live Remix Mashups, Custom Drops & Priority High-Speed Mixing Queue.
+      </div>
+
+      <div style="background:rgba(255,183,3,0.08); border:1px solid rgba(255,183,3,0.45); border-radius:16px; padding:16px; margin-bottom:22px; backdrop-filter:blur(14px); box-shadow:inset 0 1px 1px rgba(255,255,255,0.3);">
+        <div style="font-family:'Orbitron',sans-serif; font-size:1.5rem; font-weight:900; color:#ffffff;">$19.99 <span style="font-size:0.75rem; color:var(--chef-gold); font-weight:700;">/ CUSTOM MASTER MIX</span></div>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <button onclick="orderPrivateChef()" style="flex:1; padding:14px; background:linear-gradient(135deg,var(--chef-gold),#ff8800); border:none; border-radius:30px; color:#000; font-family:'Orbitron',sans-serif; font-size:0.82rem; font-weight:900; letter-spacing:1px; cursor:pointer; box-shadow:0 0 25px rgba(255,183,3,0.6);">
+          💳 UPGRADE TO PRIVATE CHEF
+        </button>
+        <button onclick="closePrivateChefModal()" style="padding:14px 20px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.25); border-radius:30px; color:#fff; font-family:'Orbitron',sans-serif; font-size:0.75rem; font-weight:700; cursor:pointer;">
+          CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FROSTED GLASS POPUP 3: KITCHEN QUEUE MODAL ───────────────────────── -->
+  <div class="kitchen-modal-overlay" id="kitchenQueueModal" onclick="if(event.target===this) closeKitchenQueueModal();">
+    <div class="kitchen-glass-card">
+      <button class="glass-modal-close-btn" onclick="closeKitchenQueueModal()">✕</button>
+
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:#ffb703; margin-bottom:12px;">
+        🍳 LIVE KITCHEN QUEUE
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#fff; font-size:0.85rem;">🔥 2026 Dancehall Clash Anthem</div>
+            <div style="font-size:0.72rem; color:var(--chef-gold);">Chef: Dancehall • 108 BPM</div>
+          </div>
+          <span style="background:rgba(0,229,255,0.2); color:#00e5ff; border:1px solid #00e5ff; padding:3px 8px; border-radius:12px; font-size:0.65rem; font-weight:900;">COOKING 85%</span>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#fff; font-size:0.85rem;">🌴 Lovers Rock Roots Odyssey</div>
+            <div style="font-size:0.72rem; color:var(--chef-gold);">Chef: Reggae • 76 BPM</div>
+          </div>
+          <span style="background:rgba(255,183,3,0.2); color:#ffb703; border:1px solid #ffb703; padding:3px 8px; border-radius:12px; font-size:0.65rem; font-weight:900;">IN QUEUE #2</span>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#fff; font-size:0.85rem;">⚡ Afro Heat Road March</div>
+            <div style="font-size:0.72rem; color:var(--chef-gold);">Chef: Afro-Beat • 105 BPM</div>
+          </div>
+          <span style="background:rgba(255,255,255,0.1); color:#aaa; border:1px solid rgba(255,255,255,0.2); padding:3px 8px; border-radius:12px; font-size:0.65rem; font-weight:900;">IN QUEUE #3</span>
+        </div>
+      </div>
+
+      <button onclick="startAutoMixCooking()" style="width:100%; padding:14px; background:linear-gradient(135deg,var(--glow-neon),#0088cc); border:none; border-radius:30px; color:#000; font-family:'Orbitron',sans-serif; font-size:0.82rem; font-weight:900; letter-spacing:1px; cursor:pointer;">
+        ⚡ COOK NEW MIX NOW
+      </button>
+    </div>
+  </div>
+
+  <!-- ── FROSTED GLASS POPUP 4: MY ORDERS MODAL ──────────────────────────── -->
+  <div class="kitchen-modal-overlay" id="myOrdersModal" onclick="if(event.target===this) closeMyOrdersModal();">
+    <div class="kitchen-glass-card">
+      <button class="glass-modal-close-btn" onclick="closeMyOrdersModal()">✕</button>
+
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:var(--chef-cyan); margin-bottom:12px;">
+        📦 MY SAVED RECIPES & ORDERS
+      </div>
+
+      <div id="ordersListContent" style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px; max-height:260px; overflow-y:auto;">
+        <!-- Dynamically injected -->
+        <div style="color:rgba(255,255,255,0.7); font-size:0.8rem; text-align:center; padding:20px;">
+          No saved recipes yet. Click "Save" on the music player to save your customized mixes!
+        </div>
+      </div>
+
+      <button onclick="closeMyOrdersModal()" style="width:100%; padding:12px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:30px; color:#fff; font-family:'Orbitron',sans-serif; font-size:0.8rem; font-weight:800; cursor:pointer;">
+        CLOSE
+      </button>
+    </div>
+  </div>
+
+  <!-- ── FROSTED GLASS POPUP 5: EXTRA INGREDIENTS MODAL ─────────────────── -->
+  <div class="kitchen-modal-overlay" id="ingredientsModal" onclick="if(event.target===this) closeIngredientsModal();">
+    <div class="kitchen-glass-card">
+      <button class="glass-modal-close-btn" onclick="closeIngredientsModal()">✕</button>
+
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:var(--chef-gold); margin-bottom:12px;">
+        🧂 RECIPE INGREDIENTS & SEASONINGS
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px; text-align:left;">
+        <div>
+          <label style="font-size:0.72rem; color:var(--chef-gold); font-weight:800; letter-spacing:1px;">AIR HORN & SOUND CLASH SFX</label>
+          <select id="ingredientSfx" style="width:100%; margin-top:4px; padding:10px; background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.25); border-radius:8px; color:#fff; font-family:'Orbitron',sans-serif; font-size:0.75rem;">
+            <option>Standard Assassin Clash Lasers</option>
+            <option>Ultra Heavy Air Horn Explosion</option>
+            <option>Dubplate Siren & Echo</option>
+            <option>Clean / Minimal SFX</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:0.72rem; color:var(--chef-gold); font-weight:800; letter-spacing:1px;">BASS BOOST SATURATION</label>
+          <select id="ingredientBass" style="width:100%; margin-top:4px; padding:10px; background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.25); border-radius:8px; color:#fff; font-family:'Orbitron',sans-serif; font-size:0.75rem;">
+            <option>Sub-Zero Heavy 808 Sub (+4dB)</option>
+            <option>Warm Analog Studio Bass (+2dB)</option>
+            <option>Club Earthquake Pressure (+6dB)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:0.72rem; color:var(--chef-gold); font-weight:800; letter-spacing:1px;">TRANSITION FLAVOR</label>
+          <select id="ingredientTransition" style="width:100%; margin-top:4px; padding:10px; background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.25); border-radius:8px; color:#fff; font-family:'Orbitron',sans-serif; font-size:0.75rem;">
+            <option>Fast Juggling Spinbacks</option>
+            <option>Smooth Harmonic Crossfade</option>
+            <option>Gradual Build-up</option>
+            <option>Chill & Smooth</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="saveMixSettings()" style="width:100%; padding:14px; background:linear-gradient(135deg,#ff3300,#cc1100); border:1.5px solid rgba(255,255,255,0.6); border-radius:30px; color:#fff; font-family:'Orbitron',sans-serif; font-size:0.82rem; font-weight:900; letter-spacing:1px; cursor:pointer; box-shadow:0 0 25px var(--glow-fire), inset 0 1px 1px #ffffff;">
+        💾 SAVE RECIPE SETTINGS
+      </button>
+    </div>
+  </div>
+
+  <!-- Frosted Glass HUD Toast Alert -->
+  <div class="kitchen-hud-toast" id="kitchenToast"></div>
+
+  <!-- Real Web Audio Element -->
+  <audio id="kitchenAudio" preload="auto">
+    <source src="/CODE AUDIO.mp3" type="audio/mpeg">
+    <source src="/wulup.mp3" type="audio/mpeg">
+    <source src="/audio/mix1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════════════
+    // 1. FULL VIEWPORT BACKGROUND PARTICLES (BEHIND MIX KITCHEN STAGE)
+    // ════════════════════════════════════════════════════════════════════════
+    const bgCanvas = document.getElementById('ambientBackgroundCanvas');
+    const bgCtx    = bgCanvas.getContext('2d');
+    let bgParticles = [];
+    const BG_PARTICLE_COUNT = 85;
+
+    function initBackgroundParticles() {
+      bgCanvas.width  = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+      bgParticles = [];
+
+      for (let i = 0; i < BG_PARTICLE_COUNT; i++) {
+        bgParticles.push({
+          x: Math.random() * bgCanvas.width,
+          y: Math.random() * bgCanvas.height,
+          size: Math.random() * 2.4 + 0.6,
+          speedY: Math.random() * 0.85 + 0.25,
+          speedX: (Math.random() - 0.5) * 0.5,
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: Math.random() * 0.03 + 0.015,
+          alpha: Math.random() * 0.6 + 0.25,
+          color: Math.random() > 0.45 ? '#ff3300' : (Math.random() > 0.5 ? '#ffb703' : '#ff203a')
+        });
+      }
+    }
+
+    function drawBackgroundParticles() {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+      for (let i = 0; i < bgParticles.length; i++) {
+        const p = bgParticles[i];
+        p.wobble += p.wobbleSpeed;
+        p.y -= p.speedY;
+        p.x += p.speedX + Math.sin(p.wobble) * 0.45;
+        p.alpha -= 0.0012;
+
+        if (p.y < -15 || p.alpha <= 0) {
+          p.x = Math.random() * bgCanvas.width;
+          p.y = bgCanvas.height + 10;
+          p.alpha = Math.random() * 0.6 + 0.25;
+        }
+
+        bgCtx.save();
+        bgCtx.globalAlpha = Math.max(0, p.alpha);
+        bgCtx.fillStyle   = p.color;
+        bgCtx.shadowColor = p.color;
+        bgCtx.shadowBlur  = p.size * 5;
+        bgCtx.beginPath();
+        bgCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        bgCtx.fill();
+        bgCtx.restore();
+      }
+
+      requestAnimationFrame(drawBackgroundParticles);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 2. 3D MOUSE PARALLAX ENGINE
+    // ════════════════════════════════════════════════════════════════════════
+    const stageWrapper = document.getElementById('masterStage');
+
+    window.addEventListener('mousemove', (e) => {
+      const xRatio = (e.clientX / window.innerWidth - 0.5) * 2;
+      const yRatio = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      const rotY = xRatio * 3.6;
+      const rotX = -yRatio * 2.6;
+
+      stageWrapper.style.transform = `perspective(1200px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    });
+
+    window.addEventListener('mouseleave', () => {
+      stageWrapper.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+    });
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 3. SYNTHESIZER AUDIO ENGINE (CHORD CHIMES, DROPS & SOUND EFFECTS)
+    // ════════════════════════════════════════════════════════════════════════
+    let synthCtx = null;
+    function getSynthContext() {
+      if (!synthCtx) synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (synthCtx.state === 'suspended') synthCtx.resume();
+      return synthCtx;
+    }
+
+    function playSynthTone(freq = 520, dur = 0.08, type = 'sine', vol = 0.2) {
+      try {
+        const ctx = getSynthContext();
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        g.gain.setValueAtTime(vol, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + dur);
+      } catch(e) {}
+    }
+
+    function playKitchenVictoryChime() {
+      try {
+        const ctx = getSynthContext();
+        const now = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.09);
+          g.gain.setValueAtTime(0.25, now + i * 0.09);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.32);
+          osc.connect(g);
+          g.connect(ctx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.33);
+        });
+      } catch(e) {}
+    }
+
+    function playSubBassDrop() {
+      try {
+        const ctx = getSynthContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(32, now + 0.6);
+        g.gain.setValueAtTime(0.35, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      } catch(e) {}
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 4. KITCHEN CHEF SELECTOR LOGIC
+    // ════════════════════════════════════════════════════════════════════════
+    let activeChef = 'DANCEHALL';
+    const chefIndicator = document.getElementById('activeChefIndicator');
+
+    function selectChef(chefName, topPct, color) {
+      activeChef = chefName;
+      chefIndicator.style.top = topPct + '%';
+      chefIndicator.style.borderColor = color;
+      chefIndicator.style.boxShadow = `0 0 25px ${color}, inset 0 1px 2px rgba(255,255,255,0.5), inset 0 0 15px ${color}`;
+
+      playSynthTone(580, 0.1, 'triangle', 0.22);
+      showToast(`🍳 ${chefName} CHEF ACTIVATED — RECIPE STYLES UPDATED`);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 5. RECIPE ORDER QUEUE & TRACK LIST LOGIC
+    // ════════════════════════════════════════════════════════════════════════
+    let orderSongCount = 10;
+    let orderEstMins   = 36;
+
+    function addTrackToOrder(title, artist, duration) {
+      orderSongCount++;
+      orderEstMins += 3;
+      playSynthTone(720, 0.08, 'triangle', 0.2);
+      showToast(`➕ ADDED TO RECIPE: ${title} (${orderSongCount} SONGS • ${orderEstMins} MIN)`);
+    }
+
+    function removeSong(slotNum, title) {
+      if (orderSongCount > 1) {
+        orderSongCount--;
+        orderEstMins = Math.max(3, orderEstMins - 3);
+        playSynthTone(320, 0.08, 'sawtooth', 0.15);
+        showToast(`✕ REMOVED: ${title} (${orderSongCount} SONGS REMAINING)`);
+      }
+    }
+
+    function removeLastSong() {
+      if (orderSongCount > 1) {
+        orderSongCount--;
+        orderEstMins = Math.max(3, orderEstMins - 3);
+        playSynthTone(340, 0.08, 'sawtooth', 0.15);
+        showToast(`✕ REMOVED LAST SONG (${orderSongCount} SONGS • ${orderEstMins} MIN)`);
+      }
+    }
+
+    function clearRecipeOrder() {
+      if (confirm('Clear current recipe order?')) {
+        orderSongCount = 0;
+        orderEstMins = 0;
+        playSynthTone(260, 0.15, 'sawtooth', 0.2);
+        showToast('🗑️ RECIPE ORDER CLEARED — READY FOR NEW INGREDIENTS');
+      }
+    }
+
+    function reorderRecipe() {
+      playSynthTone(640, 0.1, 'sine', 0.2);
+      showToast('🔀 AI SMART HARMONIC BPM RE-SEQUENCING COMPLETE');
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 6. AUTOMIX WORKFLOW ENGINE (10-STEP COOKING PIPELINE)
+    // ════════════════════════════════════════════════════════════════════════
+    const automixModal  = document.getElementById('automixProgressModal');
+    const cookingFill   = document.getElementById('cookingProgressFill');
+    const liveStepLabel = document.getElementById('cookingLiveStepLabel');
+    const chefNameLabel = document.getElementById('cookingChefName');
+    const stepGlow      = document.getElementById('cookingStepGlow');
+
+    const COOKING_STEPS = [
+      { name: '1/10: ORDER RECEIVED', desc: 'Queued in Chef Producer DAW', left: 19.5, freq: 440 },
+      { name: '2/10: ANALYZING TRACKS', desc: 'Harmonic BPM, Key & Dynamic Analysis', left: 24.8, freq: 480 },
+      { name: '3/10: ARRANGING SET', desc: 'Sequencing track order for peak clash energy', left: 30.5, freq: 520 },
+      { name: '4/10: MATCHING BEATS', desc: 'Phase alignment & beat grid sync', left: 36.0, freq: 560 },
+      { name: '5/10: COOKING TRANSITIONS', desc: 'Adding dynamic drop swaps & vocal cuts', left: 41.5, freq: 600 },
+      { name: '6/10: LIVE MULTI-TRACK MIXING', desc: 'EQ separation & stereo imaging', left: 47.0, freq: 640 },
+      { name: '7/10: ADDING FX & DUBPLATES', desc: 'Air horns, laser sweeps & Assassin drops', left: 52.8, freq: 700 },
+      { name: '8/10: ANALOG MASTERING', desc: 'Tube saturation & soundclash punch', left: 58.2, freq: 760 },
+      { name: '9/10: CHEF TASTE TEST', desc: 'Quality assurance playback check', left: 63.8, freq: 820 },
+      { name: '10/10: ORDER READY!', desc: '320kbps Masterpiece Dispatched to Player!', left: 69.2, freq: 880 }
+    ];
+
+    let automixInterval = null;
+
+    function startAutomixWorkflow() {
+      automixModal.style.display = 'flex';
+      chefNameLabel.textContent = `CHEF ${activeChef} MASTERING ENGINE ACTIVE`;
+      cookingFill.style.width = '0%';
+
+      playSubBassDrop();
+
+      let currentStepIdx = 0;
+      stepGlow.classList.add('active');
+
+      clearInterval(automixInterval);
+      automixInterval = setInterval(() => {
+        if (currentStepIdx < COOKING_STEPS.length) {
+          const step = COOKING_STEPS[currentStepIdx];
+          const pct = ((currentStepIdx + 1) / COOKING_STEPS.length) * 100;
+          cookingFill.style.width = pct + '%';
+          liveStepLabel.textContent = `${step.name}: ${step.desc.toUpperCase()}`;
+
+          stepGlow.style.left = step.left + '%';
+          playSynthTone(step.freq, 0.08, 'triangle', 0.2);
+
+          currentStepIdx++;
+        } else {
+          clearInterval(automixInterval);
+          playKitchenVictoryChime();
+          showToast('🔥 AUTOMIX READY — PLAYING MASTER RECIPE IN DOCK');
+
+          setTimeout(() => {
+            closeAutomixModal();
+            startAudioPlayback();
+          }, 1200);
+        }
+      }, 700);
+    }
+
+    function closeAutomixModal() {
+      clearInterval(automixInterval);
+      automixModal.style.display = 'none';
+      stepGlow.classList.remove('active');
+    }
+
+    function previewStep(stepNum, description, leftPct) {
+      stepGlow.style.left = leftPct + '%';
+      stepGlow.classList.add('active');
+      playSynthTone(400 + stepNum * 45, 0.08, 'sine', 0.2);
+      showToast(`⚡ STEP ${stepNum}: ${description}`);
+      setTimeout(() => stepGlow.classList.remove('active'), 2000);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 7. POPUP MODALS LOGIC
+    // ════════════════════════════════════════════════════════════════════════
+    function openPrivateChefModal() {
+      document.getElementById('privateChefModal').style.display = 'flex';
+      playSynthTone(600, 0.08, 'triangle', 0.2);
+    }
+    function closePrivateChefModal() {
+      document.getElementById('privateChefModal').style.display = 'none';
+    }
+
+    function unlockPrivateChefVIP() {
+      playKitchenVictoryChime();
+      closePrivateChefModal();
+      showToast('👑 PRIVATE CHEF VIP UNLOCKED — MASTER ACCESS GRANTED');
+    }
+
+    function openMixSettingsModal() {
+      document.getElementById('mixSettingsModal').style.display = 'flex';
+      playSynthTone(540, 0.08, 'sine', 0.18);
+    }
+    function closeMixSettingsModal() {
+      document.getElementById('mixSettingsModal').style.display = 'none';
+    }
+
+    function saveMixSettings() {
+      playKitchenVictoryChime();
+      closeMixSettingsModal();
+      showToast('💾 RECIPE SETTINGS SAVED & APPLIED TO ENGINE');
+    }
+
+    function openIngredientsModal() {
+      showToast('🌶️ EXTRA INGREDIENTS: ALL 7 SFX & DUBPLATES ACTIVE');
+    }
+
+    function openKitchenQueueModal() {
+      showToast('🍳 KITCHEN QUEUE: 3 RECIPES COOKING IN DAW');
+    }
+
+    function openMyOrdersModal() {
+      showToast('📑 MY ORDERS: 4 SAVED CUSTOM MIX RECIPES READY');
+    }
+
+    function triggerCustomTrackUpload() {
+      showToast('📤 CUSTOM AUDIO & STEM UPLOADER INITIALIZED');
+    }
+
+    function searchTrackPrompt() {
+      const q = prompt('Search 2,345 Tracks in Mix Kitchen Vault:');
+      if (q && q.trim()) {
+        showToast(`🔍 FILTERING KITCHEN VAULT FOR: "${q.toUpperCase()}"`);
+      }
+    }
+
+    function downloadMasterMix() {
+      playSynthTone(700, 0.08, 'triangle', 0.2);
+      showToast('📥 DOWNLOADING 320kbps MASTER MIX RECIPE...');
+    }
+
+    function saveRecipeOrder() {
+      playKitchenVictoryChime();
+      showToast('❤️ RECIPE SAVED TO MY ORDERS ARCHIVE');
+    }
+
+    function shareRecipeLink() {
+      playSynthTone(640, 0.08, 'sine', 0.18);
+      showToast('🔗 MIX RECIPE LINK COPIED TO CLIPBOARD');
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 8. REAL AUDIO ENGINE (BOTTOM MUSIC DOCK PLAYER)
+    // ════════════════════════════════════════════════════════════════════════
+    const playerAudio = document.getElementById('kitchenAudio');
+    let isPlaying = false;
+    let isLooping = false;
+
+    const tracks = [
+      { title: 'Your Custom Remix Mix', artist: 'Mixed by Private Chef', src: '/CODE AUDIO.mp3' },
+      { title: 'Go Down Deh (Remix)', artist: 'Spice ft. Shaggy & Sean Paul', src: '/wulup.mp3' },
+      { title: 'Godzilla (Remix)', artist: 'Eminem ft. Juice WRLD', src: '/audio/mix1.mp3' }
+    ];
+    let currentIdx = 0;
+
+    function playTrackRow(idx, title, artist) {
+      currentIdx = idx % tracks.length;
+      playerAudio.src = tracks[currentIdx].src;
+      playerAudio.load();
+      startAudioPlayback();
+      showToast(`▶ PREVIEWING: ${title} — ${artist}`);
+    }
+
+    function startAudioPlayback() {
+      playerAudio.play().then(() => {
+        isPlaying = true;
+      }).catch(() => {
+        isPlaying = true;
+      });
+    }
+
+    function togglePlayerAudio() {
+      if (isPlaying) {
+        playerAudio.pause();
+        isPlaying = false;
+        showToast('⏸ AUDIO PAUSED');
+      } else {
+        if (!playerAudio.src || playerAudio.readyState === 0) {
+          playerAudio.src = tracks[currentIdx].src;
+          playerAudio.load();
+        }
+        playerAudio.play().then(() => {
+          isPlaying = true;
+          showToast(`🔊 PLAYING: ${tracks[currentIdx].title}`);
+        }).catch(() => showToast('🔊 AUDIO ACTIVE'));
+      }
+    }
+
+    function nextAudioTrack() {
+      currentIdx = (currentIdx + 1) % tracks.length;
+      playerAudio.src = tracks[currentIdx].src;
+      playerAudio.load();
+      startAudioPlayback();
+      showToast(`⏭ NEXT: ${tracks[currentIdx].title}`);
+    }
+
+    function prevAudioTrack() {
+      currentIdx = (currentIdx - 1 + tracks.length) % tracks.length;
+      playerAudio.src = tracks[currentIdx].src;
+      playerAudio.load();
+      startAudioPlayback();
+      showToast(`⏮ PREVIOUS: ${tracks[currentIdx].title}`);
+    }
+
+    function toggleAudioLoop() {
+      isLooping = !isLooping;
+      playerAudio.loop = isLooping;
+      showToast(isLooping ? '🔁 LOOP PLAYBACK ON' : '➡️ CONTINUOUS PLAY ON');
+    }
+
+    playerAudio.addEventListener('ended', () => {
+      if (!isLooping) nextAudioTrack();
+    });
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 9. TOAST HELPER
+    // ════════════════════════════════════════════════════════════════════════
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('kitchenToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2600);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // INITIALIZATION ON LOAD
+    // ════════════════════════════════════════════════════════════════════════
+    window.addEventListener('DOMContentLoaded', () => {
+      initBackgroundParticles();
+      drawBackgroundParticles();
+    });
+
+    window.addEventListener('resize', () => {
+      initBackgroundParticles();
+    });
+  </script>
+</body>
+</html>

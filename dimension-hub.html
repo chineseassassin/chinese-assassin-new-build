@@ -1,0 +1,4366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chinese Assassin — Floating Dimension Hub (Master Rebuild)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- GSAP CDN for smooth 3D orbits and mouse parallax -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary-red: #ff203a;
+      --neon-red: #ff0033;
+      --gold: #ffd700;
+      --cyan: #00e5ff;
+      --dark-bg: #050608;
+      --card-glass: rgba(10, 14, 24, 0.72);
+      --card-border: rgba(255, 32, 58, 0.45);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--dark-bg);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    /* ── MASTER BACKGROUND ARTWORK (BEST.png) ────────────────────────── */
+    .master-stage-bg {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      background-image: url('/BEST.png') !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+      z-index: 1 !important;
+      transform-style: preserve-3d;
+      will-change: transform;
+      pointer-events: none !important;
+    }
+
+    .ambient-vignette {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.45) 75%, rgba(0, 0, 0, 0.85) 100%) !important;
+      pointer-events: none !important;
+      z-index: 2 !important;
+    }
+
+    /* ── ENERGY WIRE & FX CANVAS ───────────────────────────────────────── */
+    #energy-wires-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* ── 3D FLOATING HUB CONTAINER ─────────────────────────────────────── */
+    #dimension-hub {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      perspective: 1400px !important;
+      z-index: 10 !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    #hub-container {
+      position: relative !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transform-style: preserve-3d !important;
+      will-change: transform !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* ── TOP HUD HEADER (sits below the floating site nav) ─────────────── */
+    .hub-header {
+      position: fixed;
+      top: 76px;
+      left: 0;
+      width: 100%;
+      padding: 10px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+      z-index: 90;
+      pointer-events: none;
+    }
+
+    .hub-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hub-main-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      background: linear-gradient(135deg, #ffffff 15%, var(--primary-red) 65%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px rgba(255, 32, 58, 0.5);
+    }
+
+    .hub-sub-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: rgba(0, 229, 255, 0.7);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 18px;
+      background: rgba(255, 32, 58, 0.12);
+      border: 1px solid rgba(255, 32, 58, 0.5);
+      border-radius: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: var(--primary-red);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(255, 32, 58, 0.25);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--primary-red);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary-red);
+      animation: pulseDot 1.4s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.65); }
+    }
+
+    /* ── FLOATING ICON CARDS (NATURAL TRANSPARENT FLOATING SILHOUETTES) ─ */
+    .floating-card-anchor {
+      position: absolute;
+      width: 175px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      transform-style: preserve-3d;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+      will-change: transform, opacity;
+    }
+
+    .floating-card-frame {
+      position: relative;
+      width: 100%;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    /* PNG Icon Image - Natural, High Definition, Zero Harsh Auras */
+    .card-png-img {
+      width: 100%;
+      height: 95px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.85));
+      transition: transform 0.3s ease, filter 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Floating Titles & Descriptions Underneath */
+    .card-info-wrap {
+      width: 100%;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2px;
+      z-index: 3;
+    }
+
+    .card-title-main {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.95);
+      white-space: nowrap;
+      transition: color 0.25s ease;
+    }
+
+    .card-float-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--primary-red);
+      text-transform: uppercase;
+      line-height: 1.2;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.95);
+      transition: color 0.25s ease;
+    }
+
+    .card-desc-detail {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.25;
+      margin-top: 1px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.95);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── NATURAL HOVER INTERACTIONS (Stays In Orbit, Crisp & Clean) ──────── */
+    .floating-card-anchor:hover .card-png-img {
+      transform: scale(1.14) translateY(-4px);
+      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+    }
+
+    .floating-card-anchor:hover .card-title-main {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0,0,0,0.95);
+    }
+
+    .floating-card-anchor:hover .card-float-title {
+      color: #ffffff;
+      text-shadow: 0 0 8px #ffffff;
+    }
+
+    .floating-card-anchor:hover .card-desc-detail {
+      color: #ffffff;
+    }
+
+    /* VIP Gold Natural Theme */
+    .floating-card-anchor.card-vip .card-float-title {
+      color: var(--gold);
+    }
+
+    .floating-card-anchor.card-vip:hover .card-float-title {
+      color: #ffffff;
+      text-shadow: 0 0 10px var(--gold);
+    }
+  </style>
+
+  <!-- ── MEDIA HUB & MPC DRUM MACHINE STYLES ──────────────────────────────── -->
+  <style>
+    /* ── MASTER BOTTOM MEDIA HUB DECK ──────────────────────────────────── */
+    #master-media-deck {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1180px, 96vw);
+      background: linear-gradient(180deg, rgba(16, 20, 32, 0.96) 0%, rgba(6, 8, 14, 0.98) 100%);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-bottom: none;
+      border-radius: 20px 20px 0 0;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 -10px 45px rgba(0, 0, 0, 0.95),
+                  0 0 35px rgba(255, 32, 58, 0.25),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      z-index: 900;
+      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    #master-media-deck.collapsed {
+      transform: translateX(-50%) translateY(calc(100% - 64px));
+    }
+
+    /* Deck Drawer Handle & Header Bar */
+    .deck-top-bar {
+      width: 100%;
+      height: 64px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: linear-gradient(90deg, rgba(255, 32, 58, 0.12) 0%, rgba(10, 14, 24, 0.9) 40%, rgba(255, 32, 58, 0.12) 100%);
+      border-bottom: 1px solid rgba(255, 32, 58, 0.25);
+      border-radius: 18px 18px 0 0;
+    }
+
+    .deck-branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .deck-logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ff203a 20%, #7a0010 100%);
+      border: 1.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(255, 32, 58, 0.7);
+    }
+
+    .deck-title-group h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #ffffff;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deck-title-group p {
+      font-size: 0.58rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .deck-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(255, 32, 58, 0.15);
+      border: 1px solid rgba(255, 32, 58, 0.5);
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .deck-toggle-btn:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 16px rgba(255, 32, 58, 0.7);
+    }
+
+    /* ── EXPANDED CONSOLE WORKSTATION ──────────────────────────────────── */
+    .deck-body {
+      padding: 18px 22px 20px;
+      display: grid;
+      grid-template-columns: 340px 1fr 240px;
+      gap: 20px;
+      align-items: stretch;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    /* ── SECTION 1: MASTER MUSIC PLAYER ────────────────────────────────── */
+    .player-panel {
+      background: rgba(8, 11, 20, 0.85);
+      border: 1px solid rgba(255, 32, 58, 0.3);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel-header-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: var(--primary-red);
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .now-playing-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .vinyl-disc {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #200005 25%, #080a10 60%, #30000a 100%);
+      border: 2px solid rgba(255, 32, 58, 0.6);
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .vinyl-disc.spinning {
+      animation: vinylSpin 3s linear infinite;
+    }
+
+    @keyframes vinylSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .vinyl-disc::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 6px var(--gold);
+    }
+
+    .track-meta {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .track-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       DRAGON MASTER MEDIA PLAYER DOCK (MEDIAPLAYERPROP.png)
+       ═══════════════════════════════════════════════════════════════════════ */
+    #dragon-player-dock {
+      position: fixed !important;
+      bottom: 0px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: min(820px, 85vw) !important;
+      z-index: 150 !important;
+      pointer-events: auto;
+      filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(255, 32, 58, 0.45));
+      user-select: none;
+    }
+
+    .dragon-chassis-wrap {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    .dragon-chassis-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Hotspot Overlay Layer across MEDIAPLAYERPROP (1536x335) */
+    .dragon-overlay-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+    }
+
+    /* 1. Left Screen: Now Playing, Scrubber, Timecode & Volume Control */
+    .dragon-left-screen {
+      position: absolute;
+      left: 14.6%;
+      top: 40%;
+      width: 18.5%;
+      height: 42%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5px;
+      padding: 0 4px;
+      overflow: hidden;
+      z-index: 10;
+      box-sizing: border-box;
+    }
+
+    .dragon-title-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+      gap: 1px;
+      margin: 0;
+      transform: translateX(-6px);
+    }
+
+    .dragon-track-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 900;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 0 6px rgba(255, 32, 58, 0.95);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      text-transform: uppercase;
+      text-align: center;
+      width: 100%;
+      margin: 0;
+    }
+
+    .dragon-artist-line {
+      font-size: 0.46rem;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #ff203a;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.1;
+      text-align: center;
+      width: 100%;
+      display: block;
+      margin: 0;
+      text-shadow: 0 0 6px rgba(255, 32, 58, 0.85);
+      text-transform: uppercase;
+    }
+
+    .dragon-scrubber-box {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      margin: 1px 0;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dragon-scrubber-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff0033 0%, #ff6b81 100%);
+      box-shadow: 0 0 6px #ff0033;
+      transition: width 0.1s linear;
+    }
+
+    .dragon-left-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    .dragon-time-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.44rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Volume Control Bar */
+    .dragon-vol-wrap {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .dragon-vol-icon {
+      font-size: 0.46rem;
+      color: var(--primary-red);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .dragon-vol-icon:hover {
+      transform: scale(1.15);
+    }
+
+    .dragon-vol-track {
+      width: 44px;
+      height: 4.5px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .dragon-vol-fill {
+      width: 85%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff203a, #ff6b81);
+      box-shadow: 0 0 5px #ff203a;
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .dragon-vol-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.40rem;
+      font-weight: 800;
+      color: #ffffff;
+      min-width: 18px;
+      text-align: right;
+    }
+
+    /* ── INVISIBLE CSS HOTSPOT TECHNIQUE (mapped over MEDIAPLAYERPROP.png artwork buttons) ── */
+    .dragon-btn-hotspot {
+      position: absolute;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 10;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .dragon-btn-hotspot:hover,
+    .dragon-btn-hotspot:focus,
+    .dragon-btn-hotspot:focus-visible,
+    .dragon-btn-hotspot:active {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      transform: none !important;
+      filter: none !important;
+    }
+
+    .dragon-btn-shuffle {
+      left: 35.2%;
+      top: 38%;
+      width: 5.5%;
+      height: 34%;
+    }
+
+    .dragon-btn-prev {
+      left: 41.5%;
+      top: 38%;
+      width: 5.5%;
+      height: 34%;
+    }
+
+    .dragon-btn-play {
+      left: 47.2%;
+      top: 30%;
+      width: 10.6%;
+      height: 50%;
+      border-radius: 50%;
+    }
+
+    .dragon-btn-next {
+      left: 58.2%;
+      top: 38%;
+      width: 5.5%;
+      height: 34%;
+    }
+
+    .dragon-btn-repeat {
+      left: 64.5%;
+      top: 38%;
+      width: 5.5%;
+      height: 34%;
+    }
+
+    /* 3. Right Screen: Cyberpunk LED Segmented Rack Spectrum & DJ Options */
+    .dragon-right-screen {
+      position: absolute;
+      left: 68.8%;
+      top: 40%;
+      width: 13.0%;
+      height: 42%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 2px 2px;
+      overflow: hidden;
+      z-index: 10;
+      box-sizing: border-box;
+    }
+
+    .dragon-spectrum-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5px;
+      height: 32px;
+      width: 100%;
+      margin: auto auto 0 auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Cyberpunk LED Segmented Rack Columns & Blocks */
+    .dragon-led-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column-reverse; /* segment 0 at bottom */
+      justify-content: flex-start;
+      gap: 1.5px;
+      height: 100%;
+      position: relative;
+    }
+
+    .dragon-led-seg {
+      width: 100%;
+      height: 2px;
+      border-radius: 1px;
+      background: rgba(255, 32, 58, 0.12);
+      transition: background 0.03s ease, box-shadow 0.03s ease;
+    }
+
+    /* Illuminated LED color tiers */
+    .dragon-led-seg.seg-low {
+      background: #ffb703 !important;
+      box-shadow: 0 0 4px rgba(255, 183, 3, 0.9) !important;
+    }
+
+    .dragon-led-seg.seg-mid {
+      background: #ff0033 !important;
+      box-shadow: 0 0 6px rgba(255, 0, 51, 0.95) !important;
+    }
+
+    .dragon-led-seg.seg-high {
+      background: #ff1a4d !important;
+      box-shadow: 0 0 8px rgba(255, 26, 77, 1) !important;
+    }
+
+    .dragon-led-seg.seg-peak {
+      background: #ffffff !important;
+      box-shadow: 0 0 8px #ffffff, 0 0 14px #ff0033 !important;
+    }
+
+    .dragon-dj-options-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 2px;
+    }
+
+    /* ── Invisible DJ Option Hotspots (FLTR / PITCH / BRAKE) ── */
+    .dj-opt-btn {
+      flex: 1;
+      padding: 2px 0;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      color: transparent !important;
+      font-size: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: none !important;
+    }
+
+    .dj-opt-btn:hover,
+    .dj-opt-btn:focus,
+    .dj-opt-btn:focus-visible,
+    .dj-opt-btn:active {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    /* When a DJ mode is active, show a minimal red glow ring indicator */
+    .dj-opt-btn.active {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: 0 0 8px rgba(255, 32, 58, 0.7) !important;
+      border-radius: 3px;
+    }
+
+    /* 4. Far Right: Invisible Hotspot over drum machine artwork in MEDIAPLAYERPROP1.png */
+    .dragon-mpc-lab-trigger {
+      position: absolute;
+      left: 85.5%;
+      top: 32%;
+      width: 10.8%;
+      height: 48%;
+      cursor: pointer;
+      z-index: 10;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0 !important;
+      margin: 0 !important;
+      transition: transform 0.15s ease;
+    }
+
+    .dragon-mpc-lab-trigger:hover {
+      transform: scale(1.03);
+    }
+
+    .dragon-mpc-lab-trigger:active {
+      transform: scale(0.97);
+    }
+
+    /* Hidden elements kept for JS compat */
+    .mpc-trigger-thumb { display: none; }
+    .mpc-trigger-overlay { display: none; }
+    .mpc-trigger-label { display: none; }
+    .mpc-trigger-icon { display: none; }
+    .mpc-trigger-text { display: none; }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       SLIDE-UP MPC LAB & SEQUENCER WORKSTATION DRAWER (AKUTO MODERN GLASS STYLE)
+       ═══════════════════════════════════════════════════════════════════════ */
+    #mpc-lab-drawer {
+      position: fixed;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      width: min(1060px, 95vw);
+      max-height: 76vh;
+      overflow-y: auto;
+      background: radial-gradient(circle at 85% 15%, rgba(225, 25, 55, 0.42) 0%, rgba(18, 7, 14, 0.96) 60%, rgba(7, 2, 7, 0.99) 100%);
+      border: 1.5px solid rgba(255, 60, 90, 0.35);
+      border-radius: 28px;
+      padding: 22px 24px;
+      box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 32, 58, 0.3);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      z-index: 140;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      display: none;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    #mpc-lab-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      display: block;
+    }
+
+    .drawer-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 18px;
+    }
+
+    .drawer-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drawer-badge {
+      padding: 4px 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border-radius: 50px;
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.3);
+    }
+
+    .drawer-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .drawer-close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      line-height: 1;
+    }
+
+    .drawer-close-btn:hover {
+      background: #ffffff;
+      color: #0d040a;
+      border-color: #ffffff;
+      transform: scale(1.08);
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.6);
+    }
+
+    .drawer-grid-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 860px) {
+      .drawer-grid-layout {
+        grid-template-columns: 1fr;
+      }
+      #mpc-lab-drawer {
+        bottom: 90px;
+      }
+    }
+
+    .mpc-top-bar {
+      margin-bottom: 12px;
+    }
+
+    .mpc-title-bank-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-header-tag {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .bank-toggles {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bank-btn {
+      padding: 6px 16px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .bank-btn.active {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #0d040a;
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+    }
+
+    /* ── AUTHENTIC HARDWARE CHASSIS STYLES (drummachine.png) ──────────── */
+    .hardware-chassis-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 32, 58, 0.2);
+      border: 1px solid rgba(255, 60, 90, 0.3);
+      background: rgba(16, 7, 14, 0.7);
+    }
+
+    .hardware-chassis-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Interactive Overlay Grid Layer */
+    .hardware-overlay-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      pointer-events: auto;
+    }
+
+    /* Left Knobs Overlay (Invisible Hotspots) */
+    .hw-knobs-group {
+      position: absolute;
+      left: 1.5%;
+      top: 6.5%;
+      width: 28%;
+      height: 58%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 4px;
+    }
+
+    .hw-knob {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      border-radius: 50%;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.05s ease;
+    }
+
+    .hw-knob:active {
+      cursor: grabbing;
+    }
+
+    .hw-knob-pointer {
+      display: none !important;
+    }
+
+    /* Hardware Control Buttons Overlay (Invisible CSS Hotspots) */
+    .hw-ctrl-buttons {
+      position: absolute;
+      left: 1.5%;
+      bottom: 4%;
+      width: 28%;
+      height: 28%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+    }
+
+    .hw-btn {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      color: transparent !important;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .hw-btn:hover {
+      background: rgba(255, 32, 58, 0.15) !important;
+      border-radius: 4px;
+    }
+
+    .hw-btn:active {
+      background: rgba(255, 32, 58, 0.3) !important;
+    }
+
+    /* Right 4x4 Pads Grid Hotspots (Pixel-Perfect 1:1 hardware pad alignment) */
+    .hw-pads-grid {
+      position: absolute;
+      left: 33.2%;
+      top: 10.8%;
+      width: 62.0%;
+      height: 75.8%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 6.2% 6.6%;
+      box-sizing: border-box;
+    }
+
+    .hw-pad-hotspot {
+      position: relative;
+      background: transparent;
+      border: 1.5px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: center;
+      padding: 0 1px 4px 1px;
+      transition: all 0.08s ease;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .hw-pad-hotspot:hover {
+      background: rgba(255, 32, 58, 0.22);
+      border-color: rgba(255, 32, 58, 0.85);
+      box-shadow: inset 0 0 16px rgba(255, 32, 58, 0.5);
+    }
+
+    .hw-pad-hotspot:active,
+    .hw-pad-hotspot.hit {
+      background: rgba(255, 32, 58, 0.85);
+      border-color: #ffffff;
+      box-shadow: 0 0 25px rgba(255, 32, 58, 1), inset 0 0 15px #ffffff;
+      transform: scale(0.96);
+    }
+
+    .hw-pad-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255, 32, 58, 0.9) 0%, transparent 75%);
+      opacity: 0;
+      transition: opacity 0.06s;
+      pointer-events: none;
+    }
+
+    .hw-pad-hotspot.hit .hw-pad-glow {
+      opacity: 1;
+    }
+
+    .hw-pad-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.42rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255, 32, 58, 0.95), 0 1px 3px #000;
+      position: relative;
+      z-index: 2;
+      pointer-events: none;
+      transform: none;
+      margin: 0;
+      margin-bottom: 2px;
+      line-height: 1;
+      width: 100%;
+      text-align: center;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    }
+
+    /* ── SECTION 3: DRUM PATTERNS & SOUND EFFECTS (AKUTO FROSTED CARDS) ── */
+    .patterns-panel {
+      background: rgba(18, 8, 16, 0.75);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 60, 90, 0.25);
+      border-radius: 22px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .pattern-select-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pattern-btn {
+      padding: 11px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.25s ease;
+    }
+
+    .pattern-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 60, 90, 0.4);
+      transform: translateX(3px);
+    }
+
+    .pattern-btn.active {
+      background: linear-gradient(135deg, rgba(235, 30, 60, 0.45) 0%, rgba(140, 10, 30, 0.25) 100%);
+      border-color: rgba(255, 60, 90, 0.7);
+      color: #ffffff;
+      box-shadow: 0 8px 25px rgba(235, 30, 60, 0.35);
+    }
+
+    .pattern-bpm {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+
+    /* Pattern Transport (AKUTO Pill Play/Stop Sequencer) */
+    .sequencer-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .seq-btn {
+      flex: 1;
+      padding: 11px 18px;
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    #btnPlayPattern {
+      background: #ffffff;
+      border: none;
+      color: #0a0308;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+    }
+
+    #btnPlayPattern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+    }
+
+    #btnStopPattern {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    #btnStopPattern:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .seq-btn.running {
+      background: #00e5ff !important;
+      color: #000000 !important;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.7) !important;
+    }
+
+    /* Sound Effects Fast-Triggers (AKUTO Capsule Cards) */
+    .sfx-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .sfx-btn {
+      padding: 11px 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .sfx-btn:hover {
+      background: rgba(235, 30, 60, 0.32);
+      border-color: rgba(255, 60, 90, 0.7);
+      box-shadow: 0 6px 20px rgba(235, 30, 60, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .sfx-btn:active {
+      transform: scale(0.95);
+      background: #ff203a;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .deck-body {
+        grid-template-columns: 1fr;
+        max-height: 380px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Master Stage Background using BEST.png -->
+  <div class="master-stage-bg" id="masterStageBg"></div>
+  <div class="ambient-vignette"></div>
+
+  <!-- Animated Energy Wires Canvas -->
+  <canvas id="energy-wires-canvas"></canvas>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       CHINESE ASSASSIN SITE NAVIGATION — exact match to index.html
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <style>
+    /* ── CHINESE ASSASSIN SITE HEADER (SELF-CONTAINED) ── */
+    :root {
+      --primary-neon: #ff1a1a;
+      --glow-pink: rgba(255, 26, 26, 0.5);
+      --header-bg: rgba(10, 10, 10, 0.88);
+      --header-text: #ffffff;
+      --header-border: rgba(255, 32, 58, 0.35);
+      --header-shadow: rgba(0, 0, 0, 0.65);
+      --mega-bg: rgba(12, 6, 12, 0.96);
+      --mega-border: rgba(255, 32, 58, 0.3);
+      --mega-text: #ffffff;
+      --mega-link: rgba(255, 255, 255, 0.75);
+      --mega-featured-bg: rgba(255, 32, 58, 0.08);
+    }
+
+    .site-header {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 1400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 30px;
+      z-index: 5000;
+      background: var(--header-bg);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--header-border);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px var(--header-shadow);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .site-header .logo,
+    .site-header .nav-item > a {
+      color: var(--header-text) !important;
+    }
+
+    .site-header .logo span {
+      color: var(--primary-neon);
+      text-shadow: 0 0 15px var(--glow-pink);
+    }
+
+    .nav-item > a:hover {
+      color: var(--primary-neon) !important;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-rotator {
+      position: relative;
+      width: 45px;
+      height: 45px;
+      perspective: 600px;
+    }
+
+    .site-logo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 45px;
+      width: 45px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--glow-pink);
+      border: 1px solid var(--primary-neon);
+      transform: rotateY(-90deg) scale(1.2);
+      opacity: 0;
+      pointer-events: none;
+      object-fit: cover;
+      background-color: transparent;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-in;
+    }
+
+    .site-logo-img.rot-active {
+      transform: rotateY(0deg) scale(1.2);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-logo-img.rot-exit {
+      transform: rotateY(90deg) scale(1.2);
+      opacity: 0;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-out;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .logo span {
+      color: var(--primary-neon);
+      text-shadow: 0 0 10px var(--glow-pink);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .nav-item {
+      position: relative;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .nav-item > a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.02rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      font-family: 'Outfit', sans-serif !important;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      height: 60px;
+      padding: 0 10px;
+      position: relative;
+    }
+
+    .nav-item > a::after {
+      content: '';
+      position: absolute;
+      bottom: 12px;
+      left: 10px;
+      right: 10px;
+      width: 0;
+      height: 2.5px;
+      background: var(--primary-neon);
+      transition: width 0.3s ease;
+    }
+
+    .nav-item > a:hover::after {
+      width: calc(100% - 20px);
+    }
+
+    .chevron {
+      font-size: 0.85rem;
+      margin-left: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-item:hover .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Mega Menu */
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      width: 90vw;
+      max-width: 860px;
+      background: var(--mega-bg);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--mega-border);
+      border-top: 3px solid var(--primary-neon);
+      border-radius: 0 0 16px 16px;
+      padding: 32px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s cubic-bezier(0.2, 1, 0.2, 1);
+      pointer-events: none;
+      z-index: 5100;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .has-mega-menu:hover .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .mega-menu-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 32px;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .mega-col h4 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--primary-neon);
+      letter-spacing: 1.2px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .mega-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .mega-col ul a {
+      color: var(--mega-link);
+      font-size: 1.0rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: block;
+      padding: 6px 0;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .mega-col ul a:hover {
+      color: var(--primary-neon);
+      transform: translateX(4px);
+    }
+
+    .mega-col.featured-set {
+      flex: 1.5;
+      background: var(--mega-featured-bg);
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 32, 58, 0.2);
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 110px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 32, 58, 0.3);
+    }
+
+    .mega-preview-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--primary-neon);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 18px var(--glow-pink);
+      transform: scale(0.85);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .featured-img:hover .mega-preview-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .mix-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mix-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.3s;
+    }
+
+    .mix-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--primary-neon);
+    }
+
+    .mix-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .sign-in-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1px solid #ff203a;
+      color: #ff203a !important;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: none;
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.25);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sign-in-btn:hover {
+      background: #ff203a;
+      color: #ffffff !important;
+      box-shadow: 0 0 20px rgba(255, 32, 58, 0.7);
+      transform: translateY(-1px);
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: #ff203a;
+      transform: scale(1.1);
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 6000;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-drawer-card {
+      width: min(360px, 85vw);
+      height: 100%;
+      background: rgba(14, 6, 12, 0.98);
+      border-left: 1.5px solid rgba(255, 32, 58, 0.4);
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-drawer-close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .mobile-drawer-close-btn:hover {
+      color: #ff203a;
+    }
+
+    .mobile-drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 30px 0;
+    }
+
+    .mobile-nav-item {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: rgba(255, 32, 58, 0.4);
+      color: #ff203a;
+    }
+
+    .mobile-drawer-footer {
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.4);
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* ── AUTH MODAL WITH HIGH-VISIBILITY SIGNUPPAGE.png BACKGROUND ── */
+    .portal-auth-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('/SIGNUPPAGE.png') no-repeat center center / cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: opacity 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), visibility 0.35s ease;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .portal-auth-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.45) 100%);
+      z-index: 1;
+    }
+
+    .portal-auth-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .portal-auth-card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 440px;
+      background: rgba(18, 10, 22, 0.88);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 32, 58, 0.35);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif !important;
+      transform: scale(0.92);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .portal-auth-overlay.open .portal-auth-card {
+      transform: scale(1);
+    }
+
+    .portal-auth-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+
+    .portal-auth-close:hover {
+      background: #ff203a;
+      border-color: #ffffff;
+      transform: scale(1.1);
+      box-shadow: 0 0 12px #ff203a;
+    }
+
+    .portal-auth-header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .portal-auth-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .portal-auth-title span {
+      color: #ff203a;
+      text-shadow: 0 0 12px rgba(255, 32, 58, 0.8);
+    }
+
+    .portal-auth-sub {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 2px;
+      margin-top: 4px;
+      text-transform: uppercase;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .portal-auth-tabs {
+      display: flex;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .portal-tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .portal-tab-btn.active {
+      background: #ff203a;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.6);
+    }
+
+    .portal-google-btn {
+      width: 100%;
+      padding: 11px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-bottom: 16px;
+    }
+
+    .portal-google-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .portal-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+
+    .portal-divider::before,
+    .portal-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .portal-divider span {
+      padding: 0 10px;
+    }
+
+    .portal-form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .portal-form-group label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .portal-input-wrap {
+      position: relative;
+    }
+
+    .portal-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .portal-input:focus {
+      border-color: #ff203a;
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.5);
+    }
+
+    .portal-pwd-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+    }
+
+    .portal-options-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      margin: 12px 0 18px 0;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .portal-remember {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .portal-forgot {
+      color: #ff203a;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .portal-forgot:hover {
+      text-decoration: underline;
+    }
+
+    .portal-submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #ff0033 0%, #b3001e 100%);
+      border: none;
+      border-radius: 50px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 0, 51, 0.6);
+      transition: all 0.25s ease;
+    }
+
+    .portal-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 0, 51, 0.9);
+    }
+
+    /* ── BIOMETRIC SCANNER HUD IN AUTH MODAL ── */
+    .portal-biometric-box {
+      margin: 15px 0 20px 0;
+      padding: 18px 14px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1.5px solid rgba(255, 32, 58, 0.35);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 32, 58, 0.25);
+    }
+
+    .bio-scanner-ring {
+      position: relative;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      border: 2px solid #ff203a;
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.6), inset 0 0 12px rgba(255, 32, 58, 0.4);
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #000;
+      transition: all 0.3s ease;
+    }
+
+    .bio-scanner-ring.granted {
+      border-color: #00e5ff !important;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.95), inset 0 0 18px rgba(0, 229, 255, 0.6) !important;
+    }
+
+    .bio-scanner-ring.denied {
+      border-color: #ff0033 !important;
+      box-shadow: 0 0 25px rgba(255, 0, 51, 0.95), inset 0 0 18px rgba(255, 0, 51, 0.6) !important;
+    }
+
+    .bio-scan-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .bio-scan-laser {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 3px;
+      background: #ff203a;
+      box-shadow: 0 0 10px #ff203a, 0 0 20px #ff203a;
+      animation: bioLaserSweep 0.9s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+
+    .bio-scanner-ring.granted .bio-scan-laser {
+      background: #00e5ff;
+      box-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
+    }
+
+    .bio-scanner-ring.denied .bio-scan-laser {
+      background: #ff0033;
+      box-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033;
+    }
+
+    @keyframes bioLaserSweep {
+      0% { top: 4%; opacity: 0.6; }
+      100% { top: 92%; opacity: 1; }
+    }
+
+    .bio-status-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ffb703;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+
+    .bio-progress-bar {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .bio-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ffb703, #ff203a);
+      transition: width 0.06s linear;
+      box-shadow: 0 0 10px #ff203a;
+    }
+
+    .bio-result-msg {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .bio-result-msg.granted {
+      color: #00e5ff !important;
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.95), 0 0 25px rgba(0, 229, 255, 0.6);
+      animation: bioPulseGranted 0.8s infinite alternate ease-in-out;
+    }
+
+    .bio-result-msg.denied {
+      color: #ff0033 !important;
+      text-shadow: 0 0 12px rgba(255, 0, 51, 0.95), 0 0 25px rgba(255, 0, 51, 0.6);
+      animation: bioPulseDenied 0.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes bioPulseGranted {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    @keyframes bioPulseDenied {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+  </style>
+
+  <!-- Floating Mega Menu Header -->
+  <header class="site-header floating-header" id="siteHeader" style="z-index:5000;">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="Chinese Assassin Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="Chinese Assassin Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="Chinese Assassin Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="Chinese Assassin Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <div class="nav-item"><a href="/">HOME</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html" class="active">DIMENSION HUB</a></div>
+
+      <div class="nav-item has-mega-menu">
+        <a href="javascript:void(0)">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+        <div class="mega-menu">
+          <div class="mega-menu-content">
+            <div class="mega-col">
+              <h4>VIP Exclusives</h4>
+              <ul>
+                <li><a href="/mobile-mixes-gateway-v2.html">👑 Street Kings 2026</a></li>
+                <li><a href="/vault-gateway.html">⚡ Techno Riddim Vol 4</a></li>
+                <li><a href="/vault-gateway.html">🗝️ Assassin Dubplates</a></li>
+                <li><a href="/flashdrive.html">💾 Secret Stash Vol 1</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Mix Gallery</h4>
+              <div class="mix-gallery-grid">
+                <div class="mix-thumb"><a href="/vault-gateway.html" title="The Vault"><img src="/VAULT-2.jpg" alt="Riddim Vault"></a></div>
+                <div class="mix-thumb"><a href="/vip-gateway.html" title="VIP Citadel"><img src="/CODE-1.jpg" alt="VIP Citadel"></a></div>
+                <div class="mix-thumb"><a href="/mobile-mixes-gateway-v2.html" title="Mobile Mixes"><img src="/MOBILE_MIXES.png" alt="Mobile Mixes"></a></div>
+                <div class="mix-thumb"><a href="/tv-gateway.html" title="Assassin TV"><img src="/CODE-TV.png" alt="Assassin TV"></a></div>
+              </div>
+            </div>
+            <div class="mega-col featured-set">
+              <h4>Live Preview (30s)</h4>
+              <div class="featured-img" style="background-image: url('/MOBILE_MIXES.png'); background-size: cover; background-position: center;">
+                <button class="mega-preview-btn" onclick="event.stopPropagation(); if(typeof playAudioTrack==='function'){playAudioTrack(0);}else{showToast('▶ Playing Assassin Elite Mix (30s Sample)');}" style="background:var(--primary-neon,#ff0055); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255,0,85,0.8);" title="Play 30s Sample">
+                  <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+              <h5 style="font-size:0.85rem; margin-top:8px; color:#fff;">ASSASSIN ELITE MIX</h5>
+              <p style="font-size: 0.75rem; color: #aaa;">Flashy transitions and heavy bass.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item"><a href="/admin-vault.html" style="color:var(--primary-neon,#ff0055) !important; font-weight:800;" title="Master Admin Code Vault">👑 ADMIN VAULT</a></div>
+      <div class="nav-item"><a href="/merch.html">MERCH</a></div>
+      <div class="nav-item"><a href="/flashdrive.html">SHOP</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">ABOUT US</a></div>
+      <div class="nav-item"><a href="mailto:bookings@chineseassassin.com">CONTACT</a></div>
+    </nav>
+
+    <!-- Right Header Actions: Search | SIGN IN | Hamburger -->
+    <div class="header-actions">
+      <button class="icon-btn search-btn" aria-label="Search" onclick="focusSearchPrompt()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="/admin-vault.html" class="sign-in-btn" id="sign-in-btn">SIGN IN</a>
+      <button class="icon-btn menu-toggle-btn" aria-label="Menu" id="dh-hamburger-btn" onclick="toggleMobileDrawer()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-Screen Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-drawer-overlay" onclick="if(event.target===this) toggleMobileDrawer();">
+    <div class="mobile-drawer-card">
+      <div class="mobile-drawer-header">
+        <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        <button id="mobile-drawer-close" class="mobile-drawer-close-btn" onclick="toggleMobileDrawer()">&times;</button>
+      </div>
+      <nav class="mobile-drawer-nav">
+        <a href="/" class="mobile-nav-item">🏠 HOME</a>
+        <a href="/dimension-hub.html" class="mobile-nav-item active">🌀 DIMENSION HUB</a>
+        <a href="/streaming-gateway.html" class="mobile-nav-item">🔴 24/7 STREAM</a>
+        <a href="/tv-gateway.html" class="mobile-nav-item">📺 ASSASSIN TV</a>
+        <a href="/mobile-mixes-gateway-v2.html" class="mobile-nav-item">📱 MOBILE MIXES</a>
+        <a href="/mix-kitchen-gateway.html" class="mobile-nav-item">🍳 THE MIX KITCHEN</a>
+        <a href="/radio-gateway.html" class="mobile-nav-item">📻 ASSASSIN RADIO</a>
+        <a href="/vip-gateway.html" class="mobile-nav-item">👑 VIP CITADEL</a>
+        <a href="/merch.html" class="mobile-nav-item">👕 MERCH</a>
+        <a href="/flashdrive.html" class="mobile-nav-item">🛍️ SHOP / USB FLASH DRIVE</a>
+        <a href="/vault-gateway.html" class="mobile-nav-item">🗝️ THE VAULT</a>
+        <a href="/admin-vault.html" class="mobile-nav-item">🔒 ADMIN VAULT</a>
+      </nav>
+      <div class="mobile-drawer-footer">
+        <span>© 2026 CHINESE ASSASSIN VIP UNIVERSE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       PORTAL AUTH MODAL WITH SIGNUPPAGE.png BACKGROUND
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div id="portal-auth-modal" class="portal-auth-overlay">
+    <div class="portal-auth-card">
+      <button class="portal-auth-close" id="auth-close-btn" aria-label="Close">&times;</button>
+      
+      <div class="portal-auth-header">
+        <h2 class="portal-auth-title">CHINESE <span>ASSASSIN</span></h2>
+        <div class="portal-auth-sub">VIP UNIVERSE PORTAL</div>
+      </div>
+
+      <div class="portal-auth-tabs" id="portal-auth-tabs-row">
+        <button class="portal-tab-btn active" id="portal-tab-login">SIGN IN</button>
+        <button class="portal-tab-btn" id="portal-tab-register">CREATE ACCOUNT</button>
+      </div>
+
+      <!-- Biometric Scanner Feedback Display -->
+      <div id="portal-biometric-scanner" class="portal-biometric-box" style="display:none;">
+        <div class="bio-scanner-ring" id="bio-scanner-ring">
+          <img src="/assassin_scanner.jpg" onerror="this.onerror=null; this.src='/FACEID1.jpg';" id="bio-scan-img" alt="Biometric Scanner" class="bio-scan-avatar" />
+          <div class="bio-scan-laser" id="bio-scan-laser"></div>
+        </div>
+        <div class="bio-status-badge" id="bio-status-badge">BIOMETRIC SCAN: 0%</div>
+        <div class="bio-progress-bar"><div class="bio-progress-fill" id="bio-progress-fill"></div></div>
+        <div class="bio-result-msg" id="bio-result-msg">VERIFYING NEURAL BIOMETRICS...</div>
+      </div>
+
+      <!-- Sign In Panel -->
+      <div id="portal-panel-login" class="portal-auth-panel">
+        <button class="portal-google-btn" id="portal-google-login">
+          <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <div class="portal-divider"><span>OR</span></div>
+
+        <form id="portal-login-form" onsubmit="event.preventDefault(); window.handlePortalAuth('login');">
+          <div class="portal-form-group">
+            <label for="portal-login-email">EMAIL ADDRESS</label>
+            <input type="email" id="portal-login-email" class="portal-input" placeholder="assassin@vip.com" required>
+          </div>
+          <div class="portal-form-group">
+            <label for="portal-login-pwd">PASSWORD</label>
+            <div class="portal-input-wrap">
+              <input type="password" id="portal-login-pwd" class="portal-input" placeholder="••••••••••" required>
+              <button type="button" class="portal-pwd-toggle" onclick="window.togglePortalPwd('portal-login-pwd', this)">👁</button>
+            </div>
+          </div>
+          <div class="portal-options-row">
+            <label class="portal-remember">
+              <input type="checkbox" id="portal-remember" checked> Remember me
+            </label>
+            <a href="#" class="portal-forgot" onclick="event.preventDefault(); window.showToast('🔐 Password reset link sent to your email.');">Forgot password?</a>
+          </div>
+          <button type="submit" class="portal-submit-btn">ENTER THE PORTAL</button>
+        </form>
+      </div>
+
+      <!-- Create Account Panel -->
+      <div id="portal-panel-register" class="portal-auth-panel" style="display:none;">
+        <button class="portal-google-btn" id="portal-google-reg">
+          <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign up with Google
+        </button>
+
+        <div class="portal-divider"><span>OR</span></div>
+
+        <form id="portal-reg-form" onsubmit="event.preventDefault(); window.handlePortalAuth('register');">
+          <div class="portal-form-group">
+            <label for="portal-reg-name">FULL NAME / DJ ALIAS</label>
+            <input type="text" id="portal-reg-name" class="portal-input" placeholder="Assassin VIP" required>
+          </div>
+          <div class="portal-form-group">
+            <label for="portal-reg-email">EMAIL ADDRESS</label>
+            <input type="email" id="portal-reg-email" class="portal-input" placeholder="assassin@vip.com" required>
+          </div>
+          <div class="portal-form-group">
+            <label for="portal-reg-pwd">PASSWORD</label>
+            <div class="portal-input-wrap">
+              <input type="password" id="portal-reg-pwd" class="portal-input" placeholder="Create secure password" required>
+              <button type="button" class="portal-pwd-toggle" onclick="window.togglePortalPwd('portal-reg-pwd', this)">👁</button>
+            </div>
+          </div>
+          <div class="portal-options-row">
+            <label class="portal-remember">
+              <input type="checkbox" required> I agree to VIP terms & conditions
+            </label>
+          </div>
+          <button type="submit" class="portal-submit-btn">CREATE VIP ACCOUNT</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ── Rotating Logo (exact copy from main.js initHeader) ──────────────
+    (function initRotatingLogo() {
+      const rotator = document.getElementById('rotating-logo');
+      if (!rotator) return;
+      const images = Array.from(rotator.querySelectorAll('.site-logo-img'));
+      if (images.length < 2) return;
+      let currentIdx = 0;
+      setInterval(() => {
+        const prevImg = images[currentIdx];
+        if (prevImg) {
+          prevImg.classList.remove('rot-active');
+          prevImg.classList.add('rot-exit');
+        }
+        currentIdx = (currentIdx + 1) % images.length;
+        const nextImg = images[currentIdx];
+        if (nextImg) {
+          nextImg.classList.remove('rot-exit');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              nextImg.classList.add('rot-active');
+            });
+          });
+        }
+      }, 450);
+    })();
+
+    // ── Mobile Drawer Toggle ─────────────────────────────────────────────
+    (function initMobileDrawer() {
+      const hamburger = document.getElementById('dh-hamburger-btn');
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const closeBtn = document.getElementById('mobile-drawer-close');
+      if (hamburger && drawer) {
+        hamburger.addEventListener('click', () => drawer.classList.toggle('open'));
+      }
+      if (closeBtn && drawer) {
+        closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
+      }
+    })();
+
+    // ── Sign In / Register Auth Modal Engine with Live Biometric Verification ─
+    (function initPortalAuthModal() {
+      const modal = document.getElementById('portal-auth-modal');
+      const card = modal ? modal.querySelector('.portal-auth-card') : null;
+      const signInBtn = document.getElementById('sign-in-btn');
+      const mobileSignInBtn = document.getElementById('mobile-sign-in-btn');
+      const closeBtn = document.getElementById('auth-close-btn');
+      const tabLogin = document.getElementById('portal-tab-login');
+      const tabRegister = document.getElementById('portal-tab-register');
+      const tabsRow = document.getElementById('portal-auth-tabs-row');
+      const panelLogin = document.getElementById('portal-panel-login');
+      const panelRegister = document.getElementById('portal-panel-register');
+      const googleLogin = document.getElementById('portal-google-login');
+      const googleReg = document.getElementById('portal-google-reg');
+
+      // Biometric HUD elements
+      const bioBox = document.getElementById('portal-biometric-scanner');
+      const bioRing = document.getElementById('bio-scanner-ring');
+      const bioImg = document.getElementById('bio-scan-img');
+      const bioBadge = document.getElementById('bio-status-badge');
+      const bioFill = document.getElementById('bio-progress-fill');
+      const bioResult = document.getElementById('bio-result-msg');
+
+      let isScanning = false;
+      let bioAudioCtx = null;
+
+      function getBioAudio() {
+        if (!bioAudioCtx) {
+          bioAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (bioAudioCtx.state === 'suspended') bioAudioCtx.resume();
+        return bioAudioCtx;
+      }
+
+      function playBioBeep(freq, dur = 0.08, type = 'sawtooth', gain = 0.12) {
+        try {
+          const ctx = getBioAudio();
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+          g.gain.setValueAtTime(gain, ctx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+          osc.connect(g);
+          g.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + dur);
+        } catch(e) {}
+      }
+
+      function playBioGrantedChime() {
+        try {
+          const ctx = getBioAudio();
+          const now = ctx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            g.gain.setValueAtTime(0.18, now + i * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.45);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.46);
+          });
+        } catch(e) {}
+      }
+
+      function playBioDeniedTone() {
+        try {
+          const ctx = getBioAudio();
+          const now = ctx.currentTime;
+          [160, 120].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + i * 0.12);
+            g.gain.setValueAtTime(0.25, now + i * 0.12);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.35);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now + i * 0.12);
+            osc.stop(now + i * 0.12 + 0.36);
+          });
+        } catch(e) {}
+      }
+
+      function resetBiometrics() {
+        if (bioBox) bioBox.style.display = 'none';
+        if (bioRing) {
+          bioRing.classList.remove('granted', 'denied');
+        }
+        if (bioResult) {
+          bioResult.classList.remove('granted', 'denied');
+          bioResult.textContent = 'VERIFYING NEURAL BIOMETRICS...';
+        }
+        if (bioBadge) bioBadge.textContent = 'BIOMETRIC SCAN: 0%';
+        if (bioFill) bioFill.style.width = '0%';
+        if (tabsRow) tabsRow.style.display = 'flex';
+        isScanning = false;
+      }
+
+      function openModal(mode = 'login') {
+        if (!modal) return;
+        resetBiometrics();
+        switchTab(mode);
+        modal.classList.add('open');
+        const drawer = document.getElementById('mobile-nav-drawer');
+        if (drawer) drawer.classList.remove('open');
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.classList.remove('open');
+        setTimeout(resetBiometrics, 350);
+      }
+
+      function switchTab(mode) {
+        resetBiometrics();
+        if (mode === 'login') {
+          if (tabLogin) tabLogin.classList.add('active');
+          if (tabRegister) tabRegister.classList.remove('active');
+          if (panelLogin) panelLogin.style.display = 'block';
+          if (panelRegister) panelRegister.style.display = 'none';
+        } else {
+          if (tabRegister) tabRegister.classList.add('active');
+          if (tabLogin) tabLogin.classList.remove('active');
+          if (panelRegister) panelRegister.style.display = 'block';
+          if (panelLogin) panelLogin.style.display = 'none';
+        }
+      }
+
+      if (signInBtn) signInBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
+      if (mobileSignInBtn) mobileSignInBtn.addEventListener('click', (e) => { e.preventDefault(); openModal('login'); });
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      if (tabLogin) tabLogin.addEventListener('click', () => switchTab('login'));
+      if (tabRegister) tabRegister.addEventListener('click', () => switchTab('register'));
+
+      const triggerGoogleAuth = () => {
+        window.showToast('🌐 CONNECTING TO GOOGLE OAUTH...');
+        setTimeout(() => {
+          window.showToast('✅ SIGNED IN AS VIP ASSASSIN MEMBER');
+          closeModal();
+        }, 1200);
+      };
+
+      if (googleLogin) googleLogin.addEventListener('click', triggerGoogleAuth);
+      if (googleReg) googleReg.addEventListener('click', triggerGoogleAuth);
+
+      window.togglePortalPwd = function(inputId, btnEl) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        if (input.type === 'password') {
+          input.type = 'text';
+          btnEl.textContent = '🔒';
+        } else {
+          input.type = 'password';
+          btnEl.textContent = '👁';
+        }
+      };
+
+      // ── LIVE BIOMETRIC PASSWORD VERIFICATION ENGINE ──
+      window.handlePortalAuth = function(type) {
+        if (isScanning) return;
+        isScanning = true;
+
+        const pwdInput = type === 'login' ? document.getElementById('portal-login-pwd') : document.getElementById('portal-reg-pwd');
+        const password = pwdInput ? pwdInput.value.trim() : '';
+
+        // Password verification logic: Correct if >= 4 chars and not 'wrong' / '123' / 'denied' / 'fail' / 'error'
+        const isIncorrect = (!password || password.length < 4 || /^(wrong|denied|123|fail|error)$/i.test(password));
+
+        // Hide form panels & tab row, display Biometric HUD
+        if (panelLogin) panelLogin.style.display = 'none';
+        if (panelRegister) panelRegister.style.display = 'none';
+        if (tabsRow) tabsRow.style.display = 'none';
+        if (bioBox) bioBox.style.display = 'flex';
+
+        if (bioRing) bioRing.classList.remove('granted', 'denied');
+        if (bioResult) {
+          bioResult.classList.remove('granted', 'denied');
+          bioResult.textContent = 'ANALYZING NEURAL CREDENTIALS...';
+        }
+
+        const scanPhotos = ['/assassin_scanner.jpg', '/FACEID1.jpg', '/FACEID2.jpg', '/FACEID3.jpg', '/FACEID4.jpg'];
+        let progress = 0;
+        let photoIdx = 0;
+
+        const scanTimer = setInterval(() => {
+          progress += 4;
+          if (bioFill) bioFill.style.width = `${Math.min(progress, 100)}%`;
+          if (bioBadge) bioBadge.textContent = `BIOMETRIC SCAN: ${Math.min(progress, 100)}%`;
+
+          if (progress % 20 === 0) {
+            photoIdx = (photoIdx + 1) % scanPhotos.length;
+            if (bioImg) bioImg.src = scanPhotos[photoIdx];
+            playBioBeep(450 + progress * 4, 0.06, 'sawtooth', 0.1);
+          }
+
+          if (progress >= 100) {
+            clearInterval(scanTimer);
+
+            if (!isIncorrect) {
+              // ── PASSWORD CORRECT -> ACCESS GRANTED ──
+              if (bioRing) bioRing.classList.add('granted');
+              if (bioBadge) bioBadge.textContent = 'BIOMETRIC MATCH: 100% VERIFIED';
+              if (bioResult) {
+                bioResult.classList.add('granted');
+                bioResult.textContent = 'ACCESS: GRANTED';
+              }
+              playBioGrantedChime();
+              window.showToast('🔓 VIP ACCESS GRANTED — WELCOME ASSASSIN');
+
+              setTimeout(() => {
+                closeModal();
+              }, 1500);
+            } else {
+              // ── PASSWORD INCORRECT -> ACCESS DENIED ──
+              if (bioRing) bioRing.classList.add('denied');
+              if (bioBadge) bioBadge.textContent = 'BIOMETRIC MISMATCH: FAILED';
+              if (bioResult) {
+                bioResult.classList.add('denied');
+                bioResult.textContent = 'ACCESS: DENIED';
+              }
+              playBioDeniedTone();
+              window.showToast('❌ ACCESS DENIED — PASSWORD INCORRECT');
+
+              if (card) {
+                gsap.fromTo(card, { x: -12 }, { x: 12, duration: 0.07, repeat: 5, yoyo: true, onComplete: () => { gsap.set(card, { x: 0 }); } });
+              }
+
+              setTimeout(() => {
+                if (bioBox) bioBox.style.display = 'none';
+                if (type === 'login' && panelLogin) panelLogin.style.display = 'block';
+                if (type === 'register' && panelRegister) panelRegister.style.display = 'block';
+                if (tabsRow) tabsRow.style.display = 'flex';
+                if (pwdInput) {
+                  pwdInput.style.borderColor = '#ff0033';
+                  pwdInput.focus();
+                  setTimeout(() => { pwdInput.style.borderColor = ''; }, 3000);
+                }
+                isScanning = false;
+              }, 2000);
+            }
+          }
+        }, 30);
+      };
+    })();
+  </script>
+
+  <!-- 3D Dimension Hub Container with 7 Floating Icons (A–G) from PNG-NEW -->
+  <div id="dimension-hub">
+    <div id="hub-container">
+
+      <!-- CARD 1 (A): 24/7 STREAM (PRE-ISSUED CODE GATEWAY) -->
+      <a class="floating-card-anchor" href="/streaming-gateway.html" data-orbit-index="0" id="portal-card-0" title="24/7 Streaming (Pre-Issued Pass Required)">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/A.png" alt="24/7 Stream" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">24/7 STREAM</span>
+            <span class="card-float-title">NON-STOP VIBES</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 2 (B): ASSASSIN RADIO (PRE-ISSUED CODE GATEWAY) -->
+      <a class="floating-card-anchor" href="/radio-gateway.html" data-orbit-index="1" id="portal-card-1" title="Chinese Assassin Radio (Pre-Issued Pass Required)">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/B.png" alt="Chinese Assassin Radio" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">ASSASSIN RADIO</span>
+            <span class="card-float-title">LIVE MIXES ON ROTATION</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 3 (C): ASSASSIN TV -->
+      <a class="floating-card-anchor" href="/tv-gateway.html" data-orbit-index="2" id="portal-card-2">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/C.png" alt="Chinese Assassin TV" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">ASSASSIN TV</span>
+            <span class="card-float-title">VISUAL HEAT ALL DAY</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 4 (D): FLASH DRIVE MIXES -->
+      <a class="floating-card-anchor" href="/flashdrive.html" data-orbit-index="3" id="portal-card-3">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/D.png" alt="Flash Drive Mixes" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">FLASH DRIVE MIXES</span>
+            <span class="card-float-title">TAKE PARTY WITH YOU</span>
+            <span class="card-desc-detail">Custom USB Mixtape Builder</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 5 (E): THE VAULT (PRE-ISSUED CODE GATEWAY) -->
+      <a class="floating-card-anchor" href="/vault-gateway.html" data-orbit-index="4" id="portal-card-4" title="The Vault — Chinese Assassin Classics (Pre-Issued Pass Required)">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/E.png" alt="The Vault" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">THE VAULT</span>
+            <span class="card-float-title">CHINESE ASSASSIN CLASSICS</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 6 (F): THE MIX KITCHEN (PRE-ISSUED CODE GATEWAY) -->
+      <a class="floating-card-anchor" href="/mix-kitchen-gateway.html" data-orbit-index="5" id="portal-card-5" title="The Mix Kitchen (Pre-Issued Pass Required)">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/F.png" alt="The Mix Kitchen" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">THE MIX KITCHEN</span>
+            <span class="card-float-title">WHERE HEAT GETS COOKED</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 7 (G): VIP UNIVERSE (STRICT PRE-ISSUED CODE GATEWAY) -->
+      <a class="floating-card-anchor card-vip" href="/vip-gateway.html" data-orbit-index="6" id="portal-card-6" title="Enter VIP Universe (Strict Pre-Issued Code Required)">
+        <div class="floating-card-frame">
+          <img src="/PNG-NEW/G.png" alt="The VIP" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">VIP UNIVERSE</span>
+            <span class="card-float-title">MEMBERS ONLY ACCESS</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 8 (H): MOBILE MIXES -->
+      <a class="floating-card-anchor" href="/mobile-mixes-gateway-v2.html" data-orbit-index="7" id="portal-card-7" title="Mobile Mixes — Take The Heat Everywhere (Pre-Issued Pass Required)">
+        <div class="floating-card-frame">
+          <img src="/MOBILE_MIXES.png" alt="Mobile Mixes" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">MOBILE MIXES</span>
+            <span class="card-float-title">TAKE THE HEAT EVERYWHERE</span>
+            <span class="card-desc-detail">Pocket-Sized Assassin Vibes</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CARD 9: MOOD METER -->
+      <a class="floating-card-anchor" href="/mood-gateway.html" data-orbit-index="8" id="portal-card-8" title="Mood Meter — Choose Your Vibe">
+        <div class="floating-card-frame">
+          <img src="/MOOD_METER-1.png" alt="Mood Meter" class="card-png-img" />
+          <div class="card-info-wrap">
+            <span class="card-title-main">MOOD METER</span>
+            <span class="card-float-title">CHOOSE YOUR VIBE</span>
+            <span class="card-desc-detail">Interactive Emotion-Driven Player</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       CHINESE ASSASSIN MASTER DRAGON MEDIA PLAYER DOCK (MEDIAPLAYERPROP.png)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="dragon-player-dock">
+    <div class="dragon-chassis-wrap">
+      <!-- Authentic Dragon Player Chassis Artwork (MEDIAPLAYERPROP1.png) -->
+      <img src="/MEDIAPLAYERPROP1.png?v=3" alt="Chinese Assassin Master Dragon Player" class="dragon-chassis-img" />
+
+      <!-- Interactive Hotspot Layer -->
+      <div class="dragon-overlay-layer">
+
+        <!-- 1. Left Screen: Now Playing Info, Scrubber, Timecode & Volume Control -->
+        <div class="dragon-left-screen">
+          <div class="dragon-title-block">
+            <div class="dragon-track-title" id="playerTrackTitle">SHAKE IT TO THE MAX</div>
+            <div class="dragon-artist-line" id="playerArtist">CHINESE ASSASSIN MEGAMIX</div>
+          </div>
+          <div class="dragon-scrubber-box" id="scrubberTrack" title="Seek track">
+            <div class="dragon-scrubber-bar" id="scrubberProgress"></div>
+          </div>
+          <div class="dragon-left-bottom-row">
+            <div class="dragon-time-row">
+              <span id="timeCurrent">0:00</span> / <span id="timeDuration">3:24</span>
+            </div>
+            <div class="dragon-vol-wrap" id="volWrap" title="Adjust Volume">
+              <span class="dragon-vol-icon" id="volIcon">🔊</span>
+              <div class="dragon-vol-track" id="volTrack">
+                <div class="dragon-vol-fill" id="volFill"></div>
+              </div>
+              <span class="dragon-vol-num" id="volNum">85%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Center Transport Controls Hotspots -->
+        <button class="dragon-btn-hotspot dragon-btn-shuffle" id="btnShuffle" title="Shuffle / Random"></button>
+        <button class="dragon-btn-hotspot dragon-btn-prev" id="btnPrev" title="Previous Track"></button>
+        <button class="dragon-btn-hotspot dragon-btn-play" id="btnPlayMaster" title="Play / Pause"></button>
+        <button class="dragon-btn-hotspot dragon-btn-next" id="btnNext" title="Next Track"></button>
+        <button class="dragon-btn-hotspot dragon-btn-repeat" id="btnRepeat" title="Repeat / Loop"></button>
+
+        <!-- 3. Right Screen: Centered Red Spectrum Visualizer & DJ Options -->
+        <div class="dragon-right-screen">
+          <div class="dragon-spectrum-bars" id="eqSpectrumBars">
+            <!-- Centered Red Spectrum bars injected via JS -->
+          </div>
+          <div class="dragon-dj-options-bar">
+            <button class="dj-opt-btn" id="btnDjFilter" title="Toggle DJ Low/High Filter">FLTR</button>
+            <button class="dj-opt-btn" id="btnDjPitch" title="Toggle DJ Speed Bend +8%">PITCH</button>
+            <button class="dj-opt-btn" id="btnDjBrake" title="DJ Vinyl Spin Down">BRAKE</button>
+          </div>
+        </div>
+
+        <!-- 4. Far Right: Invisible Hotspot over drum machine artwork in MEDIAPLAYERPROP1.png -->
+        <button class="dragon-mpc-lab-trigger" id="mpcLabTriggerBtn" title="Click to Open 16-Pad MPC Drum Lab">
+          <span class="mpc-trigger-icon" id="mpcTriggerIcon" style="display:none"></span>
+          <span class="mpc-trigger-text" id="mpcTriggerText" style="display:none"></span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE-UP MPC LAB & SEQUENCER WORKSTATION DRAWER
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="mpc-lab-drawer">
+    <div class="drawer-header-bar">
+      <div class="drawer-title-wrap">
+        <span class="drawer-badge">MPC LAB</span>
+        <h3 class="drawer-title">CHINESE ASSASSIN &bull; 16-PAD HARDWARE WORKSTATION</h3>
+      </div>
+      <button class="drawer-close-btn" id="drawerCloseBtn" title="Close MPC Lab">✕</button>
+    </div>
+
+    <div class="drawer-grid-layout">
+
+      <!-- Column 1: Authentic Hardware MPC Drum Machine (drummachine.png) -->
+      <div class="mpc-panel hardware-mpc-container">
+        <div class="mpc-top-bar">
+          <div class="mpc-title-bank-row">
+            <span class="panel-header-tag" style="margin:0;">16-PAD HARDWARE CONTROLLER</span>
+            <div class="bank-toggles">
+              <button class="bank-btn active" id="btnBankA">BANK A</button>
+              <button class="bank-btn" id="btnBankB">BANK B</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Realistic Hardware Machine Chassis -->
+        <div class="hardware-chassis-wrap">
+          <img src="/drummachine.png" alt="MPC Drum Machine Controller" class="hardware-chassis-img" />
+
+          <!-- Interactive Hotspot Layer on Top of Hardware Artwork -->
+          <div class="hardware-overlay-layer">
+
+            <!-- 6 Interactive Rotary Knobs -->
+            <div class="hw-knobs-group">
+              <div class="hw-knob" data-knob="5" title="Knob 5: Filter Frequency"><div class="hw-knob-pointer"></div></div>
+              <div class="hw-knob" data-knob="6" title="Knob 6: Resonance"><div class="hw-knob-pointer"></div></div>
+              <div class="hw-knob" data-knob="3" title="Knob 3: Reverb Level"><div class="hw-knob-pointer"></div></div>
+              <div class="hw-knob" data-knob="4" title="Knob 4: Delay Wet/Dry"><div class="hw-knob-pointer"></div></div>
+              <div class="hw-knob" data-knob="1" title="Knob 1: Master Volume"><div class="hw-knob-pointer"></div></div>
+              <div class="hw-knob" data-knob="2" title="Knob 2: Pitch Tune"><div class="hw-knob-pointer"></div></div>
+            </div>
+
+            <!-- Hardware Control Buttons (100% Invisible CSS Hotspots) -->
+            <div class="hw-ctrl-buttons">
+              <button class="hw-btn" id="hwBtnCtrlBank" title="Control Bank"></button>
+              <button class="hw-btn" id="hwBtnProgSelect" title="Program Select"></button>
+              <button class="hw-btn" id="hwBtnPadBank" title="Pad Bank"></button>
+              <button class="hw-btn" id="hwBtnFullLevel" title="Full Velocity Level"></button>
+              <button class="hw-btn" id="hwBtnNrConfig" title="Noise Reduction / Config"></button>
+              <button class="hw-btn" id="hwBtnNoteRepeat" title="Note Repeat Sequencer"></button>
+            </div>
+
+            <!-- 16 Interactive Hardware Pads (Mapped directly over the 4x4 red-rimmed pads) -->
+            <div class="hw-pads-grid" id="mpcPadGrid">
+              <!-- Row 4 (Top): Pads 13, 14, 15, 16 -->
+              <button class="hw-pad-hotspot" data-pad="13" data-key="q"><div class="hw-pad-glow"></div><span class="hw-pad-label">CRASH</span></button>
+              <button class="hw-pad-hotspot" data-pad="14" data-key="w"><div class="hw-pad-glow"></div><span class="hw-pad-label">OPEN HH</span></button>
+              <button class="hw-pad-hotspot" data-pad="15" data-key="e"><div class="hw-pad-glow"></div><span class="hw-pad-label">CLO HH</span></button>
+              <button class="hw-pad-hotspot" data-pad="16" data-key="r"><div class="hw-pad-glow"></div><span class="hw-pad-label">TAMBR</span></button>
+
+              <!-- Row 3: Pads 9, 10, 11, 12 -->
+              <button class="hw-pad-hotspot" data-pad="9" data-key="a"><div class="hw-pad-glow"></div><span class="hw-pad-label">RIM</span></button>
+              <button class="hw-pad-hotspot" data-pad="10" data-key="s"><div class="hw-pad-glow"></div><span class="hw-pad-label">CLAP</span></button>
+              <button class="hw-pad-hotspot" data-pad="11" data-key="d"><div class="hw-pad-glow"></div><span class="hw-pad-label">SNARE 2</span></button>
+              <button class="hw-pad-hotspot" data-pad="12" data-key="f"><div class="hw-pad-glow"></div><span class="hw-pad-label">TOM HI</span></button>
+
+              <!-- Row 2: Pads 5, 6, 7, 8 -->
+              <button class="hw-pad-hotspot" data-pad="5" data-key="z"><div class="hw-pad-glow"></div><span class="hw-pad-label">KICK 2</span></button>
+              <button class="hw-pad-hotspot" data-pad="6" data-key="x"><div class="hw-pad-glow"></div><span class="hw-pad-label">PERC</span></button>
+              <button class="hw-pad-hotspot" data-pad="7" data-key="c"><div class="hw-pad-glow"></div><span class="hw-pad-label">TOM LO</span></button>
+              <button class="hw-pad-hotspot" data-pad="8" data-key="v"><div class="hw-pad-glow"></div><span class="hw-pad-label">FX HIT</span></button>
+
+              <!-- Row 1 (Bottom): Pads 1, 2, 3, 4 -->
+              <button class="hw-pad-hotspot" data-pad="1" data-key="1"><div class="hw-pad-glow"></div><span class="hw-pad-label">KICK</span></button>
+              <button class="hw-pad-hotspot" data-pad="2" data-key="2"><div class="hw-pad-glow"></div><span class="hw-pad-label">SNARE</span></button>
+              <button class="hw-pad-hotspot" data-pad="3" data-key="3"><div class="hw-pad-glow"></div><span class="hw-pad-label">BASS</span></button>
+              <button class="hw-pad-hotspot" data-pad="4" data-key="4"><div class="hw-pad-glow"></div><span class="hw-pad-label">SUB DRP</span></button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2: Drum Patterns & Sound Effects Soundboard -->
+      <div class="patterns-panel">
+        <div class="panel-header-tag">
+          <span>DRUM PATTERNS</span>
+          <span style="color:var(--gold);" id="bpmDisplay">98 BPM</span>
+        </div>
+
+        <!-- Pattern Selector -->
+        <div class="pattern-select-box">
+          <button class="pattern-btn active" data-pattern="0">
+            <span>1. DANCEHALL RIDDIM</span>
+            <span class="pattern-bpm">98 BPM</span>
+          </button>
+          <button class="pattern-btn" data-pattern="1">
+            <span>2. REGGAE ONE-DROP</span>
+            <span class="pattern-bpm">78 BPM</span>
+          </button>
+          <button class="pattern-btn" data-pattern="2">
+            <span>3. 808 TRAP BEAT</span>
+            <span class="pattern-bpm">140 BPM</span>
+          </button>
+          <button class="pattern-btn" data-pattern="3">
+            <span>4. AFROBEATS GROOVE</span>
+            <span class="pattern-bpm">104 BPM</span>
+          </button>
+        </div>
+
+        <!-- Sequencer Play/Stop -->
+        <div class="sequencer-controls">
+          <button class="seq-btn" id="btnPlayPattern">▶ PLAY PATTERN</button>
+          <button class="seq-btn" id="btnStopPattern">⏹ STOP</button>
+        </div>
+
+        <!-- Quick Sound FX Soundboard -->
+        <div class="panel-header-tag" style="margin-top:6px;">
+          <span>SOUND FX LAUNCHPAD</span>
+        </div>
+        <div class="sfx-grid">
+          <button class="sfx-btn" data-sfx="airhorn">🚨 AIRHORN</button>
+          <button class="sfx-btn" data-sfx="siren">⚡ DUB SIREN</button>
+          <button class="sfx-btn" data-sfx="laser">💥 LASER</button>
+          <button class="sfx-btn" data-sfx="rewind">⏪ WHEEL UP</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── ORBITAL & PARALLAX ENGINE SCRIPT ─────────────────────────────────── -->
+  <script>
+    class DimensionHubOrbitEngine {
+      constructor() {
+        this.hub = document.getElementById('dimension-hub');
+        this.container = document.getElementById('hub-container');
+        this.cards = Array.from(document.querySelectorAll('.floating-card-anchor'));
+        this.bg = document.getElementById('masterStageBg');
+        this.canvas = document.getElementById('energy-wires-canvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        this.orbitAngleOffset = 0;
+        this.isOrbiting = true;
+        this.orbitSpeedMultiplier = 1.0;
+        this.hoveredCard = null;
+
+        this.resizeCanvas();
+        window.addEventListener('resize', () => {
+          this.resizeCanvas();
+          this.updateOrbitalPositions();
+        });
+
+        this.initOrbitalLayout();
+        this.initMouseParallax();
+        this.initCardHoverEvents();
+        this.initContinuousOrbit();
+        this.initEnergyWires();
+      }
+
+      resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // 3D ORBITAL ELLIPSE CALCULATION
+      // ───────────────────────────────────────────────────────────────────────
+      updateOrbitalPositions() {
+        if (!this.cards.length) return;
+
+        const total = this.cards.length;
+        const W = window.innerWidth;
+        const H = window.innerHeight;
+        const isMobile = W < 768;
+
+        // Radius X & Y tailored around the central Assassin figure in BEST.png
+        const rx = isMobile ? W * 0.38 : Math.min(W * 0.42, 540);
+        const ry = isMobile ? H * 0.28 : Math.min(H * 0.32, 250);
+        const offset = this.orbitAngleOffset;
+
+        this.cards.forEach((card, i) => {
+          // If this card is currently hovered, don't overwrite its zoomed transform
+          if (card === this.hoveredCard) return;
+
+          const baseAngle = ((i / total) * Math.PI * 2) + (Math.PI * 1.25) + offset;
+          const cosA = Math.cos(baseAngle);
+          const sinA = Math.sin(baseAngle);
+
+          const x = cosA * rx;
+          const y = sinA * ry - 30; // Shift slightly above the bottom player deck
+          const z = sinA * 70 + 80; // Depth in 3D
+
+          const rotateY = -cosA * 18;
+          const rotateX = sinA * 6;
+          const scale = 0.88 + (sinA + 1) * 0.08;
+          const zIndex = sinA > 0 ? 25 : 8;
+
+          card.style.zIndex = zIndex;
+          card.dataset.baseX = x;
+          card.dataset.baseY = y;
+          card.dataset.baseZ = z;
+          card.dataset.baseRy = rotateY;
+          card.dataset.baseRx = rotateX;
+          card.dataset.baseScale = scale;
+
+          gsap.set(card, {
+            x, y, z, scale, rotateY, rotateX,
+            transformOrigin: 'center center',
+            force3D: true
+          });
+        });
+      }
+
+      initOrbitalLayout() {
+        this.updateOrbitalPositions();
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // CONTINUOUS SMOOTH ORBIT
+      // ───────────────────────────────────────────────────────────────────────
+      initContinuousOrbit() {
+        gsap.ticker.add(() => {
+          if (!this.isOrbiting) return;
+          this.orbitAngleOffset += 0.00065 * this.orbitSpeedMultiplier;
+          this.updateOrbitalPositions();
+        });
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // MOUSE PARALLAX RESPONSE
+      // ───────────────────────────────────────────────────────────────────────
+      initMouseParallax() {
+        window.addEventListener('mousemove', (e) => {
+          const cx = window.innerWidth / 2;
+          const cy = window.innerHeight / 2;
+          const panX = (e.clientX - cx) / cx;
+          const panY = (e.clientY - cy) / cy;
+
+          // Parallax tilt on 3D hub container
+          gsap.to(this.container, {
+            rotateY: panX * 12,
+            rotateX: -panY * 9,
+            duration: 1.4,
+            ease: 'power2.out'
+          });
+
+          // Subtle parallax shift on master background
+          if (this.bg) {
+            gsap.to(this.bg, {
+              scale: 1.03,
+              x: -panX * 14,
+              y: -panY * 10,
+              duration: 1.6,
+              ease: 'power2.out'
+            });
+          }
+        });
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // SOUND ENGINE (3-Layer Sci-Fi Holographic Resonance)
+      // ───────────────────────────────────────────────────────────────────────
+      initSoundEngine() {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = null;
+
+        const getAudioContext = () => {
+          if (!this.audioCtx) {
+            this.audioCtx = new AudioCtx();
+          }
+          if (this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+          }
+          return this.audioCtx;
+        };
+
+        // Unlock audio on first user gesture
+        window.addEventListener('pointerdown', () => getAudioContext(), { once: true });
+        window.addEventListener('keydown', () => getAudioContext(), { once: true });
+
+        // Base resonant frequencies per card (A -> I harmonic sequence)
+        const cardPitches = [340, 390, 440, 500, 570, 650, 740, 830, 920];
+
+        this.playHoverSound = (cardIndex = 0) => {
+          try {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const time = ctx.currentTime;
+            const baseFreq = cardPitches[cardIndex % cardPitches.length] || 440;
+
+            // Layer 1: Forward Surge Doppler Pitch Sweep (Sine)
+            const osc1 = ctx.createOscillator();
+            const gain1 = ctx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(baseFreq, time);
+            osc1.frequency.exponentialRampToValueAtTime(baseFreq * 2.2, time + 0.16);
+
+            gain1.gain.setValueAtTime(0, time);
+            gain1.gain.linearRampToValueAtTime(0.12, time + 0.025);
+            gain1.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+
+            osc1.connect(gain1);
+            gain1.connect(ctx.destination);
+            osc1.start(time);
+            osc1.stop(time + 0.18);
+
+            // Layer 2: Glossy High-Overtone Chime Sheen (Triangle)
+            const osc2 = ctx.createOscillator();
+            const gain2 = ctx.createGain();
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(baseFreq * 3.5, time);
+            osc2.frequency.exponentialRampToValueAtTime(baseFreq * 5.2, time + 0.14);
+
+            gain2.gain.setValueAtTime(0, time);
+            gain2.gain.linearRampToValueAtTime(0.05, time + 0.02);
+            gain2.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+
+            osc2.connect(gain2);
+            gain2.connect(ctx.destination);
+            osc2.start(time);
+            osc2.stop(time + 0.15);
+
+            // Layer 3: Tactile Sub Air Depth
+            const osc3 = ctx.createOscillator();
+            const gain3 = ctx.createGain();
+            osc3.type = 'sine';
+            osc3.frequency.setValueAtTime(160, time);
+            osc3.frequency.exponentialRampToValueAtTime(70, time + 0.11);
+
+            gain3.gain.setValueAtTime(0, time);
+            gain3.gain.linearRampToValueAtTime(0.08, time + 0.02);
+            gain3.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+
+            osc3.connect(gain3);
+            gain3.connect(ctx.destination);
+            osc3.start(time);
+            osc3.stop(time + 0.12);
+          } catch (e) {
+            // Audio context not ready
+          }
+        };
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // HOVER FOCUS INTERACTIONS (Stays In Natural Position, Zero Harsh Glow)
+      // ───────────────────────────────────────────────────────────────────────
+      initCardHoverEvents() {
+        this.initSoundEngine();
+
+        this.cards.forEach((card, idx) => {
+          card.addEventListener('mouseenter', () => {
+            this.hoveredCard = card;
+
+            // Play audio feedback with unique harmonic note
+            if (this.playHoverSound) this.playHoverSound(idx);
+
+            // Pop slightly in 3D in its NATURAL position (do not move to center)
+            gsap.killTweensOf(card);
+            const baseScale = parseFloat(card.dataset.baseScale || 1);
+            const baseZ = parseFloat(card.dataset.baseZ || 80);
+
+            gsap.to(card, {
+              scale: baseScale * 1.15,
+              z: baseZ + 35,
+              opacity: 1,
+              duration: 0.3,
+              ease: 'power2.out',
+              overwrite: 'auto'
+            });
+            card.style.zIndex = 40;
+
+            // Subtly dim other cards to 0.55
+            this.cards.forEach(other => {
+              if (other !== card) {
+                gsap.killTweensOf(other);
+                gsap.to(other, {
+                  opacity: 0.55,
+                  duration: 0.3,
+                  ease: 'power2.out'
+                });
+              }
+            });
+          });
+
+          card.addEventListener('mouseleave', () => {
+            this.hoveredCard = null;
+
+            const baseZ = parseFloat(card.dataset.baseZ || 80);
+            const baseScale = parseFloat(card.dataset.baseScale || 1);
+
+            // Return to natural orbital scale & depth
+            gsap.killTweensOf(card);
+            gsap.to(card, {
+              scale: baseScale,
+              z: baseZ,
+              opacity: 1,
+              duration: 0.3,
+              ease: 'power2.out',
+              overwrite: 'auto',
+              onComplete: () => {
+                card.style.zIndex = parseFloat(baseZ) > 80 ? 25 : 8;
+              }
+            });
+
+            // Restore all other cards to full opacity
+            this.cards.forEach(other => {
+              if (other !== card) {
+                gsap.killTweensOf(other);
+                gsap.to(other, {
+                  opacity: 1,
+                  duration: 0.3,
+                  ease: 'power2.out'
+                });
+              }
+            });
+          });
+        });
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // FINGERTIP ENERGY STRANDS (WIRES) — Audio-Reactive Master Engine
+      // ───────────────────────────────────────────────────────────────────────
+      initEnergyWires() {
+        let phase = 0;
+        const sparks = [];
+        const SPARK_COUNT = 6;
+
+        this.cards.forEach((_, idx) => {
+          for (let s = 0; s < SPARK_COUNT; s++) {
+            sparks.push({
+              cardIdx: idx,
+              t: Math.random(),
+              speed: 0.004 + Math.random() * 0.006,
+              r: 1.5 + Math.random() * 2,
+              alpha: 0.5 + Math.random() * 0.5
+            });
+          }
+        });
+
+        const bezierPoint = (x0, y0, cx1, cy1, cx2, cy2, x1, y1, t) => {
+          const mt = 1 - t, mt2 = mt * mt, mt3 = mt2 * mt, t2 = t * t, t3 = t2 * t;
+          return {
+            x: mt3 * x0 + 3 * mt2 * t * cx1 + 3 * mt * t2 * cx2 + t3 * x1,
+            y: mt3 * y0 + 3 * mt2 * t * cy1 + 3 * mt * t2 * cx2 + t3 * y1
+          };
+        };
+
+        const renderWires = () => {
+          const W = this.canvas.width;
+          const H = this.canvas.height;
+          this.ctx.clearRect(0, 0, W, H);
+          phase += 0.018;
+
+          // Check if music or pattern sequencer is playing
+          const hub = window.masterMediaHub;
+          const isPlaying = hub ? (hub.isPlayingMusic || hub.isPatternRunning) : false;
+
+          // Simulated / live audio amplitude (0..1)
+          let amp = 0;
+          if (isPlaying) {
+            amp = 0.4 + Math.abs(Math.sin(phase * 3.5)) * 0.5 + Math.abs(Math.cos(phase * 2.1)) * 0.3;
+          }
+
+          // Assassin sword/chest origin point in BEST.png (center slightly below horizon)
+          const originX = W * 0.5;
+          const originY = H * 0.52;
+
+          this.cards.forEach((card, i) => {
+            const rect = card.getBoundingClientRect();
+            if (!rect || rect.width === 0) return;
+
+            const cardCX = rect.left + rect.width * 0.5;
+            const cardCY = rect.top + rect.height * 0.45;
+
+            // Audio-reactive wave displacement
+            const waveAmp = isPlaying
+              ? 28 + amp * 75 + Math.sin(phase * 1.3 + i * 0.9) * 20
+              : 12 + Math.sin(phase + i * 0.7) * 8;
+
+            const midX = (originX + cardCX) * 0.5 + Math.sin(phase * 0.7 + i) * waveAmp;
+            const midY = (originY + cardCY) * 0.5 + Math.cos(phase * 0.9 + i * 1.2) * waveAmp * 0.5;
+
+            const cp1x = originX + (cardCX - originX) * 0.25 + Math.sin(phase * 1.1 + i * 1.4) * waveAmp * 0.8;
+            const cp1y = originY + (cardCY - originY) * 0.15 + Math.cos(phase * 0.8 + i) * waveAmp * 0.6;
+            const cp2x = midX + Math.cos(phase * 1.3 + i * 0.8) * waveAmp * 0.5;
+            const cp2y = midY + Math.sin(phase * 1.1 + i * 1.1) * waveAmp * 0.4;
+
+            const isCardHovered = (card === this.hoveredCard);
+            const baseAlpha = isPlaying
+              ? 0.28 + amp * 0.55 + Math.sin(phase * 2 + i) * 0.08
+              : (isCardHovered ? 0.75 : 0.14 + Math.sin(phase * 0.6 + i) * 0.05);
+
+            // ── Outer Glow Pass ──
+            const gradient = this.ctx.createLinearGradient(originX, originY, cardCX, cardCY);
+            gradient.addColorStop(0,   `rgba(255, 32, 58, ${baseAlpha * 0.6})`);
+            gradient.addColorStop(0.4, `rgba(255, 90, 30, ${baseAlpha * 0.8})`);
+            gradient.addColorStop(0.7, `rgba(0, 200, 255, ${baseAlpha * 0.7})`);
+            gradient.addColorStop(1,   `rgba(0, 229, 255, ${baseAlpha * 0.5})`);
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(originX, originY);
+            this.ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, cardCX, cardCY);
+            this.ctx.strokeStyle = gradient;
+            this.ctx.lineWidth = isPlaying ? 2.8 + amp * 4.5 : (isCardHovered ? 2.8 : 1.6);
+            this.ctx.shadowBlur = isPlaying ? 16 + amp * 22 : (isCardHovered ? 16 : 6);
+            this.ctx.shadowColor = 'rgba(255, 32, 58, 0.85)';
+            this.ctx.lineCap = 'round';
+            this.ctx.stroke();
+
+            // ── Inner Core Pass (Thinner & Brighter) ──
+            const coreAlpha = isPlaying ? 0.65 + amp * 0.35 : (isCardHovered ? 0.8 : 0.25);
+            const coreGrad  = this.ctx.createLinearGradient(originX, originY, cardCX, cardCY);
+            coreGrad.addColorStop(0,   `rgba(255, 140, 90, ${coreAlpha})`);
+            coreGrad.addColorStop(0.5, `rgba(255, 210, 120, ${coreAlpha * 0.85})`);
+            coreGrad.addColorStop(1,   `rgba(120, 245, 255, ${coreAlpha})`);
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(originX, originY);
+            this.ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, cardCX, cardCY);
+            this.ctx.strokeStyle = coreGrad;
+            this.ctx.lineWidth = isPlaying ? 1.2 + amp * 1.8 : 0.8;
+            this.ctx.shadowBlur = 0;
+            this.ctx.stroke();
+
+            // ── Origin Fingertip Pulse Dot ──
+            const dotR = isPlaying ? 4 + amp * 7 : 3;
+            this.ctx.beginPath();
+            this.ctx.arc(originX, originY, dotR, 0, Math.PI * 2);
+            this.ctx.fillStyle = isPlaying ? 'rgba(255, 220, 100, 0.9)' : 'rgba(255, 50, 70, 0.7)';
+            this.ctx.shadowBlur = isPlaying ? 14 + amp * 15 : 6;
+            this.ctx.shadowColor = '#ff203a';
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+          });
+
+          // ── Sparks Travelling Along Wires ──
+          sparks.forEach(sp => {
+            const card = this.cards[sp.cardIdx];
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            if (!rect || rect.width === 0) return;
+
+            const cardCX = rect.left + rect.width * 0.5;
+            const cardCY = rect.top + rect.height * 0.45;
+            const waveAmp = isPlaying
+              ? 28 + amp * 75 + Math.sin(phase * 1.3 + sp.cardIdx * 0.9) * 20
+              : 12 + Math.sin(phase + sp.cardIdx * 0.7) * 8;
+
+            const cp1x = originX + (cardCX - originX) * 0.25 + Math.sin(phase * 1.1 + sp.cardIdx * 1.4) * waveAmp * 0.8;
+            const cp1y = originY + (cardCY - originY) * 0.15 + Math.cos(phase * 0.8 + sp.cardIdx) * waveAmp * 0.6;
+            const midX = (originX + cardCX) * 0.5 + Math.sin(phase * 0.7 + sp.cardIdx) * waveAmp;
+            const midY = (originY + cardCY) * 0.5 + Math.cos(phase * 0.9 + sp.cardIdx * 1.2) * waveAmp * 0.5;
+            const cp2x = midX + Math.cos(phase * 1.3 + sp.cardIdx * 0.8) * waveAmp * 0.5;
+            const cp2y = midY + Math.sin(phase * 1.1 + sp.cardIdx * 1.1) * waveAmp * 0.4;
+
+            const pt = bezierPoint(originX, originY, cp1x, cp1y, cp2x, cp2y, cardCX, cardCY, sp.t);
+
+            const isHovered = (card === this.hoveredCard);
+            const sa = sp.alpha * (isPlaying ? 0.95 : (isHovered ? 0.85 : 0.45));
+            const sparkColor = sp.t < 0.5
+              ? `rgba(255, ${Math.floor(120 + sp.t * 240)}, 70, ${sa})`
+              : `rgba(${Math.floor(255 - sp.t * 200)}, 230, 255, ${sa})`;
+
+            this.ctx.beginPath();
+            this.ctx.arc(pt.x, pt.y, sp.r * (isPlaying ? (1.3 + amp * 1.2) : (isHovered ? 1.4 : 1)), 0, Math.PI * 2);
+            this.ctx.fillStyle = sparkColor;
+            this.ctx.shadowBlur = isPlaying ? 10 + amp * 10 : 6;
+            this.ctx.shadowColor = sp.t < 0.5 ? '#ff4020' : '#00e5ff';
+            this.ctx.fill();
+
+            sp.t += sp.speed * (isPlaying ? (2.2 + amp * 2.5) : (isHovered ? 1.8 : 1.0));
+            if (sp.t > 1) {
+              sp.t = 0;
+              sp.r = 1.5 + Math.random() * 2;
+              sp.alpha = 0.5 + Math.random() * 0.5;
+            }
+          });
+
+          this.ctx.shadowBlur = 0;
+          requestAnimationFrame(renderWires);
+        };
+
+        renderWires();
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MASTER DRAGON MEDIA PLAYER DOCK (MEDIAPLAYERPROP.png) & MPC LAB ENGINE
+    // ─────────────────────────────────────────────────────────────────────────
+    class MasterMediaHubEngine {
+      constructor() {
+        this.playerDock = document.getElementById('dragon-player-dock');
+        this.mpcDrawer = document.getElementById('mpc-lab-drawer');
+        this.mpcTriggerBtn = document.getElementById('mpcLabTriggerBtn');
+        this.drawerCloseBtn = document.getElementById('drawerCloseBtn');
+        this.mpcTriggerIcon = document.getElementById('mpcTriggerIcon');
+        this.mpcTriggerText = document.getElementById('mpcTriggerText');
+
+        // Audio Player
+        this.audio = new Audio();
+        this.tracks = [
+          { title: "SHAKE IT TO THE MAX", artist: "CHINESE ASSASSIN MEGAMIX", src: "/background.mp3" },
+          { title: "Soundclash Special War Mix", artist: "CHINESE ASSASSIN LIVE WAR", src: "/demo1.mp3" },
+          { title: "Dancehall Anthems Vol. 1", artist: "CHINESE ASSASSIN MULTIVERSE", src: "/demo2.mp3" },
+          { title: "Wheel Up Dub Special", artist: "CHINESE ASSASSIN SOUNDCLASH", src: "/wulup.mp3" }
+        ];
+        this.currentTrackIdx = 0;
+        this.isPlayingMusic = false;
+        this.isFilterActive = false;
+        this.isPitchActive = false;
+
+        // UI elements on Dragon Player Dock
+        this.trackTitleEl = document.getElementById('playerTrackTitle');
+        this.artistEl = document.getElementById('playerArtist');
+        this.playBtn = document.getElementById('btnPlayMaster');
+        this.prevBtn = document.getElementById('btnPrev');
+        this.nextBtn = document.getElementById('btnNext');
+        this.shuffleBtn = document.getElementById('btnShuffle');
+        this.repeatBtn = document.getElementById('btnRepeat');
+        this.scrubberProgress = document.getElementById('scrubberProgress');
+        this.scrubberTrack = document.getElementById('scrubberTrack');
+        this.timeCurEl = document.getElementById('timeCurrent');
+        this.timeDurEl = document.getElementById('timeDuration');
+
+        // DJ Option Buttons
+        this.btnDjFilter = document.getElementById('btnDjFilter');
+        this.btnDjPitch = document.getElementById('btnDjPitch');
+        this.btnDjBrake = document.getElementById('btnDjBrake');
+
+        // Spectrum EQ Bars
+        this.eqContainer = document.getElementById('eqSpectrumBars');
+        this.spectrumBars = [];
+
+        // MPC Drum Machine inside Drawer
+        this.padGrid = document.getElementById('mpcPadGrid');
+        this.currentBank = 'A';
+        this.btnBankA = document.getElementById('btnBankA');
+        this.btnBankB = document.getElementById('btnBankB');
+
+        // Pattern Sequencer
+        this.btnPlayPattern = document.getElementById('btnPlayPattern');
+        this.btnStopPattern = document.getElementById('btnStopPattern');
+        this.bpmDisplay = document.getElementById('bpmDisplay');
+        this.currentPatternIdx = 0;
+        this.isPatternRunning = false;
+        this.seqTimer = null;
+        this.seqStep = 0;
+
+        this.init();
+      }
+
+      init() {
+        this.initDrawer();
+        this.initEQBars();
+        this.initAudioPlayer();
+        this.initVolumeControl();
+        this.initDjOptions();
+        this.initMPCDrums();
+        this.initPatternSequencer();
+        this.initSoundFX();
+      }
+
+      // MPC Lab Drawer Toggle
+      initDrawer() {
+        const toggleDrawer = (openState) => {
+          const shouldOpen = (openState !== undefined) ? openState : !this.mpcDrawer.classList.contains('open');
+          this.mpcDrawer.classList.toggle('open', shouldOpen);
+          this.mpcTriggerBtn.classList.toggle('active', shouldOpen);
+          // Update the label bar text at bottom of the drum machine thumbnail
+          this.mpcTriggerText.textContent = shouldOpen ? 'CLOSE LAB' : 'OPEN MPC LAB';
+        };
+
+        this.mpcTriggerBtn.addEventListener('click', () => toggleDrawer());
+        this.drawerCloseBtn.addEventListener('click', () => toggleDrawer(false));
+      }
+
+      // Build Cyberpunk LED Segmented Rack on Right Screen
+      initEQBars() {
+        this.eqContainer.innerHTML = '';
+        const colCount = 16;
+        const segsPerCol = 10;
+        this.spectrumCols = [];
+        this.peakHold = new Array(colCount).fill(0);
+        this.peakDecayTimer = new Array(colCount).fill(0);
+
+        for (let i = 0; i < colCount; i++) {
+          const col = document.createElement('div');
+          col.className = 'dragon-led-col';
+          const segments = [];
+
+          for (let s = 0; s < segsPerCol; s++) {
+            const seg = document.createElement('div');
+            seg.className = 'dragon-led-seg';
+            col.appendChild(seg);
+            segments.push(seg);
+          }
+
+          this.eqContainer.appendChild(col);
+          this.spectrumCols.push(segments);
+        }
+
+        let phase = 0;
+        const animateBars = () => {
+          phase += 0.16;
+          const isPlaying = this.isPlayingMusic || this.isPatternRunning;
+
+          this.spectrumCols.forEach((segments, idx) => {
+            let targetCount;
+            if (isPlaying) {
+              const bellCurve = Math.sin((idx / (colCount - 1)) * Math.PI);
+              const wave1 = Math.sin(phase * 2.4 + idx * 0.48);
+              const wave2 = Math.cos(phase * 1.8 - idx * 0.35);
+              const noise = (Math.sin(phase * 4.2 + idx * 1.9) + 1) * 0.5;
+              const val = (bellCurve * 0.4 + 0.6) * (Math.abs(wave1 * 0.65 + wave2 * 0.35) * 8 + noise * 3);
+              targetCount = Math.min(segsPerCol, Math.max(1, Math.round(val)));
+            } else {
+              targetCount = Math.max(1, Math.round(1 + Math.abs(Math.sin(phase * 0.6 + idx * 0.3)) * 2));
+            }
+
+            // Peak Hold with smooth gravity decay
+            if (targetCount >= this.peakHold[idx]) {
+              this.peakHold[idx] = targetCount;
+              this.peakDecayTimer[idx] = 12; // hold for 12 frames
+            } else {
+              if (this.peakDecayTimer[idx] > 0) {
+                this.peakDecayTimer[idx]--;
+              } else {
+                this.peakHold[idx] = Math.max(targetCount, this.peakHold[idx] - 0.25);
+              }
+            }
+
+            const peakIdx = Math.min(segsPerCol - 1, Math.floor(this.peakHold[idx]));
+
+            // Update each LED segment in this column
+            segments.forEach((seg, sIdx) => {
+              seg.className = 'dragon-led-seg';
+              if (sIdx === peakIdx && peakIdx > 0) {
+                seg.classList.add('seg-peak');
+              } else if (sIdx < targetCount) {
+                if (sIdx <= 2) {
+                  seg.classList.add('seg-low');
+                } else if (sIdx <= 6) {
+                  seg.classList.add('seg-mid');
+                } else {
+                  seg.classList.add('seg-high');
+                }
+              }
+            });
+          });
+
+          requestAnimationFrame(animateBars);
+        };
+        animateBars();
+      }
+
+      // Volume Control Slider (Increase / Reduce / Mute)
+      initVolumeControl() {
+        this.audio.volume = 0.85;
+        this.volTrack = document.getElementById('volTrack');
+        this.volFill = document.getElementById('volFill');
+        this.volNum = document.getElementById('volNum');
+        this.volIcon = document.getElementById('volIcon');
+
+        const updateVol = (vol) => {
+          vol = Math.max(0, Math.min(1, vol));
+          this.audio.volume = vol;
+          const pct = Math.round(vol * 100);
+          if (this.volFill) this.volFill.style.width = `${pct}%`;
+          if (this.volNum) this.volNum.textContent = `${pct}%`;
+          if (this.volIcon) {
+            if (vol === 0) this.volIcon.textContent = '🔇';
+            else if (vol < 0.5) this.volIcon.textContent = '🔉';
+            else this.volIcon.textContent = '🔊';
+          }
+        };
+
+        if (this.volTrack) {
+          let isDragging = false;
+          const handleVol = (e) => {
+            const rect = this.volTrack.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            updateVol(clickX / rect.width);
+          };
+
+          this.volTrack.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            handleVol(e);
+          });
+          window.addEventListener('mousemove', (e) => {
+            if (isDragging) handleVol(e);
+          });
+          window.addEventListener('mouseup', () => {
+            isDragging = false;
+          });
+
+          this.volTrack.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            const touch = e.touches[0];
+            const rect = this.volTrack.getBoundingClientRect();
+            updateVol((touch.clientX - rect.left) / rect.width);
+          }, { passive: true });
+
+          this.volTrack.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+              const touch = e.touches[0];
+              const rect = this.volTrack.getBoundingClientRect();
+              updateVol((touch.clientX - rect.left) / rect.width);
+            }
+          }, { passive: true });
+
+          this.volTrack.addEventListener('touchend', () => { isDragging = false; });
+        }
+
+        if (this.volIcon) {
+          let lastVol = 0.85;
+          this.volIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (this.audio.volume > 0) {
+              lastVol = this.audio.volume;
+              updateVol(0);
+            } else {
+              updateVol(lastVol || 0.85);
+            }
+          });
+        }
+      }
+
+      // Audio Music Player setup
+      initAudioPlayer() {
+        this.loadTrack(0);
+
+        this.playBtn.addEventListener('click', () => this.togglePlayMusic());
+        this.nextBtn.addEventListener('click', () => {
+          this.currentTrackIdx = (this.currentTrackIdx + 1) % this.tracks.length;
+          this.loadTrack(this.currentTrackIdx);
+          this.playMusic();
+        });
+        this.prevBtn.addEventListener('click', () => {
+          this.currentTrackIdx = (this.currentTrackIdx - 1 + this.tracks.length) % this.tracks.length;
+          this.loadTrack(this.currentTrackIdx);
+          this.playMusic();
+        });
+
+        if (this.shuffleBtn) {
+          this.shuffleBtn.addEventListener('click', () => {
+            this.currentTrackIdx = Math.floor(Math.random() * this.tracks.length);
+            this.loadTrack(this.currentTrackIdx);
+            this.playMusic();
+          });
+        }
+
+        if (this.repeatBtn) {
+          this.repeatBtn.addEventListener('click', () => {
+            this.audio.loop = !this.audio.loop;
+            this.repeatBtn.classList.toggle('active', this.audio.loop);
+          });
+        }
+
+        this.audio.addEventListener('timeupdate', () => {
+          if (!this.audio.duration) return;
+          const pct = (this.audio.currentTime / this.audio.duration) * 100;
+          this.scrubberProgress.style.width = `${pct}%`;
+          this.timeCurEl.textContent = this.formatTime(this.audio.currentTime);
+        });
+
+        this.audio.addEventListener('loadedmetadata', () => {
+          this.timeDurEl.textContent = this.formatTime(this.audio.duration);
+        });
+
+        this.scrubberTrack.addEventListener('click', (e) => {
+          const rect = this.scrubberTrack.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const pct = clickX / rect.width;
+          if (this.audio.duration) {
+            this.audio.currentTime = pct * this.audio.duration;
+          }
+        });
+      }
+
+      // DJ Options (Filter, Pitch Bend, Vinyl Brake)
+      initDjOptions() {
+        // 1. DJ Filter FX Toggle
+        if (this.btnDjFilter) {
+          this.btnDjFilter.addEventListener('click', () => {
+            this.isFilterActive = !this.isFilterActive;
+            this.btnDjFilter.classList.toggle('active', this.isFilterActive);
+          });
+        }
+
+        // 2. DJ Pitch Speed Bend (+8%)
+        if (this.btnDjPitch) {
+          this.btnDjPitch.addEventListener('click', () => {
+            this.isPitchActive = !this.isPitchActive;
+            this.btnDjPitch.classList.toggle('active', this.isPitchActive);
+            this.audio.playbackRate = this.isPitchActive ? 1.08 : 1.0;
+          });
+        }
+
+        // 3. DJ Vinyl Brake Spin Down
+        if (this.btnDjBrake) {
+          this.btnDjBrake.addEventListener('click', () => {
+            if (!this.isPlayingMusic) return;
+            this.btnDjBrake.classList.add('active');
+            let rate = this.audio.playbackRate;
+            const brakeInterval = setInterval(() => {
+              rate -= 0.15;
+              if (rate <= 0.1) {
+                clearInterval(brakeInterval);
+                this.pauseMusic();
+                this.audio.playbackRate = this.isPitchActive ? 1.08 : 1.0;
+                setTimeout(() => this.btnDjBrake.classList.remove('active'), 250);
+              } else {
+                this.audio.playbackRate = rate;
+              }
+            }, 60);
+          });
+        }
+      }
+
+      formatTime(sec) {
+        const m = Math.floor(sec / 60) || 0;
+        const s = Math.floor(sec % 60) || 0;
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+      }
+
+      loadTrack(idx) {
+        const t = this.tracks[idx];
+        if (!t) return;
+        this.audio.src = t.src;
+        this.trackTitleEl.textContent = t.title;
+        this.artistEl.textContent = t.artist;
+      }
+
+      togglePlayMusic() {
+        if (this.isPlayingMusic) {
+          this.pauseMusic();
+        } else {
+          this.playMusic();
+        }
+      }
+
+      playMusic() {
+        this.audio.play().then(() => {
+          this.isPlayingMusic = true;
+          this.playBtn.classList.add('playing');
+        }).catch(e => console.log('Audio autoplay policy:', e));
+      }
+
+      pauseMusic() {
+        this.audio.pause();
+        this.isPlayingMusic = false;
+        this.playBtn.classList.remove('playing');
+      }
+
+      stopMusic() {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.isPlayingMusic = false;
+        this.playBtn.classList.remove('playing');
+        this.scrubberProgress.style.width = '0%';
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // MPC 16-PAD CONTROLLER & SYNTHESIS
+      // ───────────────────────────────────────────────────────────────────────
+      initMPCDrums() {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.synthCtx = null;
+
+        const ensureCtx = () => {
+          if (!this.synthCtx) this.synthCtx = new AudioCtx();
+          if (this.synthCtx.state === 'suspended') this.synthCtx.resume();
+          return this.synthCtx;
+        };
+
+        const bankA = {
+          1: { name: 'KICK', type: 'kick' },
+          2: { name: 'SNARE', type: 'snare' },
+          3: { name: 'BASS', type: 'bass' },
+          4: { name: 'SUB DRP', type: 'sub' },
+          5: { name: 'KICK 2', type: 'kick2' },
+          6: { name: 'PERC', type: 'perc' },
+          7: { name: 'TOM LO', type: 'tomlo' },
+          8: { name: 'FX HIT', type: 'fxhit' },
+          9: { name: 'RIM', type: 'rim' },
+          10: { name: 'CLAP', type: 'clap' },
+          11: { name: 'SNARE 2', type: 'snare2' },
+          12: { name: 'TOM HI', type: 'tomhi' },
+          13: { name: 'CRASH', type: 'crash' },
+          14: { name: 'OPEN HH', type: 'openHH' },
+          15: { name: 'CLO HH', type: 'cloHH' },
+          16: { name: 'TAMBR', type: 'tamb' },
+        };
+
+        const bankB = {
+          1: { name: '808 BD', type: 'kick' },
+          2: { name: '808 SD', type: 'snare' },
+          3: { name: 'RAGGA BASS', type: 'bass' },
+          4: { name: 'SUB DROP', type: 'sub' },
+          5: { name: 'AMEN BREAK', type: 'kick2' },
+          6: { name: 'STAB HIT', type: 'perc' },
+          7: { name: 'DANCE HORN', type: 'tomlo' },
+          8: { name: 'CYBER BELL', type: 'fxhit' },
+          9: { name: 'DUB FLUTE', type: 'rim' },
+          10: { name: 'VOCAL CHANT', type: 'clap' },
+          11: { name: 'LASER SHOT', type: 'snare2' },
+          12: { name: 'FX SWEEP', type: 'tomhi' },
+          13: { name: 'CYMBAL RISE', type: 'crash' },
+          14: { name: 'AIR DROP', type: 'openHH' },
+          15: { name: 'ZAP SFX', type: 'cloHH' },
+          16: { name: 'SHAKER', type: 'tamb' },
+        };
+
+        this.playPadSound = (type) => {
+          const ctx = ensureCtx();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          const master = ctx.createGain();
+          master.gain.setValueAtTime(0.85, now);
+          master.connect(ctx.destination);
+
+          switch (type) {
+            case 'kick':
+            case 'kick2': {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(type === 'kick' ? 160 : 120, now);
+              osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
+              g.gain.setValueAtTime(1, now);
+              g.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+              osc.connect(g); g.connect(master);
+              osc.start(now); osc.stop(now + 0.4);
+              break;
+            }
+            case 'snare':
+            case 'snare2': {
+              const bufSz = ctx.sampleRate * 0.18;
+              const buf = ctx.createBuffer(1, bufSz, ctx.sampleRate);
+              const data = buf.getChannelData(0);
+              for (let i = 0; i < bufSz; i++) data[i] = Math.random() * 2 - 1;
+              const noise = ctx.createBufferSource();
+              noise.buffer = buf;
+              const ng = ctx.createGain();
+              ng.gain.setValueAtTime(0.7, now);
+              ng.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+              noise.connect(ng); ng.connect(master);
+
+              const osc = ctx.createOscillator();
+              const og = ctx.createGain();
+              osc.frequency.value = type === 'snare' ? 220 : 180;
+              og.gain.setValueAtTime(0.5, now);
+              og.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+              osc.connect(og); og.connect(master);
+              noise.start(now); noise.stop(now + 0.2);
+              osc.start(now); osc.stop(now + 0.12);
+              break;
+            }
+            case 'clap': {
+              for (let rep = 0; rep < 3; rep++) {
+                const delay = rep * 0.012;
+                const bufSz = ctx.sampleRate * 0.08;
+                const buf = ctx.createBuffer(1, bufSz, ctx.sampleRate);
+                const data = buf.getChannelData(0);
+                for (let i = 0; i < bufSz; i++) data[i] = Math.random() * 2 - 1;
+                const src = ctx.createBufferSource();
+                src.buffer = buf;
+                const g = ctx.createGain();
+                g.gain.setValueAtTime(0.6, now + delay);
+                g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.1);
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'highpass'; filter.frequency.value = 1200;
+                src.connect(filter); filter.connect(g); g.connect(master);
+                src.start(now + delay); src.stop(now + delay + 0.12);
+              }
+              break;
+            }
+            case 'cloHH':
+            case 'openHH': {
+              const isOp = (type === 'openHH');
+              const bufSz = ctx.sampleRate * (isOp ? 0.3 : 0.06);
+              const buf = ctx.createBuffer(1, bufSz, ctx.sampleRate);
+              const data = buf.getChannelData(0);
+              for (let i = 0; i < bufSz; i++) data[i] = Math.random() * 2 - 1;
+              const src = ctx.createBufferSource(); src.buffer = buf;
+              const filter = ctx.createBiquadFilter();
+              filter.type = 'highpass'; filter.frequency.value = isOp ? 5500 : 7000;
+              const g = ctx.createGain();
+              g.gain.setValueAtTime(0.55, now);
+              g.gain.exponentialRampToValueAtTime(0.001, now + (isOp ? 0.32 : 0.06));
+              src.connect(filter); filter.connect(g); g.connect(master);
+              src.start(now); src.stop(now + (isOp ? 0.34 : 0.07));
+              break;
+            }
+            case 'crash': {
+              const bufSz = ctx.sampleRate * 0.8;
+              const buf = ctx.createBuffer(1, bufSz, ctx.sampleRate);
+              const data = buf.getChannelData(0);
+              for (let i = 0; i < bufSz; i++) data[i] = Math.random() * 2 - 1;
+              const src = ctx.createBufferSource(); src.buffer = buf;
+              const filter = ctx.createBiquadFilter();
+              filter.type = 'bandpass'; filter.frequency.value = 4500; filter.Q.value = 0.6;
+              const g = ctx.createGain();
+              g.gain.setValueAtTime(0.6, now);
+              g.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+              src.connect(filter); filter.connect(g); g.connect(master);
+              src.start(now); src.stop(now + 0.9);
+              break;
+            }
+            case 'bass':
+            case 'sub': {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'sawtooth';
+              const f = type === 'sub' ? 45 : 80;
+              osc.frequency.setValueAtTime(f, now);
+              osc.frequency.exponentialRampToValueAtTime(f * 0.5, now + 0.25);
+              g.gain.setValueAtTime(0.9, now);
+              g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+              const filter = ctx.createBiquadFilter();
+              filter.type = 'lowpass'; filter.frequency.value = 350;
+              osc.connect(filter); filter.connect(g); g.connect(master);
+              osc.start(now); osc.stop(now + 0.45);
+              break;
+            }
+            default: {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(450, now);
+              osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+              g.gain.setValueAtTime(0.7, now);
+              g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+              osc.connect(g); g.connect(master);
+              osc.start(now); osc.stop(now + 0.2);
+              break;
+            }
+          }
+        };
+
+        const triggerPad = (padNum, padEl) => {
+          padEl.classList.add('hit');
+          setTimeout(() => padEl.classList.remove('hit'), 120);
+          const currentBankDef = (this.currentBank === 'A') ? bankA : bankB;
+          const def = currentBankDef[padNum];
+          if (def) this.playPadSound(def.type);
+        };
+
+        // Attach listeners to all 16 hardware pads
+        const pads = Array.from(this.padGrid.querySelectorAll('.hw-pad-hotspot'));
+        pads.forEach(padEl => {
+          const num = parseInt(padEl.dataset.pad, 10);
+          padEl.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            triggerPad(num, padEl);
+          });
+          padEl.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            triggerPad(num, padEl);
+          }, { passive: false });
+        });
+
+        // Bank Switchers
+        const switchBank = (b) => {
+          this.currentBank = b;
+          this.btnBankA.classList.toggle('active', b === 'A');
+          this.btnBankB.classList.toggle('active', b === 'B');
+          const defMap = (b === 'A') ? bankA : bankB;
+          pads.forEach(padEl => {
+            const num = parseInt(padEl.dataset.pad, 10);
+            const labelEl = padEl.querySelector('.hw-pad-label');
+            if (labelEl && defMap[num]) {
+              labelEl.textContent = defMap[num].name;
+            }
+          });
+        };
+
+        this.btnBankA.addEventListener('click', () => switchBank('A'));
+        this.btnBankB.addEventListener('click', () => switchBank('B'));
+
+        // Hardware function buttons
+        const hwBtnBank = document.getElementById('hwBtnPadBank');
+        if (hwBtnBank) {
+          hwBtnBank.addEventListener('click', () => {
+            switchBank(this.currentBank === 'A' ? 'B' : 'A');
+          });
+        }
+
+        const hwFullLevel = document.getElementById('hwBtnFullLevel');
+        if (hwFullLevel) {
+          hwFullLevel.addEventListener('click', () => {
+            hwFullLevel.classList.toggle('active');
+          });
+        }
+
+        // Rotary Knobs Interactivity
+        const knobs = document.querySelectorAll('.hw-knob');
+        knobs.forEach((knob, idx) => {
+          let currentAngle = (idx * 45) % 270 - 135;
+          knob.style.transform = `rotate(${currentAngle}deg)`;
+
+          let isDragging = false;
+          let startY = 0;
+
+          const onStart = (clientY) => {
+            isDragging = true;
+            startY = clientY;
+          };
+
+          const onMove = (clientY) => {
+            if (!isDragging) return;
+            const deltaY = startY - clientY;
+            startY = clientY;
+            currentAngle = Math.max(-140, Math.min(140, currentAngle + deltaY * 2.5));
+            knob.style.transform = `rotate(${currentAngle}deg)`;
+          };
+
+          const onEnd = () => { isDragging = false; };
+
+          knob.addEventListener('mousedown', (e) => onStart(e.clientY));
+          window.addEventListener('mousemove', (e) => onMove(e.clientY));
+          window.addEventListener('mouseup', onEnd);
+
+          knob.addEventListener('touchstart', (e) => {
+            if (e.touches.length) onStart(e.touches[0].clientY);
+          }, { passive: true });
+          window.addEventListener('touchmove', (e) => {
+            if (e.touches.length) onMove(e.touches[0].clientY);
+          }, { passive: true });
+          window.addEventListener('touchend', onEnd);
+        });
+
+        // Keyboard hotkey trigger (1-4, Z-V, A-F, Q-R) — Ignore when typing in form inputs or inside auth modal
+        const keyPadMap = {};
+        pads.forEach(p => { keyPadMap[p.dataset.key.toLowerCase()] = p; });
+        document.addEventListener('keydown', (e) => {
+          // Ignore when user is typing in any input field, password box, or while auth modal is open
+          const tag = (e.target.tagName || '').toUpperCase();
+          if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target.isContentEditable) {
+            return;
+          }
+          const authModal = document.getElementById('portal-auth-modal');
+          if (authModal && authModal.classList.contains('open')) {
+            return;
+          }
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+          const k = e.key.toLowerCase();
+          const targetPad = keyPadMap[k];
+          if (targetPad) {
+            triggerPad(parseInt(targetPad.dataset.pad, 10), targetPad);
+          }
+        });
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // DRUM PATTERNS AUTOMATED SEQUENCER
+      // ───────────────────────────────────────────────────────────────────────
+      initPatternSequencer() {
+        const patterns = [
+          // 0: Dancehall Riddim (98 BPM)
+          { name: "Dancehall Riddim", bpm: 98, steps: [
+            ['kick'], [], ['cloHH'], ['snare'],
+            [], ['cloHH'], ['kick'], [],
+            ['snare'], ['cloHH'], [], ['kick'],
+            ['snare'], [], ['cloHH'], ['crash']
+          ]},
+          // 1: Reggae One-Drop (78 BPM)
+          { name: "Reggae One-Drop", bpm: 78, steps: [
+            ['cloHH'], ['cloHH'], ['cloHH'], ['cloHH'],
+            ['kick', 'snare', 'bass'], ['cloHH'], ['cloHH'], ['cloHH'],
+            ['cloHH'], ['cloHH'], ['cloHH'], ['cloHH'],
+            ['kick', 'snare', 'rim'], ['cloHH'], ['openHH'], []
+          ]},
+          // 2: 808 Trap Beat (140 BPM)
+          { name: "808 Trap Beat", bpm: 140, steps: [
+            ['kick', 'sub'], ['cloHH'], ['cloHH'], ['cloHH'],
+            ['snare', 'clap'], ['cloHH'], ['kick'], ['cloHH'],
+            ['sub'], ['cloHH'], ['cloHH'], ['cloHH'],
+            ['snare', 'clap'], ['cloHH'], ['openHH'], ['crash']
+          ]},
+          // 3: Afrobeats Groove (104 BPM)
+          { name: "Afrobeats Groove", bpm: 104, steps: [
+            ['kick'], [], ['rim'], ['cloHH'],
+            ['perc'], ['kick'], [], ['snare'],
+            ['rim'], ['cloHH'], ['kick'], ['perc'],
+            ['snare'], [], ['rim'], ['openHH']
+          ]}
+        ];
+
+        // Pattern selector buttons
+        const patBtns = document.querySelectorAll('.pattern-btn');
+        patBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            patBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.currentPatternIdx = parseInt(btn.dataset.pattern, 10);
+            const curPat = patterns[this.currentPatternIdx];
+            this.bpmDisplay.textContent = `${curPat.bpm} BPM`;
+            if (this.isPatternRunning) {
+              this.stopPatternSequencer();
+              this.startPatternSequencer(curPat);
+            }
+          });
+        });
+
+        this.btnPlayPattern.addEventListener('click', () => {
+          const curPat = patterns[this.currentPatternIdx];
+          this.startPatternSequencer(curPat);
+        });
+
+        this.btnStopPattern.addEventListener('click', () => {
+          this.stopPatternSequencer();
+        });
+
+        this.startPatternSequencer = (pat) => {
+          this.stopPatternSequencer();
+          this.isPatternRunning = true;
+          this.btnPlayPattern.classList.add('running');
+          this.btnPlayPattern.textContent = '⏸ PAUSE';
+
+          const intervalMs = (60000 / pat.bpm) / 4; // 16th notes
+          this.seqStep = 0;
+
+          this.seqTimer = setInterval(() => {
+            const activeSounds = pat.steps[this.seqStep % pat.steps.length];
+            activeSounds.forEach(soundType => {
+              if (this.playPadSound) this.playPadSound(soundType);
+            });
+            this.seqStep++;
+          }, intervalMs);
+        };
+
+        this.stopPatternSequencer = () => {
+          this.isPatternRunning = false;
+          clearInterval(this.seqTimer);
+          this.btnPlayPattern.classList.remove('running');
+          this.btnPlayPattern.textContent = '▶ PLAY PATTERN';
+        };
+      }
+
+      // ───────────────────────────────────────────────────────────────────────
+      // SOUND FX LAUNCHPAD
+      // ───────────────────────────────────────────────────────────────────────
+      initSoundFX() {
+        const sfxBtns = document.querySelectorAll('.sfx-btn');
+        sfxBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const sfxType = btn.dataset.sfx;
+            this.triggerSoundEffect(sfxType);
+          });
+        });
+
+        this.triggerSoundEffect = (type) => {
+          if (!this.synthCtx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            this.synthCtx = new AudioCtx();
+          }
+          const ctx = this.synthCtx;
+          const now = ctx.currentTime;
+
+          if (type === 'rewind') {
+            const wulup = new Audio('/wulup.mp3');
+            wulup.play().catch(() => {});
+            return;
+          }
+
+          if (type === 'airhorn') {
+            // High energy dancehall airhorn pulse
+            for (let i = 0; i < 4; i++) {
+              const t = now + i * 0.11;
+              const osc1 = ctx.createOscillator();
+              const osc2 = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc1.type = 'sawtooth'; osc2.type = 'sawtooth';
+              osc1.frequency.setValueAtTime(466, t);
+              osc2.frequency.setValueAtTime(622, t);
+              g.gain.setValueAtTime(0.5, t);
+              g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+              osc1.connect(g); osc2.connect(g); g.connect(ctx.destination);
+              osc1.start(t); osc2.start(t);
+              osc1.stop(t + 0.11); osc2.stop(t + 0.11);
+            }
+          } else if (type === 'siren') {
+            // Reggae Dub Siren sweep
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(900, now + 0.25);
+            osc.frequency.linearRampToValueAtTime(300, now + 0.5);
+            osc.frequency.linearRampToValueAtTime(900, now + 0.75);
+            g.gain.setValueAtTime(0.6, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+            osc.connect(g); g.connect(ctx.destination);
+            osc.start(now); osc.stop(now + 0.85);
+          } else if (type === 'laser') {
+            // Dubplate laser blast
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(1400, now);
+            osc.frequency.exponentialRampToValueAtTime(120, now + 0.35);
+            g.gain.setValueAtTime(0.7, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+            osc.connect(g); g.connect(ctx.destination);
+            osc.start(now); osc.stop(now + 0.4);
+          }
+        };
+      }
+    }
+
+    // Initialize entire Dimension Hub & Master Media Deck on DOM Ready
+    window.addEventListener('DOMContentLoaded', () => {
+      window.dimensionHubEngine = new DimensionHubOrbitEngine();
+      window.masterMediaHub = new MasterMediaHubEngine();
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Assassin — Merch | Rep The Culture. Live The Legacy.</title>
+  <meta name="description" content="Chinese Assassin Official Merch — Exclusive designs, premium quality, limited drops.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-red: #ff203a;
+      --primary-neon: #ff0055;
+      --gold: #d4a843;
+      --header-h: 56px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #030008;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ═══════════════════════════════════════════
+       FLOATING HEADER
+    ═══════════════════════════════════════════ */
+    .site-header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1320px;
+      height: 52px;
+      background: rgba(10, 4, 12, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.85), 0 0 25px rgba(255,32,58,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 5000;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-wrap .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+    .logo-wrap .logo-text span { color: var(--primary-red); }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header-nav a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 6px 12px;
+      border-radius: 30px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .header-nav a:hover { color: #fff; background: rgba(255,32,58,0.15); }
+    .header-nav a.gold { color: var(--gold); font-weight: 800; text-shadow: 0 0 12px rgba(212,168,67,0.6); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      background: transparent;
+      border: 1.5px solid rgba(255,32,58,0.5);
+      color: #fff;
+      padding: 7px 18px;
+      border-radius: 30px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .back-btn:hover {
+      background: var(--primary-red);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 20px rgba(255,32,58,0.6);
+    }
+
+    /* ═══════════════════════════════════════════
+       ARTWORK STAGE (3:2 ratio)
+    ═══════════════════════════════════════════ */
+    .merch-stage {
+      position: fixed;
+      top: 68px;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .merch-artwork-wrapper {
+      position: relative;
+      height: 100%;
+      max-height: 100%;
+      width: auto;
+      aspect-ratio: 3 / 2;
+      max-width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(255,32,58,0.4), 0 0 120px rgba(212,168,67,0.15), 0 20px 80px rgba(0,0,0,0.95);
+      border: 1px solid rgba(255,32,58,0.3);
+      background: #050207;
+      animation: breathe 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes breathe {
+      0%   { transform: translateY(0px);  box-shadow: 0 0 50px rgba(255,32,58,0.35), 0 20px 80px rgba(0,0,0,0.95); }
+      100% { transform: translateY(-4px); box-shadow: 0 0 80px rgba(255,32,58,0.5), 0 0 40px rgba(212,168,67,0.2), 0 25px 95px rgba(0,0,0,0.98); }
+    }
+
+    .merch-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════
+       INVISIBLE HOTSPOTS
+    ═══════════════════════════════════════════ */
+    .hs-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    .hs {
+      position: absolute;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      border-radius: 6px;
+    }
+    .hs:hover, .hs:active, .hs:focus, .hs:focus-visible {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Nav sidebar items */
+    .hs-logo       { left: 0.5%; top: 1%; width: 8%; height: 8%; border-radius: 50%; }
+    .hs-home       { left: 1%; top: 10.5%; width: 9%; height: 5%; border-radius: 4px; }
+    .hs-stream     { left: 1%; top: 16%;   width: 9%; height: 5%; border-radius: 4px; }
+    .hs-tv         { left: 1%; top: 21.5%; width: 9%; height: 5%; border-radius: 4px; }
+    .hs-mobile     { left: 1%; top: 27%;   width: 9%; height: 5%; border-radius: 4px; }
+    .hs-kitchen    { left: 1%; top: 32.5%; width: 9%; height: 5%; border-radius: 4px; }
+    .hs-radio      { left: 1%; top: 38%;   width: 9%; height: 5%; border-radius: 4px; }
+    .hs-vip        { left: 1%; top: 43.5%; width: 9%; height: 5%; border-radius: 4px; }
+    .hs-flashdrive { left: 1%; top: 49%;   width: 9%; height: 5.5%; border-radius: 4px; }
+    .hs-shop       { left: 1%; top: 55%;   width: 9%; height: 5%; border-radius: 4px; }
+    .hs-vault      { left: 1%; top: 60.5%; width: 9%; height: 5%; border-radius: 4px; }
+    .hs-merch      { left: 1%; top: 66%;   width: 9%; height: 5%; border-radius: 4px; }
+    .hs-about      { left: 1%; top: 71.5%; width: 9%; height: 5%; border-radius: 4px; }
+    .hs-contact    { left: 1%; top: 77%;   width: 9%; height: 5%; border-radius: 4px; }
+
+    /* Notify Me button — center of page */
+    .hs-notify {
+      left: 33%;
+      top: 80%;
+      width: 34%;
+      height: 11%;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    /* Product cards */
+    .hs-hoodie  { left: 12%; top: 42%; width: 20%; height: 50%; border-radius: 10px; cursor: pointer; }
+    .hs-tshirt  { right: 3%; top: 42%; width: 20%; height: 45%; border-radius: 10px; cursor: pointer; }
+    .hs-hat     { left: 18%; top: 75%; width: 18%; height: 23%; border-radius: 8px;  cursor: pointer; }
+
+    /* ═══════════════════════════════════════════
+       NOTIFY ME MODAL
+    ═══════════════════════════════════════════ */
+    .notify-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(18px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .notify-modal-overlay.open { display: flex; }
+
+    .notify-modal {
+      background: linear-gradient(135deg, rgba(14,4,8,0.98) 0%, rgba(30,8,14,0.98) 100%);
+      border: 1.5px solid rgba(255,32,58,0.5);
+      border-radius: 20px;
+      padding: 40px 44px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 0 60px rgba(255,32,58,0.3), 0 0 120px rgba(212,168,67,0.1), 0 30px 80px rgba(0,0,0,0.9);
+      position: relative;
+      animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes modalIn {
+      from { transform: translateY(30px) scale(0.95); opacity: 0; }
+      to   { transform: translateY(0)    scale(1);    opacity: 1; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: transparent;
+      border: 1.5px solid rgba(255,32,58,0.4);
+      color: rgba(255,255,255,0.7);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-close:hover { background: var(--primary-red); color: #fff; border-color: var(--primary-red); }
+
+    .modal-badge {
+      display: inline-block;
+      background: rgba(212,168,67,0.12);
+      border: 1px solid rgba(212,168,67,0.4);
+      color: var(--gold);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 30px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .modal-title span { color: var(--primary-red); }
+
+    .modal-sub {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .modal-input-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .modal-email {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,32,58,0.3);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    .modal-email::placeholder { color: rgba(255,255,255,0.3); }
+    .modal-email:focus {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 18px rgba(255,32,58,0.25);
+    }
+
+    .modal-submit {
+      background: var(--primary-red);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 12px 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 0 20px rgba(255,32,58,0.5);
+    }
+    .modal-submit:hover {
+      background: #ff0044;
+      box-shadow: 0 0 35px rgba(255,32,58,0.8);
+      transform: scale(1.04);
+    }
+
+    .modal-perks {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .modal-perk {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .modal-perk::before {
+      content: '✦';
+      color: var(--gold);
+      font-size: 0.6rem;
+    }
+
+    .modal-success {
+      display: none;
+      text-align: center;
+      padding: 10px 0 4px;
+    }
+    .modal-success .success-icon { font-size: 2.8rem; margin-bottom: 10px; }
+    .modal-success h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .modal-success p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* ═══════════════════════════════════════════
+       TOAST HUD
+    ═══════════════════════════════════════════ */
+    .hud-toast {
+      position: fixed;
+      bottom: 75px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14,6,16,0.95);
+      border: 1.5px solid var(--primary-red);
+      border-radius: 50px;
+      padding: 10px 28px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 0 30px rgba(255,32,58,0.7);
+      display: none;
+      z-index: 10000;
+      backdrop-filter: blur(16px);
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════════
+       AMBIENT PARTICLES
+    ═══════════════════════════════════════════ */
+    .ambient-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Particles -->
+  <canvas id="particleCanvas" class="ambient-particles"></canvas>
+
+  <!-- ══════════════════════════════════════════
+       FLOATING HEADER
+  ══════════════════════════════════════════ -->
+  <header class="site-header">
+    <a href="/" class="logo-wrap" title="Chinese Assassin Home">
+      <img src="/logo.png1.png" width="34" height="34" style="border-radius:50%; border:1.5px solid rgba(255,32,58,0.5);" alt="CA Logo" onerror="this.style.display='none'">
+      <span class="logo-text">CHINESE<span>ASSASSIN</span></span>
+    </a>
+
+    <nav class="header-nav">
+      <a href="/">HOME</a>
+      <a href="/streaming-gateway.html">STREAM</a>
+      <a href="/tv-gateway.html">TV</a>
+      <a href="/mobile-mixes-gateway-v2.html">MOBILE</a>
+      <a href="/radio-gateway.html">RADIO</a>
+      <a href="/vip-gateway.html">VIP</a>
+      <a href="/flashdrive.html">SHOP</a>
+      <a href="/merch.html" class="gold">✦ MERCH</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="/admin-vault.html" class="back-btn">SIGN IN</a>
+      <a href="/" class="back-btn">← HOME</a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       MERCH ARTWORK STAGE
+  ══════════════════════════════════════════ -->
+  <div class="merch-stage">
+    <div class="merch-artwork-wrapper">
+      <img src="/MERCH-1.png" alt="Chinese Assassin Merch — Rep The Culture. Live The Legacy." class="merch-bg-img" onerror="this.src='/HOME PAGE/MERCH-1.png';" />
+
+      <!-- Invisible Hotspot Layer -->
+      <div class="hs-layer">
+
+        <!-- Logo -->
+        <a href="/" class="hs hs-logo" title="Home"></a>
+
+        <!-- Left Sidebar Navigation -->
+        <a href="/"                          class="hs hs-home"       title="Home"></a>
+        <a href="/streaming-gateway.html"    class="hs hs-stream"     title="24/7 Stream"></a>
+        <a href="/tv-gateway.html"           class="hs hs-tv"         title="Assassin TV"></a>
+        <a href="/mobile-mixes-gateway-v2.html" class="hs hs-mobile"  title="Mobile Mixes"></a>
+        <a href="/mix-kitchen.html"          class="hs hs-kitchen"    title="The Mix Kitchen"></a>
+        <a href="/radio-gateway.html"        class="hs hs-radio"      title="Assassin Radio"></a>
+        <a href="/vip-gateway.html"          class="hs hs-vip"        title="VIP Citadel"></a>
+        <a href="/flashdrive.html"           class="hs hs-flashdrive" title="Flash Drive Mixes"></a>
+        <a href="/flashdrive.html"           class="hs hs-shop"       title="Shop"></a>
+        <a href="/riddim"                    class="hs hs-vault"      title="The Vault"></a>
+        <a href="/merch.html"                class="hs hs-merch"      title="Merch"></a>
+        <a href="/dimension-hub.html"        class="hs hs-about"      title="About Us"></a>
+        <a href="mailto:bookings@chineseassassin.com" class="hs hs-contact" title="Contact"></a>
+
+        <!-- Product cards — show notify modal on click -->
+        <button class="hs hs-hoodie"  onclick="openNotifyModal('ASSASSIN HOODIE')" title="Assassin Hoodie"></button>
+        <button class="hs hs-tshirt"  onclick="openNotifyModal('ASSASSIN TEE')"    title="Assassin Tee"></button>
+        <button class="hs hs-hat"     onclick="openNotifyModal('ASSASSIN SNAPBACK')" title="Assassin Snapback"></button>
+
+        <!-- Notify Me button -->
+        <button class="hs hs-notify" onclick="openNotifyModal()" title="Get Notified When We Launch"></button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD Toast -->
+  <div class="hud-toast" id="hudToast"></div>
+
+  <!-- ══════════════════════════════════════════
+       NOTIFY ME MODAL
+  ══════════════════════════════════════════ -->
+  <div class="notify-modal-overlay" id="notifyOverlay" onclick="if(event.target===this) closeNotifyModal();">
+    <div class="notify-modal">
+      <button class="modal-close" onclick="closeNotifyModal()">✕</button>
+
+      <!-- Form view -->
+      <div id="modalFormView">
+        <div class="modal-badge">⚡ EXCLUSIVE ACCESS</div>
+        <h2 class="modal-title">BE THE FIRST<br><span>TO KNOW</span></h2>
+        <p class="modal-sub" id="modalSub">Drop your email and we'll notify you the moment Chinese Assassin Merch drops. Limited edition. Limited time.</p>
+
+        <div class="modal-input-wrap">
+          <input type="email" class="modal-email" id="notifyEmail"
+                 placeholder="your@email.com" autocomplete="email" />
+          <button class="modal-submit" onclick="submitNotify()">NOTIFY ME</button>
+        </div>
+
+        <div class="modal-perks">
+          <span class="modal-perk">Exclusive Designs</span>
+          <span class="modal-perk">Premium Quality</span>
+          <span class="modal-perk">Limited Drops</span>
+        </div>
+      </div>
+
+      <!-- Success view -->
+      <div class="modal-success" id="modalSuccessView">
+        <div class="success-icon">🔥</div>
+        <h3>YOU'RE LOCKED IN!</h3>
+        <p>We'll hit you up the moment the drop goes live.<br>Stay locked in. Greatness is loading.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── AMBIENT PARTICLES ─────────────────────────────────────────────────
+    (function() {
+      const canvas = document.getElementById('particleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width  = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+      window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
+
+      const colors = ['#ff203a','#ff0055','#d4a843','#ffffff','#880022'];
+      const pts = Array.from({length: 40}, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        r: Math.random() * 2 + 0.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: -Math.random() * 0.5 - 0.15,
+        alpha: Math.random() * 0.6 + 0.2,
+        fs: Math.random() * 0.007 + 0.003,
+        glow: Math.random() > 0.5
+      }));
+
+      (function tick() {
+        ctx.clearRect(0, 0, w, h);
+        pts.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.alpha += p.fs;
+          if (p.alpha > 0.85 || p.alpha < 0.15) p.fs = -p.fs;
+          if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha));
+          if (p.glow) { ctx.shadowBlur = 10; ctx.shadowColor = p.color; }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          ctx.restore();
+        });
+        requestAnimationFrame(tick);
+      })();
+    })();
+
+    // ── TOAST ─────────────────────────────────────────────────────────────
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById('hudToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.style.display = 'none', 2500);
+    }
+
+    // ── NOTIFY MODAL ──────────────────────────────────────────────────────
+    function openNotifyModal(item) {
+      const overlay = document.getElementById('notifyOverlay');
+      const sub     = document.getElementById('modalSub');
+      const form    = document.getElementById('modalFormView');
+      const success = document.getElementById('modalSuccessView');
+      if (form) form.style.display = 'block';
+      if (success) success.style.display = 'none';
+      if (item && sub) {
+        sub.textContent = `Get early access for the "${item}" — drop your email and we'll notify you the moment it's available.`;
+      } else if (sub) {
+        sub.textContent = `Drop your email and we'll notify you the moment Chinese Assassin Merch drops. Limited edition. Limited time.`;
+      }
+      if (overlay) overlay.classList.add('open');
+    }
+
+    function closeNotifyModal() {
+      const overlay = document.getElementById('notifyOverlay');
+      if (overlay) overlay.classList.remove('open');
+    }
+
+    function submitNotify() {
+      const email = document.getElementById('notifyEmail');
+      if (!email || !email.value.trim() || !email.value.includes('@')) {
+        showToast('⚠️ ENTER A VALID EMAIL');
+        email && email.focus();
+        return;
+      }
+      // Save locally
+      const emails = JSON.parse(localStorage.getItem('CA_MERCH_EMAILS') || '[]');
+      if (!emails.includes(email.value.trim())) {
+        emails.push(email.value.trim());
+        localStorage.setItem('CA_MERCH_EMAILS', JSON.stringify(emails));
+      }
+      // Show success
+      const form    = document.getElementById('modalFormView');
+      const success = document.getElementById('modalSuccessView');
+      if (form) form.style.display = 'none';
+      if (success) success.style.display = 'block';
+      showToast('🔥 YOU\'RE ON THE LIST — STAY LOCKED IN!');
+      setTimeout(closeNotifyModal, 3500);
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeNotifyModal();
+    });
+  </script>
+</body>
+</html>

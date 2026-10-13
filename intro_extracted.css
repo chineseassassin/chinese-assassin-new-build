@@ -1,0 +1,428 @@
+﻿.intro-door {
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 50.2vw;
+  background-image: url('/THEDOOR2.jpg.png'), url('/Images/THEDOOR2.jpg.png'), url('/THEDOOR2.jpg');
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
+  z-index: 41;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.left-door {
+  left: 0;
+  background-position: left center;
+  /* Hinge on the left edge ΓÇö door swings away to the left */
+  transform-origin: left center;
+}
+
+.right-door {
+  right: 0;
+  background-position: right center;
+  /* Hinge on the right edge ΓÇö door swings away to the right */
+  transform-origin: right center;
+}
+
+.door-ui-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 52vh;
+  pointer-events: auto;
+}
+
+.door-enter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 260px;
+  padding: 16px 44px;
+  background: rgba(14, 3, 7, 0.85);
+  border: 1.5px solid rgba(255, 32, 58, 0.85);
+  border-radius: 40px;
+  color: #ffffff;
+  font-family: 'Outfit', 'Cinzel Decorative', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 0 35px rgba(255, 32, 58, 0.5), inset 0 0 15px rgba(255, 32, 58, 0.25);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 50;
+}
+
+.door-enter-btn:hover {
+  background: #ff203a;
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 0 60px rgba(255, 32, 58, 0.9), 0 0 90px rgba(255, 32, 58, 0.5);
+}
+
+/* ==========================================================================
+   BIOMETRIC FACEID SCANNER BOX (4-IMAGE SEQUENCE ON ENTER PORTAL)
+   ========================================================================== */
+.portal-faceid-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  max-width: 90vw;
+  padding: 24px 22px 20px 22px;
+  background: rgba(10, 3, 8, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 32, 58, 0.75);
+  border-radius: 20px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 32, 58, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  z-index: 999;
+  transform-style: preserve-3d;
+}
+
+.hud-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #ff203a;
+  border-style: solid;
+  pointer-events: none;
+}
+.hud-corner.top-left { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.hud-corner.top-right { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+.hud-corner.bottom-left { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+.hud-corner.bottom-right { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+.faceid-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.faceid-lock-icon {
+  font-size: 1rem;
+}
+
+.faceid-title {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #ff203a;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.faceid-viewport {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.faceid-img-frame {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 32, 58, 0.8);
+  box-shadow: 0 0 25px rgba(255, 32, 58, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.8);
+  background: #000;
+}
+
+.faceid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.faceid-laser-sweep {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #ff203a;
+  box-shadow: 0 0 15px #ff203a, 0 0 30px #ffffff;
+  animation: faceidLaser 1.4s ease-in-out infinite alternate;
+  z-index: 5;
+}
+
+@keyframes faceidLaser {
+  0% { top: 3%; opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { top: 94%; opacity: 0.4; }
+}
+
+.faceid-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(255, 32, 58, 0.08) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 32, 58, 0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.faceid-match-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(10, 3, 8, 0.85);
+  border: 1px solid #ff203a;
+  color: #ff203a;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  z-index: 6;
+}
+
+.faceid-hud-bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.faceid-status-text {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #ff203a;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.faceid-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 32, 58, 0.4);
+}
+
+.faceid-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff203a, #00e5ff);
+  box-shadow: 0 0 15px #ff203a;
+  border-radius: 4px;
+  transition: width 0.12s linear;
+}
+
+.faceid-details-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+}
+
+.faceid-granted {
+  color: #00e5ff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 10px #00e5ff;
+}
+
+/* UI Container: Logo & Enter CTA */
+.cinematic-ui-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 52vh;
+  pointer-events: none;
+}
+
+/* Logo Reveal Container */
+#cinematic-logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+#cinematic-logo-wrap.cinematic-logo-hidden {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+}
+
+#cinematic-logo-wrap.cinematic-logo-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.logo-sub-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: rgba(255, 80, 80, 0.85);
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(255, 32, 58, 0.6);
+  margin-bottom: 8px;
+}
+
+.cinematic-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(2rem, 5.5vw, 4.2rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 12px;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.1;
+  text-shadow:
+    0 0 30px rgba(255, 32, 58, 0.6),
+    0 0 60px rgba(255, 0, 0, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.9);
+  background: linear-gradient(180deg, #ffffff 0%, #dddddd 45%, #ff203a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(255, 32, 58, 0.5));
+}
+
+.cinematic-title span {
+  background: linear-gradient(180deg, #ff6b7d 0%, #ff203a 50%, #990012 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255, 32, 58, 0.9);
+}
+
+.logo-accent-line {
+  width: 140px;
+  height: 2px;
+  margin-top: 14px;
+  background: linear-gradient(90deg, transparent, #ff203a, transparent);
+  box-shadow: 0 0 15px #ff203a;
+}
+
+/* Glassmorphism ENTER Button */
+.cinematic-enter-btn {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 54px 18px;
+  background: rgba(10, 2, 6, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 32, 58, 0.45);
+  border-radius: 50px;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow:
+    0 0 30px rgba(255, 32, 58, 0.25),
+    0 10px 40px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.cinematic-enter-btn.cinematic-btn-hidden {
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  pointer-events: none;
+}
+
+.cinematic-enter-btn.cinematic-btn-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.btn-glow-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50px;
+  background: linear-gradient(90deg, transparent, rgba(255, 32, 58, 0.8), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.btn-label {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 10px;
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(255, 32, 58, 0.9), 0 0 30px rgba(255, 0, 0, 0.6);
+  text-transform: uppercase;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.btn-subtext {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: rgba(255, 180, 180, 0.7);
+  text-transform: uppercase;
+  margin-top: 4px;
+  transition: color 0.3s ease;
+}
+
+.cinematic-enter-btn:hover {
+  background: rgba(255, 20, 40, 0.22);
+  border-color: rgba(255, 80, 90, 0.85);
+  transform: translateY(-3px) scale(1.04);
+  box-shadow:
+    0 0 50px rgba(255, 32, 58, 0.6),
+    0 15px 50px rgba(255, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cinematic-enter-btn:hover .btn-glow-ring {
+  opacity: 1;
+}
+
+.cinematic-enter-btn:hover .btn-label {
+  color: #ffffff;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 32, 58, 1);
+}
+
+.cinematic-enter-btn:hover .btn-subtext {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+
+
+/* === HUB UI OVERLAY (HOME SCREEN) === */
+.hub-ui-overlay {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease 1s;
+  /* Fade in after the hub activates */
+}
+
+#dimension-hub.active+.hub-ui-overlay,

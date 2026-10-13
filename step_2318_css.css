@@ -1,0 +1,141 @@
+/* ── Premium Crystal Cyber Side-Slide Transformation ── */
+.ca-static-chassis {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 30;
+  transition: opacity 0.35s ease;
+}
+
+.ca-static-chassis img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.ca-card.card-opened .ca-static-chassis {
+  opacity: 1;
+}
+
+.ca-sliding-door {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 15;
+  transition: transform 0.85s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.35s ease;
+}
+
+.ca-sliding-door img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.ca-door-left {
+  transform: translateX(0) translateZ(0);
+}
+
+.ca-door-right {
+  transform: translateX(0) translateZ(0);
+}
+
+.ca-card.card-opened .ca-sliding-door {
+  opacity: 0.95;
+}
+
+.ca-card.card-opened .ca-door-left {
+  transform: translateX(-24%) translateZ(-25px) scale(0.96);
+  filter: brightness(0.85);
+}
+
+.ca-card.card-opened .ca-door-right {
+  transform: translateX(24%) translateZ(-25px) scale(0.96);
+  filter: brightness(0.85);
+}
+
+/* Vertical Laser Energy Conduit Beams on Parted Edges */
+.ca-beam-left {
+  left: 16%;
+}
+
+.ca-beam-right {
+  right: 16%;
+}
+
+.ca-card.card-opened .ca-energy-beam {
+  opacity: 1;
+  transform: scaleY(1);
+  animation: beamFlicker 0.15s infinite alternate;
+}
+
+/* Live Dynamic Scrubber & Timestamp on Bottom Deck */
+.ca-live-scrubber-track {
+  position: absolute;
+  left: 26.6%;
+  top: 78.4%;
+  width: 6.8%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 35;
+}
+
+.ca-live-scrubber-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff1a30, #ff5566, #ffffff);
+  box-shadow: 0 0 6px #ff2233;
+  transition: width 0.15s linear;
+}
+
+.ca-live-timestamp {
+  position: absolute;
+  left: 26.6%;
+  top: 75.8%;
+  font-size: 8px;
+  font-family: monospace;
+  font-weight: 700;
+  color: #ff4d60;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  z-index: 35;
+  text-shadow: 0 0 4px rgba(255, 30, 50, 0.8);
+}
+
+/* Widescreen Glass Video Chamber (Smooth 3D Forward Glide) */
+.ca-screen-chamber {
+  position: absolute;
+  top: 14.5%;
+  left: 6.0%;
+  width: 88.0%;
+  height: 57.0%;
+  border-radius: 14px;
+  overflow: hidden;
+  display: none;
+  opacity: 0;
+  z-index: 22;
+  background: #000000;
+  cursor: pointer;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  transform: translateZ(-50px) scale(0.94);
+  transition: opacity 0.4s ease, transform 0.85s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.85s ease;
+}
+
+.ca-screen-chamber.active {
+  display: block;
+  opacity: 1;
+  z-index: 9999 !important;
+  transform: translateZ(80px) scale(1.04);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.98), 0 0 25px rgba(255, 30, 50, 0.25);
+}

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chinese Assassin | Mobile Mixes</title>
+    <link rel="stylesheet" href="../src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 3D Background -->
+      <canvas id="webgl-canvas"></canvas>
+      <div id="atmosphere-overlay"></div>
+
+      <!-- Scrolling UI Overlay -->
+      <div id="scroll-wrapper">
+        
+        <!-- Sonaar-style Sidebar + Main Content Layout -->
+        <div class="elite-dashboard-layout">
+          
+          <aside class="sonaar-sidebar">
+            <div class="sidebar-brand">
+              <h3>MOBILE MIXES</h3>
+            </div>
+            <div class="sidebar-section">
+              <h4>LIBRARY</h4>
+              <nav>
+                <a href="#" class="active"><span class="nav-icon">🔥</span> New Releases</a>
+                <a href="#"><span class="nav-icon">📻</span> Radio Mixes</a>
+                <a href="#"><span class="nav-icon">🔝</span> Top Charts</a>
+                <a href="#"><span class="nav-icon">💎</span> VIP Exclusives</a>
+              </nav>
+            </div>
+            <div class="sidebar-section">
+              <h4>GENRES</h4>
+              <nav>
+                <a href="#">Dancehall</a>
+                <a href="#">Reggae</a>
+                <a href="#">Riddim</a>
+                <a href="#">Hip Hop</a>
+                <a href="#">Afrobeats</a>
+              </nav>
+            </div>
+          </aside>
+
+          <div class="main-dashboard-content">
+            <!-- Header: Nav Links -->
+            <!-- Floating Mega Menu Header -->
+            <header class="site-header floating-header">
+              <div class="logo-wrapper">
+                <div class="logo-rotator" id="rotating-logo">
+                  <img src="../logo.png1.png" class="site-logo-img rot-active" alt="Logo 1">
+                  <img src="../logo.png2.png" class="site-logo-img" alt="Logo 2">
+                  <img src="../logo.png3.png" class="site-logo-img" alt="Logo 3">
+                  <img src="../logo.png4.png" class="site-logo-img" alt="Logo 4">
+                </div>
+                <div class="logo">CHINESE<span>ASSASSIN</span></div>
+              </div>
+
+              <nav class="desktop-nav">
+                <div class="nav-item"><a href="/">HOME</a></div>
+                <div class="nav-item"><a href="#playlist">PLAYLIST</a></div>
+                <div class="nav-item has-mega-menu">
+                  <a href="#">SETS <span class="chevron">▾</span></a>
+                  <div class="mega-menu">
+                    <div class="mega-menu-content">
+                      <div class="mega-col">
+                        <h4>Top Categories</h4>
+                        <ul>
+                          <li><a href="#">New Releases</a></li>
+                          <li><a href="#">Radio Mixes</a></li>
+                          <li><a href="#">Top Charts</a></li>
+                          <li><a href="#">VIP Exclusives</a></li>
+                        </ul>
+                      </div>
+                      <div class="mega-col">
+                        <h4>Genres</h4>
+                        <ul>
+                          <li><a href="#">Dancehall</a></li>
+                          <li><a href="#">Reggae</a></li>
+                          <li><a href="#">Riddim</a></li>
+                          <li><a href="#">Hip Hop</a></li>
+                        </ul>
+                      </div>
+                      <div class="mega-col featured-set">
+                        <h4>Featured Release</h4>
+                        <div class="featured-img" style="background-image: url('../mobile_mix_bg.png');"></div>
+                        <h5>STREET KINGS ELITE</h5>
+                        <p style="font-size: 0.8rem; color: #666;">Experience the ultimate Caribbean soundclash.</p>
+                        <a href="#" class="btn-buy-full" style="padding: 5px 10px; font-size: 0.7rem;">View Set</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="nav-item"><a href="#">SHOP</a></div>
+                <div class="nav-item"><a href="#contact">CONTACT</a></div>
+                <div class="nav-item">
+                  <!-- Google Login Container -->
+                  <div id="g_id_onload"
+                       data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                       data-context="signin"
+                       data-ux_mode="popup"
+                       data-callback="handleCredentialResponse"
+                       data-auto_prompt="false">
+                  </div>
+                  <div class="g_id_signin"
+                       data-type="standard"
+                       data-shape="pill"
+                       data-theme="outline"
+                       data-text="signin_with"
+                       data-size="medium"
+                       data-logo_alignment="left">
+                  </div>
+                </div>
+                <div class="nav-item">
+                  <button id="theme-toggle-btn" class="theme-toggle">
+                    <span id="theme-icon">🌞</span>
+                  </button>
+                </div>
+              </nav>
+            </header>
+
+            <!-- Main Hero: Centered Player Card (Dual Column Elite) -->
+            <main class="hero-player-section">
+              <div class="premium-player-card elite-sonaar-build">
+                
+                <div class="elite-main-grid">
+                  <!-- Column 1: Visual Stage -->
+                  <div class="visual-stage">
+                    <div class="artist-cover-wrap">
+                      <img src="/dj_avatar_final.png" alt="Chinese Assassin" class="hero-artist-img">
+                      <div class="live-tag">LIVE DJ SET</div>
+                    </div>
+                    <!-- Master Spectrum -->
+                    <div class="visualizer-container">
+                      <canvas id="audio-visualizer"></canvas>
+                    </div>
+                    <div class="interaction-deck">
+                      <button id="fx-filter-btn" class="fx-pill">
+                        <span class="fx-icon">⚡</span> HOLD FOR LIVE DJ FILTER
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Column 2: Metadata & Controls -->
+                  <div class="metadata-stage">
+                    <div class="player-top-meta">
+                      <span class="album-tag">ELITE MIX SERIES</span>
+                      <h1 id="current-track-title">STREET KINGS</h1>
+                      <p id="current-track-artist">CHINESE ASSASSIN DJ'S</p>
+                    </div>
+
+                    <div class="player-actions">
+                      <button id="main-play-btn" class="elite-play-btn">
+                         <svg class="icon-play" viewBox="0 0 24 24" width="40" height="40"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+                         <svg class="icon-pause" viewBox="0 0 24 24" width="40" height="40" style="display:none;"><path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                      </button>
+                      <div class="player-stats">
+                        <div class="stat-item"><span class="val">48k</span><span class="lbl">PLAYS</span></div>
+                        <div class="stat-item"><span class="val">12k</span><span class="lbl">LIKES</span></div>
+                      </div>
+                    </div>
+
+                    <div class="tracklist-preview">
+                       <ul class="preview-rows" id="playlist-list-preview">
+                         <!-- Small subset of tracks -->
+                       </ul>
+                    </div>
+
+                    <div class="cta-row">
+                       <button class="btn-buy-full">BUY FULL MIX - $19.99</button>
+                       <button class="btn-share">SHARE</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Progress Bar at bottom of card -->
+                <div class="audio-progress-bar-wrap">
+                  <div class="time-readout">
+                    <span id="curr-time">0:00</span>
+                    <span id="total-time">0:30 Preview</span>
+                  </div>
+                  <div class="audio-progress-bar" id="main-progress-bar">
+                    <div class="audio-progress-fill" id="main-progress-fill"></div>
+                  </div>
+                </div>
+
+              </div>
+            </main>
+
+            <!-- Sonaar-style Album Carousel (Archives) -->
+            <section class="archive-section">
+               <div class="section-container">
+                  <h2 class="section-title">CHINESE ASSASSIN ARCHIVES</h2>
+                  <div id="album-carousel" class="coverflow-container">
+                     <!-- JS Populated -->
+                  </div>
+               </div>
+            </section>
+
+            <!-- Sonaar-style Row Playlist -->
+            <section id="playlist" class="playlist-section">
+              <div class="section-container">
+                <h2 class="section-title">TRACKLIST</h2>
+                <ul id="playlist-list" class="sonaar-playlist">
+                  <!-- JS Populated -->
+                </ul>
+              </div>
+            </section>
+
+          </div> <!-- /.main-dashboard-content -->
+        </div> <!-- /.elite-dashboard-layout -->
+        </div>er>
+
+      </div> <!-- /#scroll-wrapper -->
+
+      <!-- Sticky Bottom Player -->
+      <div id="sticky-player" class="sticky-player">
+         <div class="sticky-player-left">
+            <button id="sticky-play-btn" class="play-circle-btn small">
+               <svg viewBox="0 0 24 24" class="icon-play" width="24" height="24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+               <svg viewBox="0 0 24 24" class="icon-pause" width="24" height="24" style="display:none;"><path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <div class="sticky-track-info">
+               <h4 id="sticky-track-title">Select a Track</h4>
+               <span id="sticky-track-time">0:00 / 0:30 Preview</span>
+            </div>
+         </div>
+         <div class="sticky-player-center">
+            <div class="audio-progress-bar" id="sticky-progress-bar">
+               <div class="audio-progress-fill" id="sticky-progress-fill"></div>
+            </div>
+         </div>
+         <div class="sticky-player-right">
+            <button class="btn-primary" id="sticky-buy-btn" style="padding: 6px 16px; font-size: 0.9rem;">Buy Full Mix</button>
+         </div>
+      </div>
+
+      <!-- Audio Teaser Modal -->
+      <div id="audio-teaser-modal" class="teaser-modal">
+        <div class="teaser-content">
+          <h3>Preview Ended</h3>
+          <p>You've reached the end of the free preview.</p>
+          <div class="teaser-actions">
+             <button class="btn-primary" id="teaser-buy-btn">Purchase Mix</button>
+             <button class="btn-ghost" id="teaser-close-btn">Close</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script type="module" src="../src/mobile.js"></script>
+  </body>
+</html>

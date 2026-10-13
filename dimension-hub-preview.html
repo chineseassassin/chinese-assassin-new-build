@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floating Icon Page — Dimension Hub Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;600;800;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #ff203a;
+      --cyan:   #00e5ff;
+      --gold:   #ffd700;
+      --dark:   #080a0f;
+      --glass:  rgba(255,255,255,0.04);
+      --border: rgba(255,32,58,0.3);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
+    }
+
+    /* ── BACKGROUND ───────────────────────────────────────────────────── */
+    #bg-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── HALO RINGS ─────────────────────────────────────────────────────── */
+    .halo-ring {
+      position: fixed;
+      border-radius: 50%;
+      border: 1px solid;
+      pointer-events: none;
+      transform-style: preserve-3d;
+      transform-origin: center center;
+    }
+    .halo-ring-1 {
+      width: 600px; height: 600px;
+      top: 50%; left: 50%;
+      margin: -300px 0 0 -300px;
+      border-color: rgba(255,32,58,0.25);
+      box-shadow: 0 0 20px rgba(255,32,58,0.12), inset 0 0 20px rgba(255,32,58,0.06);
+      animation: ringOrbit1 18s linear infinite;
+      z-index: 1;
+    }
+    .halo-ring-2 {
+      width: 820px; height: 820px;
+      top: 50%; left: 50%;
+      margin: -410px 0 0 -410px;
+      border-color: rgba(0,229,255,0.15);
+      box-shadow: 0 0 30px rgba(0,229,255,0.08), inset 0 0 30px rgba(0,229,255,0.04);
+      animation: ringOrbit2 28s linear infinite;
+      z-index: 1;
+    }
+    .halo-ring-3 {
+      width: 420px; height: 420px;
+      top: 50%; left: 50%;
+      margin: -210px 0 0 -210px;
+      border-color: rgba(255,215,0,0.18);
+      box-shadow: 0 0 15px rgba(255,215,0,0.10);
+      animation: ringOrbit3 12s linear infinite reverse;
+      z-index: 1;
+    }
+    @keyframes ringOrbit1 {
+      from { transform: rotateX(72deg) rotateZ(0deg); }
+      to   { transform: rotateX(72deg) rotateZ(360deg); }
+    }
+    @keyframes ringOrbit2 {
+      from { transform: rotateX(60deg) rotateZ(0deg); }
+      to   { transform: rotateX(60deg) rotateZ(360deg); }
+    }
+    @keyframes ringOrbit3 {
+      from { transform: rotateX(80deg) rotateZ(0deg); }
+      to   { transform: rotateX(80deg) rotateZ(360deg); }
+    }
+
+    /* ── ENERGY WIRE CANVAS ─────────────────────────────────────────────── */
+    #energy-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 2;
+    }
+
+    /* ── DIMENSION HUB ──────────────────────────────────────────────────── */
+    #dimension-hub {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 10; padding: 20px;
+    }
+
+    .dh-header {
+      text-align: center; margin-bottom: 32px;
+    }
+    .dh-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      letter-spacing: 0.2em;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--red) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      margin-bottom: 8px;
+    }
+    .dh-subtitle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.35em;
+      color: rgba(0,229,255,0.6);
+      text-transform: uppercase;
+    }
+
+    /* ── GRID OF CARDS ──────────────────────────────────────────────────── */
+    .dh-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      max-width: 900px; width: 100%;
+    }
+
+    .dh-card {
+      position: relative;
+      background: rgba(8,10,18,0.75);
+      border: 1px solid rgba(255,32,58,0.22);
+      border-radius: 16px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      overflow: hidden;
+    }
+    .dh-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,32,58,0.06) 0%, transparent 60%, rgba(0,229,255,0.04) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .dh-card:hover::before { opacity: 1; }
+    .dh-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: rgba(255,32,58,0.55);
+      box-shadow: 0 12px 40px rgba(255,32,58,0.25), 0 0 0 1px rgba(255,32,58,0.2);
+    }
+    .dh-card--highlight {
+      border-color: rgba(255,32,58,0.45);
+      box-shadow: 0 0 30px rgba(255,32,58,0.15);
+      animation: cardPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes cardPulse {
+      0%,100% { box-shadow: 0 0 30px rgba(255,32,58,0.15); }
+      50%      { box-shadow: 0 0 50px rgba(255,32,58,0.35), 0 0 80px rgba(255,32,58,0.10); }
+    }
+
+    .dh-card-inner {
+      padding: 28px 20px 22px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+
+    /* Card label badge (A–F) */
+    .dh-card-label {
+      position: absolute; top: 10px; left: 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.62rem; font-weight: 800;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+
+    .dh-icon {
+      font-size: 2.6rem;
+      filter: drop-shadow(0 0 12px rgba(255,32,58,0.6));
+      line-height: 1;
+      transition: transform 0.3s ease;
+    }
+    .dh-card:hover .dh-icon {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 20px rgba(0,229,255,0.8));
+    }
+
+    .dh-card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .dh-card-desc {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.48);
+      line-height: 1.5;
+    }
+    .dh-btn {
+      margin-top: 4px;
+      padding: 7px 18px;
+      background: transparent;
+      border: 1px solid rgba(255,32,58,0.5);
+      border-radius: 20px;
+      color: var(--red);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .dh-btn:hover {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255,32,58,0.6);
+    }
+    .dh-btn--pulse {
+      animation: btnGlow 1.8s ease-in-out infinite;
+    }
+    @keyframes btnGlow {
+      0%,100% { box-shadow: 0 0 8px rgba(255,32,58,0.4); }
+      50%      { box-shadow: 0 0 20px rgba(255,32,58,0.9), 0 0 35px rgba(255,32,58,0.4); }
+    }
+
+    /* ── MPC BEAT MACHINE PANEL ─────────────────────────────────────────── */
+    #mpc-panel {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(5,7,12,0.95);
+      border-top: 1px solid rgba(255,32,58,0.3);
+      backdrop-filter: blur(20px);
+      z-index: 20;
+      padding: 12px 20px 10px;
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .mpc-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem; font-weight: 800;
+      letter-spacing: 0.2em;
+      color: var(--red);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+    }
+
+    .mpc-banks {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .mpc-bank-btn {
+      width: 28px; height: 28px;
+      background: rgba(255,32,58,0.1);
+      border: 1px solid rgba(255,32,58,0.3);
+      border-radius: 4px;
+      color: var(--red);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem; font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mpc-bank-btn.active {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(255,32,58,0.7);
+    }
+    .mpc-bank-btn:hover:not(.active) {
+      background: rgba(255,32,58,0.25);
+    }
+
+    .mpc-pad-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 5px;
+      flex: 1;
+    }
+
+    .mpc-pad {
+      aspect-ratio: 1;
+      background: rgba(15,18,28,0.9);
+      border: 1px solid rgba(255,32,58,0.2);
+      border-radius: 5px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      transition: all 0.12s ease;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .mpc-pad-num {
+      font-size: 0.5rem; font-weight: 800;
+      color: rgba(255,32,58,0.5);
+      line-height: 1;
+    }
+    .mpc-pad-name {
+      font-size: 0.38rem;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .mpc-pad::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(255,32,58,0.5) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+    .mpc-pad:active::before,
+    .mpc-pad.hit::before { opacity: 1; }
+    .mpc-pad:hover {
+      border-color: rgba(255,32,58,0.5);
+      background: rgba(255,32,58,0.07);
+    }
+    .mpc-pad:active, .mpc-pad.hit {
+      border-color: var(--red);
+      background: rgba(255,32,58,0.2);
+      box-shadow: 0 0 14px rgba(255,32,58,0.6), inset 0 0 8px rgba(255,32,58,0.3);
+      transform: scale(0.94);
+    }
+
+    .mpc-controls {
+      display: flex; flex-direction: column; gap: 6px; align-items: center;
+    }
+    .mpc-vol-knob {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #1a1d2a 40%, #0a0c14 100%);
+      border: 2px solid rgba(255,32,58,0.4);
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255,32,58,0.2);
+    }
+    .mpc-vol-knob::after {
+      content: '';
+      position: absolute; top: 4px; left: 50%;
+      transform: translateX(-50%);
+      width: 2px; height: 8px;
+      background: var(--red);
+      border-radius: 1px;
+    }
+    .mpc-vol-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.45rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── PLAYER TRANSPORT ───────────────────────────────────────────────── */
+    .mpc-transport {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .mpc-btn-transport {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(255,32,58,0.08);
+      border: 1px solid rgba(255,32,58,0.3);
+      color: var(--red);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .mpc-btn-transport:hover {
+      background: rgba(255,32,58,0.22);
+      box-shadow: 0 0 10px rgba(255,32,58,0.5);
+    }
+    .mpc-btn-transport.play-btn {
+      width: 44px; height: 44px;
+      background: var(--red);
+      color: #fff;
+      font-size: 1.1rem;
+      box-shadow: 0 0 18px rgba(255,32,58,0.5);
+    }
+    .mpc-btn-transport.play-btn:hover {
+      background: #ff4058;
+      box-shadow: 0 0 30px rgba(255,32,58,0.8);
+    }
+
+    /* ── WAVEFORM BARS ──────────────────────────────────────────────────── */
+    .mpc-waveform {
+      display: flex; align-items: flex-end; gap: 2px;
+      height: 32px; padding: 0 4px;
+    }
+    .ebar {
+      width: 3px;
+      background: var(--red);
+      border-radius: 2px 2px 0 0;
+      transition: height 0.05s ease;
+      box-shadow: 0 0 4px rgba(255,32,58,0.5);
+    }
+
+    /* ── FOOTER LABEL ───────────────────────────────────────────────────── */
+    .mpc-footer-title {
+      display: flex; flex-direction: column;
+    }
+    .mpc-footer-title span:first-child {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem; font-weight: 800;
+      color: var(--red);
+      letter-spacing: 0.15em;
+    }
+    .mpc-footer-title span:last-child {
+      font-size: 0.45rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .dh-grid { grid-template-columns: repeat(2, 1fr); }
+      .mpc-pad-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated background stars canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Halo rings -->
+  <div class="halo-ring halo-ring-1"></div>
+  <div class="halo-ring halo-ring-2"></div>
+  <div class="halo-ring halo-ring-3"></div>
+
+  <!-- Energy wire canvas -->
+  <canvas id="energy-canvas"></canvas>
+
+  <!-- ── DIMENSION HUB ─────────────────────────────────────────────────── -->
+  <div id="dimension-hub">
+    <div class="dh-header">
+      <h2 class="dh-title">SELECT YOUR DIMENSION</h2>
+      <p class="dh-subtitle">EXPLORE THE CHINESE ASSASSIN MULTIVERSE</p>
+    </div>
+
+    <div class="dh-grid" id="dhGrid">
+
+      <!-- CARD A: LIVE RADIO -->
+      <div class="dh-card" data-dimension="radio" id="card-a">
+        <span class="dh-card-label">A</span>
+        <div class="dh-card-inner">
+          <div class="dh-icon">📻</div>
+          <h3 class="dh-card-title">LIVE RADIO</h3>
+          <p class="dh-card-desc">24/7 Hardcore Dancehall, Reggae &amp; Exclusive Mixtapes.</p>
+          <button class="dh-btn">TUNE IN LIVE</button>
+        </div>
+      </div>
+
+      <!-- CARD B: STREAMING HUB -->
+      <div class="dh-card" data-dimension="streaming" id="card-b">
+        <span class="dh-card-label">B</span>
+        <div class="dh-card-inner">
+          <div class="dh-icon">🎧</div>
+          <h3 class="dh-card-title">STREAMING</h3>
+          <p class="dh-card-desc">Full Discography, Soundclash Remastered Audio &amp; Stems.</p>
+          <button class="dh-btn">OPEN HUB</button>
+        </div>
+      </div>
+
+      <!-- CARD C: THE MIX KITCHEN (highlight) -->
+      <div class="dh-card dh-card--highlight" data-dimension="kitchen" id="card-c">
+        <span class="dh-card-label">C</span>
+        <div class="dh-card-inner">
+          <div class="dh-icon">🎛️</div>
+          <h3 class="dh-card-title">THE MIX KITCHEN</h3>
+          <p class="dh-card-desc">16-Pad MPC Drum Machine, Soundboard &amp; Custom Dubplate Sampler.</p>
+          <button class="dh-btn dh-btn--pulse">LAUNCH BEAT MACHINE</button>
+        </div>
+      </div>
+
+      <!-- CARD D: VIP TV -->
+      <div class="dh-card" data-dimension="tv" id="card-d">
+        <span class="dh-card-label">D</span>
+        <div class="dh-card-inner">
+          <div class="dh-icon">📺</div>
+          <h3 class="dh-card-title">VIP TV &amp; CINEMA</h3>
+          <p class="dh-card-desc">4K Visualizers, Soundclash Archive &amp; Live Concert Feeds.</p>
+          <button class="dh-btn">WATCH NOW</button>
+        </div>
+      </div>
+
+      <!-- CARD E: FLASH DRIVE MIXES -->
+      <div class="dh-card" data-dimension="usb" id="card-e">
+        <span class="dh-card-label">E</span>
+        <div class="dh-card-inner">
+          <div class="dh-icon">💾</div>
+          <h3 class="dh-card-title">FLASH DRIVE MIXES</h3>
+          <p class="dh-card-desc">Official Collector's USB Drives with Uncompressed Audio.</p>
+          <button class="dh-btn">CUSTOMIZE USB</button>
+        </div>
+      </div>
+
+      <!-- CARD F: PODCASTS -->
+      <div class="dh-card" data-dimension="podcasts" id="card-f">
+        <span class="dh-card-label">F</span>
+        <div class="dh-card-inner">
+          <div class="dh-icon">🎙️</div>
+          <h3 class="dh-card-title">PODCASTS</h3>
+          <p class="dh-card-desc">Behind the scenes, Soundclash History &amp; Artist Spotlight.</p>
+          <button class="dh-btn">LISTEN NOW</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MPC BEAT MACHINE BOTTOM BAR ──────────────────────────────────── -->
+  <div id="mpc-panel">
+
+    <div class="mpc-footer-title">
+      <span>THE MIX KITCHEN</span>
+      <span>MPC BEAT MACHINE</span>
+    </div>
+
+    <div class="mpc-label">BANKS</div>
+    <div class="mpc-banks">
+      <button class="mpc-bank-btn active" id="bankA">A</button>
+      <button class="mpc-bank-btn" id="bankB">B</button>
+    </div>
+
+    <!-- 16 Pads (row 4 → row 1, top-left = pad 13) -->
+    <div class="mpc-pad-grid" id="padGrid">
+      <div class="mpc-pad" data-pad="13" data-key="Q"><span class="mpc-pad-num">13</span><span class="mpc-pad-name">CRASH</span></div>
+      <div class="mpc-pad" data-pad="14" data-key="W"><span class="mpc-pad-num">14</span><span class="mpc-pad-name">OPEN HH</span></div>
+      <div class="mpc-pad" data-pad="15" data-key="E"><span class="mpc-pad-num">15</span><span class="mpc-pad-name">CLO HH</span></div>
+      <div class="mpc-pad" data-pad="16" data-key="R"><span class="mpc-pad-num">16</span><span class="mpc-pad-name">TAMBR</span></div>
+      <div class="mpc-pad" data-pad="9"  data-key="A"><span class="mpc-pad-num">9</span><span class="mpc-pad-name">RIM</span></div>
+      <div class="mpc-pad" data-pad="10" data-key="S"><span class="mpc-pad-num">10</span><span class="mpc-pad-name">CLAP</span></div>
+      <div class="mpc-pad" data-pad="11" data-key="D"><span class="mpc-pad-num">11</span><span class="mpc-pad-name">SNARE 2</span></div>
+      <div class="mpc-pad" data-pad="12" data-key="F"><span class="mpc-pad-num">12</span><span class="mpc-pad-name">TOM HI</span></div>
+      <div class="mpc-pad" data-pad="5"  data-key="Z"><span class="mpc-pad-num">5</span><span class="mpc-pad-name">KICK 2</span></div>
+      <div class="mpc-pad" data-pad="6"  data-key="X"><span class="mpc-pad-num">6</span><span class="mpc-pad-name">PERC</span></div>
+      <div class="mpc-pad" data-pad="7"  data-key="C"><span class="mpc-pad-num">7</span><span class="mpc-pad-name">TOM LO</span></div>
+      <div class="mpc-pad" data-pad="8"  data-key="V"><span class="mpc-pad-num">8</span><span class="mpc-pad-name">FX HIT</span></div>
+      <div class="mpc-pad" data-pad="1"  data-key="1"><span class="mpc-pad-num">1</span><span class="mpc-pad-name">KICK</span></div>
+      <div class="mpc-pad" data-pad="2"  data-key="2"><span class="mpc-pad-num">2</span><span class="mpc-pad-name">SNARE</span></div>
+      <div class="mpc-pad" data-pad="3"  data-key="3"><span class="mpc-pad-num">3</span><span class="mpc-pad-name">BASS</span></div>
+      <div class="mpc-pad" data-pad="4"  data-key="4"><span class="mpc-pad-num">4</span><span class="mpc-pad-name">SUB DRP</span></div>
+    </div>
+
+    <!-- Transport controls -->
+    <div class="mpc-transport">
+      <button class="mpc-btn-transport" title="Stop" id="stopBtn">⏹</button>
+      <button class="mpc-btn-transport play-btn" title="Play" id="playBtn">▶</button>
+      <button class="mpc-btn-transport" title="Record" id="recBtn">⏺</button>
+    </div>
+
+    <!-- Waveform visualizer -->
+    <div class="mpc-waveform" id="waveform">
+      <!-- bars injected by JS -->
+    </div>
+
+    <!-- Volume knob -->
+    <div class="mpc-controls">
+      <div class="mpc-vol-knob" id="volKnob"></div>
+      <span class="mpc-vol-label">VOL</span>
+    </div>
+
+  </div>
+
+  <script>
+  // ── STAR BACKGROUND ────────────────────────────────────────────────────────
+  (function() {
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    const resize = () => {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const stars = Array.from({ length: 200 }, () => ({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 1.4 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.0004 + 0.0001
+    }));
+
+    function drawBg() {
+      ctx.fillStyle = '#040608';
+      ctx.fillRect(0, 0, W, H);
+
+      // Deep vignette radial
+      const vg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.72);
+      vg.addColorStop(0, 'rgba(20,5,5,0)');
+      vg.addColorStop(1, 'rgba(0,0,0,0.85)');
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, W, H);
+
+      // Subtle center glow
+      const cg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.35);
+      cg.addColorStop(0, 'rgba(180,20,20,0.06)');
+      cg.addColorStop(1, 'transparent');
+      ctx.fillStyle = cg;
+      ctx.fillRect(0, 0, W, H);
+
+      stars.forEach(s => {
+        s.a += s.speed;
+        const alpha = 0.3 + Math.sin(s.a) * 0.3;
+        ctx.beginPath();
+        ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(drawBg);
+    }
+    drawBg();
+  })();
+
+  // ── WAVEFORM BARS ──────────────────────────────────────────────────────────
+  (function() {
+    const wf = document.getElementById('waveform');
+    const BAR_COUNT = 24;
+    for (let i = 0; i < BAR_COUNT; i++) {
+      const b = document.createElement('div');
+      b.className = 'ebar';
+      b.style.height = '4px';
+      wf.appendChild(b);
+    }
+
+    let isPlaying = false;
+    let phase = 0;
+
+    const bars = wf.querySelectorAll('.ebar');
+    function animateBars() {
+      phase += 0.08;
+      bars.forEach((b, i) => {
+        if (isPlaying) {
+          const h = 4 + Math.abs(Math.sin(phase + i * 0.5)) * 26;
+          b.style.height = h + 'px';
+          b.style.background = `hsl(${340 + i * 3}, 90%, ${40 + h}%)`;
+        } else {
+          const h = 2 + Math.abs(Math.sin(phase * 0.3 + i * 0.4)) * 6;
+          b.style.height = h + 'px';
+          b.style.background = 'rgba(255,32,58,0.35)';
+        }
+      });
+      requestAnimationFrame(animateBars);
+    }
+    animateBars();
+
+    document.getElementById('playBtn').addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('playBtn');
+      btn.textContent = isPlaying ? '⏸' : '▶';
+      btn.style.background = isPlaying ? '#00c851' : '';
+      btn.style.boxShadow = isPlaying ? '0 0 20px rgba(0,200,80,0.6)' : '';
+      window._mpcPlaying = isPlaying;
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      isPlaying = false;
+      window._mpcPlaying = false;
+      const btn = document.getElementById('playBtn');
+      btn.textContent = '▶';
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+    });
+  })();
+
+  // ── MPC PADS ───────────────────────────────────────────────────────────────
+  (function() {
+    const pads = document.querySelectorAll('.mpc-pad');
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+    const padFreqs = {
+      1: 60, 2: 200, 3: 80, 4: 50,
+      5: 65, 6: 400, 7: 120, 8: 800,
+      9: 180, 10: 220, 11: 210, 12: 250,
+      13: 600, 14: 900, 15: 700, 16: 1200
+    };
+
+    function hitPad(pad, padNum) {
+      pad.classList.add('hit');
+      setTimeout(() => pad.classList.remove('hit'), 140);
+
+      // Trigger wire pulse
+      window._wirePulse = (window._wirePulse || 0) + 0.4;
+      setTimeout(() => { window._wirePulse = 0; }, 300);
+
+      // Synthesized drum sound
+      if (!actx) { try { actx = new AudioCtx(); } catch(e) { return; } }
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.frequency.setValueAtTime(padFreqs[padNum] || 200, actx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(padFreqs[padNum] * 0.3 || 20, actx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.55, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.22);
+      osc.start(actx.currentTime);
+      osc.stop(actx.currentTime + 0.25);
+    }
+
+    pads.forEach(pad => {
+      const padNum = parseInt(pad.dataset.pad);
+      pad.addEventListener('mousedown', () => hitPad(pad, padNum));
+      pad.addEventListener('touchstart', (e) => { e.preventDefault(); hitPad(pad, padNum); }, { passive: false });
+    });
+
+    // Keyboard mapping
+    const keyMap = {};
+    pads.forEach(pad => { keyMap[pad.dataset.key?.toLowerCase()] = pad; });
+    document.addEventListener('keydown', e => {
+      const pad = keyMap[e.key.toLowerCase()];
+      if (pad) hitPad(pad, parseInt(pad.dataset.pad));
+    });
+
+    // Bank switching
+    document.getElementById('bankA').addEventListener('click', function() {
+      this.classList.add('active');
+      document.getElementById('bankB').classList.remove('active');
+    });
+    document.getElementById('bankB').addEventListener('click', function() {
+      this.classList.add('active');
+      document.getElementById('bankA').classList.remove('active');
+    });
+  })();
+
+  // ── ENERGY WIRE CANVAS ─────────────────────────────────────────────────────
+  (function() {
+    const canvas = document.getElementById('energy-canvas');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width  = window.innerWidth;
+    let H = canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    });
+
+    const cards = ['card-a','card-b','card-c','card-d','card-e','card-f'];
+    const SPARKS_PER_WIRE = 4;
+    const sparks = [];
+
+    cards.forEach((id, i) => {
+      for (let s = 0; s < SPARKS_PER_WIRE; s++) {
+        sparks.push({ cardId: id, t: Math.random(), speed: 0.003 + Math.random() * 0.005, r: 1.5 + Math.random() * 2, alpha: 0.5 + Math.random() * 0.5 });
+      }
+    });
+
+    const bezierPoint = (x0,y0,cx1,cy1,cx2,cy2,x1,y1,t) => {
+      const mt = 1-t, mt2=mt*mt, mt3=mt2*mt, t2=t*t, t3=t2*t;
+      return { x: mt3*x0+3*mt2*t*cx1+3*mt*t2*cx2+t3*x1, y: mt3*y0+3*mt2*t*cy1+3*mt*t2*cy2+t3*y1 };
+    };
+
+    let phase = 0;
+
+    function tick() {
+      ctx.clearRect(0, 0, W, H);
+      phase += 0.018;
+
+      const isPlaying = !!window._mpcPlaying;
+      const pulse = Math.min(1, window._wirePulse || 0);
+      window._wirePulse = Math.max(0, (window._wirePulse || 0) - 0.03);
+
+      const amp = isPlaying ? 0.35 + Math.abs(Math.sin(phase * 2.5)) * 0.5 : pulse;
+      const originX = W * 0.5;
+      const originY = H * 0.5;
+
+      cards.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        if (!rect || rect.width === 0) return;
+        const cardCX = rect.left + rect.width  * 0.5;
+        const cardCY = rect.top  + rect.height * 0.5;
+
+        const waveAmp = isPlaying || pulse > 0.1
+          ? 30 + amp * 80 + Math.sin(phase * 1.3 + i * 0.9) * 20
+          : 12 + Math.sin(phase + i * 0.7) * 8;
+
+        const midX = (originX+cardCX)*0.5 + Math.sin(phase*0.7+i)*waveAmp;
+        const midY = (originY+cardCY)*0.5 + Math.cos(phase*0.9+i*1.2)*waveAmp*0.5;
+        const cp1x = originX+(cardCX-originX)*0.25+Math.sin(phase*1.1+i*1.4)*waveAmp*0.8;
+        const cp1y = originY+(cardCY-originY)*0.15+Math.cos(phase*0.8+i)*waveAmp*0.6;
+        const cp2x = midX+Math.cos(phase*1.3+i*0.8)*waveAmp*0.5;
+        const cp2y = midY+Math.sin(phase*1.1+i*1.1)*waveAmp*0.4;
+
+        const baseAlpha = isPlaying || pulse > 0
+          ? 0.25 + amp * 0.55 + Math.sin(phase*2+i)*0.08
+          : 0.10 + Math.sin(phase*0.6+i)*0.04;
+
+        // Outer glow
+        const grad = ctx.createLinearGradient(originX, originY, cardCX, cardCY);
+        grad.addColorStop(0,   `rgba(255,32,58,${baseAlpha*0.6})`);
+        grad.addColorStop(0.4, `rgba(255,90,30,${baseAlpha*0.8})`);
+        grad.addColorStop(0.7, `rgba(0,200,255,${baseAlpha*0.7})`);
+        grad.addColorStop(1,   `rgba(0,229,255,${baseAlpha*0.5})`);
+        ctx.beginPath(); ctx.moveTo(originX, originY);
+        ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,cardCX,cardCY);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = isPlaying ? 2.5+amp*5 : 1.5;
+        ctx.shadowBlur = isPlaying ? 16+amp*20 : 6;
+        ctx.shadowColor = 'rgba(255,32,58,0.9)';
+        ctx.lineCap = 'round'; ctx.stroke();
+
+        // Core
+        const coreGrad = ctx.createLinearGradient(originX, originY, cardCX, cardCY);
+        coreGrad.addColorStop(0, `rgba(255,120,80,${isPlaying?0.7:0.2})`);
+        coreGrad.addColorStop(1, `rgba(100,240,255,${isPlaying?0.7:0.2})`);
+        ctx.beginPath(); ctx.moveTo(originX, originY);
+        ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,cardCX,cardCY);
+        ctx.strokeStyle = coreGrad;
+        ctx.lineWidth = isPlaying ? 1+amp*1.5 : 0.6;
+        ctx.shadowBlur = 0; ctx.stroke();
+
+        // Origin dot
+        ctx.beginPath();
+        ctx.arc(originX, originY, isPlaying?4+amp*6:3, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,80,40,${isPlaying?0.8:0.35})`;
+        ctx.shadowBlur = isPlaying?18+amp*28:7; ctx.shadowColor = '#ff2030'; ctx.fill();
+
+        // Card dot
+        ctx.beginPath();
+        ctx.arc(cardCX, cardCY, isPlaying?3+amp*4:2, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(0,220,255,${isPlaying?0.8:0.3})`;
+        ctx.shadowColor = '#00e0ff'; ctx.shadowBlur = isPlaying?14+amp*18:5; ctx.fill();
+      });
+
+      // Sparks
+      ctx.shadowBlur = 0;
+      sparks.forEach(sp => {
+        const el = document.getElementById(sp.cardId);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        if (!rect || rect.width === 0) return;
+        const cardCX = rect.left + rect.width * 0.5;
+        const cardCY = rect.top  + rect.height * 0.5;
+        const i = cards.indexOf(sp.cardId);
+        const waveAmp = (isPlaying || (window._wirePulse||0) > 0.1)
+          ? 30 + amp * 80 + Math.sin(phase * 1.3 + i * 0.9) * 20
+          : 12 + Math.sin(phase + i * 0.7) * 8;
+        const midX = (W*0.5+cardCX)*0.5+Math.sin(phase*0.7+i)*waveAmp;
+        const midY = (H*0.5+cardCY)*0.5+Math.cos(phase*0.9+i*1.2)*waveAmp*0.5;
+        const cp1x = W*0.5+(cardCX-W*0.5)*0.25+Math.sin(phase*1.1+i*1.4)*waveAmp*0.8;
+        const cp1y = H*0.5+(cardCY-H*0.5)*0.15+Math.cos(phase*0.8+i)*waveAmp*0.6;
+        const cp2x = midX+Math.cos(phase*1.3+i*0.8)*waveAmp*0.5;
+        const cp2y = midY+Math.sin(phase*1.1+i*1.1)*waveAmp*0.4;
+        const pt = bezierPoint(W*0.5,H*0.5,cp1x,cp1y,cp2x,cp2y,cardCX,cardCY,sp.t);
+        const sa = sp.alpha*(isPlaying?0.9:0.3);
+        ctx.beginPath();
+        ctx.arc(pt.x,pt.y,sp.r*(isPlaying?1+amp*1.2:0.5),0,Math.PI*2);
+        ctx.fillStyle = sp.t<0.5?`rgba(255,${Math.floor(80+sp.t*300)},60,${sa})`:`rgba(${Math.floor(255-sp.t*300)},220,255,${sa})`;
+        ctx.shadowBlur=8; ctx.shadowColor=sp.t<0.5?'#ff4020':'#00e0ff'; ctx.fill();
+        sp.t += sp.speed*(isPlaying?1+amp*2:0.5);
+        if (sp.t>1){sp.t=0;sp.r=1.5+Math.random()*2;sp.alpha=0.5+Math.random()*0.5;}
+      });
+      ctx.shadowBlur=0;
+      requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+
+  // ── PAD HOVER: wire pulse on hover ────────────────────────────────────────
+  document.querySelectorAll('.dh-card').forEach(card => {
+    card.addEventListener('mouseenter', () => { window._wirePulse = 0.6; });
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,2387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Chinese Assassin 24/7 Streaming — VIP Passcode Gateway</title>
+
+  <!-- Google Fonts & GSAP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --primary-red: #ff203a;
+      --primary-neon: #ff0055;
+      --deep-crimson: #800010;
+      --stream-fire: #ff3300;
+      --stream-gold: #ffb703;
+      --neon-cyan: #00e5ff;
+      --neon-green: #00ff88;
+      --glow-red: 0 0 25px rgba(255, 32, 58, 0.75);
+      --glow-pink: 0 0 15px rgba(255, 0, 85, 0.5);
+      --glow-cyan: 0 0 25px rgba(0, 229, 255, 0.75);
+      --glow-gold: 0 0 25px rgba(255, 183, 3, 0.75);
+      --glow-green: 0 0 25px rgba(0, 255, 136, 0.75);
+      --bg-dark: #050207;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      background: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC FLOATING MEGA MENU HEADER (UNIFORM WITH HOME & DIMENSION HUB)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .site-header.floating-header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1320px;
+      height: 65px;
+      background: rgba(10, 4, 12, 0.85);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 2px solid rgba(255, 32, 58, 0.45);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 32, 58, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      z-index: 5000;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-rotator {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      perspective: 750px;
+      flex-shrink: 0;
+    }
+
+    .site-logo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--glow-pink, rgba(255, 0, 85, 0.5));
+      border: 1px solid var(--primary-neon, #ff0055);
+      transform: rotateY(-90deg) scale(1.15);
+      opacity: 0;
+      pointer-events: none;
+      object-fit: cover;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-in;
+    }
+
+    .site-logo-img.rot-active {
+      transform: rotateY(0deg) scale(1.15);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-logo-img.rot-exit {
+      transform: rotateY(90deg) scale(1.15);
+      opacity: 0;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-out;
+    }
+
+    .logo {
+      font-size: 1.56rem;
+      font-weight: 800;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: var(--primary-neon, #ff0055);
+      text-shadow: 0 0 12.5px var(--glow-pink, rgba(255, 0, 85, 0.5));
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: nowrap;
+      overflow: visible;
+    }
+
+    .nav-item {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .nav-item > a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      height: 65px;
+      padding: 0 6px;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-item > a::after {
+      content: '';
+      position: absolute;
+      bottom: 12px;
+      left: 6px;
+      right: 6px;
+      height: 2px;
+      background: var(--primary-neon, #ff0055);
+      transition: width 0.25s ease;
+      width: 0;
+    }
+
+    .nav-item > a:hover::after,
+    .nav-item > a.active::after {
+      width: calc(100% - 12px);
+    }
+
+    .nav-item > a:hover,
+    .nav-item > a.active {
+      color: var(--primary-neon, #ff0055);
+    }
+
+    .nav-item.has-mega-menu {
+      position: relative;
+    }
+
+    .nav-item.has-mega-menu:hover .mega-menu,
+    .nav-item.has-mega-menu.mega-open .mega-menu,
+    .mega-menu:hover {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      transform: translateX(-50%) translateY(0) !important;
+    }
+
+    .chevron {
+      font-size: 0.85rem;
+      margin-left: 5px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.has-mega-menu:hover .chevron,
+    .nav-item.has-mega-menu.mega-open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .mega-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 780px;
+      background: rgba(14, 6, 12, 0.97);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 32, 58, 0.25);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 6000;
+    }
+
+    .mega-menu::before {
+      content: '';
+      position: absolute;
+      top: -16px;
+      left: 0;
+      right: 0;
+      height: 16px;
+      background: transparent;
+    }
+
+    .mega-menu-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    .mega-col {
+      flex: 1;
+    }
+
+    .mega-col h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary-neon, #ff0055);
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .mega-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mega-col ul a {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: block;
+      padding: 5px 0;
+    }
+
+    .mega-col ul a:hover {
+      color: var(--primary-neon, #ff0055);
+      transform: translateX(4px);
+    }
+
+    .mega-col.featured-set {
+      flex: 1.3;
+      background: rgba(255, 32, 58, 0.06);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 32, 58, 0.2);
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 95px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 32, 58, 0.3);
+    }
+
+    .mix-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mix-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s;
+    }
+
+    .mix-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--primary-neon, #ff0055);
+    }
+
+    .mix-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: #ff203a;
+      transform: scale(1.1);
+    }
+
+    .sign-in-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 20px;
+      border-radius: 25px;
+      border: 1px solid #ff203a;
+      color: #ff203a !important;
+      font-size: 0.875rem;
+      font-weight: 800;
+      letter-spacing: 1.25px;
+      text-decoration: none;
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 10px rgba(255, 32, 58, 0.25);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sign-in-btn:hover {
+      background: #ff203a;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive Header Breakpoints */
+    @media (max-width: 1120px) {
+      .desktop-nav {
+        gap: 10px;
+      }
+      .nav-item > a {
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        padding: 0 4px;
+      }
+      .logo {
+        font-size: 1.35rem;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .desktop-nav {
+        display: none !important;
+      }
+      .site-header.floating-header {
+        height: 58px;
+        padding: 0 18px;
+        top: 10px;
+        width: 94%;
+      }
+      .logo-rotator,
+      .site-logo-img {
+        width: 40px;
+        height: 40px;
+      }
+      .logo {
+        font-size: 1.25rem;
+        letter-spacing: 1.8px;
+      }
+      .master-stage-wrapper {
+        top: 76px !important;
+        height: calc(100vh - 88px) !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-header.floating-header {
+        height: 50px;
+        padding: 0 14px;
+        top: 8px;
+        width: 95%;
+      }
+      .logo-rotator,
+      .site-logo-img {
+        width: 34px;
+        height: 34px;
+      }
+      .logo {
+        font-size: 1.05rem;
+        letter-spacing: 1.2px;
+      }
+      .sign-in-btn {
+        padding: 4px 12px;
+        font-size: 0.72rem;
+      }
+      .master-stage-wrapper {
+        top: 66px !important;
+        height: calc(100vh - 78px) !important;
+      }
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 6000;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-drawer-card {
+      width: min(340px, 85vw);
+      height: 100%;
+      background: rgba(14, 6, 12, 0.98);
+      border-left: 1.5px solid rgba(255, 32, 58, 0.4);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-drawer-close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mobile-drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .mobile-nav-item {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: rgba(255, 32, 58, 0.4);
+      color: #ff203a;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       AMBIENT BACKGROUND FLOATING GLOW EFFECTS
+       ══════════════════════════════════════════════════════════════════════════ */
+    .ambient-bg-effects {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      opacity: 0.38;
+      pointer-events: none;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, #ff203a 0%, transparent 70%); top: -120px; left: 10%; }
+    .orb-2 { width: 580px; height: 580px; background: radial-gradient(circle, #ff0055 0%, transparent 70%); bottom: -150px; right: 8%; animation-delay: -5s; }
+    .orb-3 { width: 440px; height: 440px; background: radial-gradient(circle, #ff5500 0%, transparent 70%); top: 40%; left: -100px; animation-delay: -8s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, 30px) scale(1.1); }
+      100% { transform: translate(-30px, -35px) scale(0.95); }
+    }
+
+    @keyframes floatingStageBreath {
+      0% { transform: translateY(0px); box-shadow: 0 0 45px rgba(255, 32, 58, 0.35), 0 20px 80px rgba(0, 0, 0, 0.95); }
+      100% { transform: translateY(-4px); box-shadow: 0 0 70px rgba(255, 32, 58, 0.5), 0 25px 100px rgba(0, 0, 0, 0.98); }
+    }
+
+    /* ── MASTER 3:2 (1536x1024) CONTAINER ────────────────────────────────── */
+    .master-stage-wrapper {
+      position: fixed;
+      top: 85px;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      height: calc(100vh - 97px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      z-index: 10;
+      padding: 0 16px;
+    }
+
+    .stage-inner-box {
+      position: relative;
+      height: 100%;
+      max-height: 100%;
+      width: auto;
+      aspect-ratio: 3 / 2;
+      max-width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(255, 32, 58, 0.4), 0 25px 95px rgba(0, 0, 0, 0.98);
+      border: 1px solid rgba(255, 32, 58, 0.3);
+      background: #050207;
+      animation: floatingStageBreath 7s ease-in-out infinite alternate;
+    }
+
+    /* Base Artwork Image (CODE-STREAMING-1.png) */
+    .master-code-streaming-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── TOP HUD NAVIGATION BAR ──────────────────────────────────────────── */
+    .stage-top-hud {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 35;
+      pointer-events: none;
+    }
+
+    .hud-left-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(14, 4, 10, 0.88);
+      border: 1px solid rgba(255, 51, 0, 0.45);
+      border-radius: 28px;
+      padding: 6px 16px 6px 8px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 51, 0, 0.25);
+      text-decoration: none;
+      pointer-events: auto;
+      transition: all 0.25s ease;
+    }
+    .hud-left-brand:hover {
+      border-color: var(--stream-gold);
+      box-shadow: 0 0 25px rgba(255, 183, 3, 0.6);
+      transform: scale(1.03);
+    }
+
+    .hud-shuffle-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff3300, #ffb703);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      box-shadow: 0 0 10px #ff3300;
+    }
+
+    .hud-brand-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+    }
+    .hud-brand-text span {
+      color: var(--stream-gold);
+    }
+
+    .hud-right-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .hud-btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 4, 10, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 20px;
+      padding: 6px 14px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+      text-decoration: none;
+    }
+    .hud-btn-pill:hover {
+      border-color: var(--stream-gold);
+      background: rgba(255, 183, 3, 0.22);
+      color: #ffffff;
+      box-shadow: 0 0 24px rgba(255, 183, 3, 0.75);
+      transform: scale(1.05);
+    }
+
+    .hud-btn-pill.btn-admin-vault {
+      border-color: rgba(255, 51, 0, 0.6);
+      color: #ffeedd;
+      background: rgba(30, 8, 14, 0.9);
+      box-shadow: 0 0 16px rgba(255, 51, 0, 0.35);
+    }
+    .hud-btn-pill.btn-admin-vault:hover {
+      border-color: var(--stream-fire);
+      background: var(--stream-fire);
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(255, 51, 0, 0.9);
+    }
+
+    /* ── INVISIBLE & INTERACTIVE HOTSPOT LAYER OVER THE ARTWORK ──────────── */
+    .artwork-hotspots-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .invisible-hotspot {
+      position: absolute;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      z-index: 25;
+      text-decoration: none;
+      display: block;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-touch-callout: none !important;
+      user-select: none !important;
+    }
+    .invisible-hotspot:hover,
+    .invisible-hotspot:active,
+    .invisible-hotspot:focus,
+    .invisible-hotspot:focus-visible {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Top-Left Logo Hotspot -> Home */
+    .hs-top-logo-home {
+      left: 6.0%;
+      top: 3.0%;
+      width: 26.0%;
+      height: 22.0%;
+      border-radius: 20px;
+    }
+
+    /* ── SIX-DIGIT PIN INPUT GROUP (COMPACT & PRECISELY SIZED INSIDE THE BOX) ── */
+    .hs-code-entry-chassis {
+      position: absolute;
+      left: 50.0%;
+      top: 61.4%;
+      transform: translate(-50%, -50%);
+      width: 26.0%;
+      height: 5.0%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      box-sizing: border-box;
+    }
+
+    .hs-pin-inputs-row {
+      display: flex;
+      gap: 1.5%;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .hs-pin-digit-box {
+      flex: 1 1 0;
+      min-width: 0 !important;
+      width: 0 !important;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0;
+      background: rgba(18, 4, 10, 0.90);
+      border: 1px solid rgba(255, 51, 0, 0.75);
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.85rem, 1.25vw, 1.25rem);
+      font-weight: 900;
+      color: #ffffff;
+      text-align: center;
+      outline: none;
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.85), 0 0 10px rgba(255, 51, 0, 0.35);
+      transition: all 0.2s ease;
+      caret-color: var(--stream-fire);
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.85), 0 0 14px #ff3300;
+    }
+
+    .hs-pin-digit-box:hover {
+      border-color: var(--stream-gold);
+      background: rgba(36, 8, 14, 0.94);
+      box-shadow: 0 0 14px rgba(255, 51, 0, 0.6), inset 0 0 6px rgba(255, 183, 3, 0.25);
+    }
+
+    .hs-pin-digit-box:focus {
+      background: rgba(48, 10, 16, 0.98) !important;
+      border-color: #ff3300 !important;
+      box-shadow: 0 0 20px rgba(255, 51, 0, 0.9), 0 0 10px rgba(255, 183, 3, 0.7), inset 0 1px 3px rgba(255,255,255,0.4) !important;
+      transform: scale(1.04);
+      color: #ffffff;
+    }
+
+    .hs-pin-digit-box.filled {
+      background: rgba(42, 12, 14, 0.94) !important;
+      border-color: var(--stream-gold) !important;
+      box-shadow: 0 0 16px rgba(255, 183, 3, 0.8), inset 0 2px 5px rgba(0,0,0,0.8);
+      color: #ffeedd;
+      transform: scale(1.02);
+    }
+
+    /* ── ACTION BUTTON HOTSPOT (ON THE RED PAINTED PLAQUE) ───────────────── */
+    .hs-btn-generate-code {
+      left: 50.0%;
+      top: 79.8%;
+      transform: translate(-50%, -50%);
+      width: 32.5%;
+      height: 6.8%;
+      border-radius: 14px;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      z-index: 30;
+    }
+    .hs-btn-generate-code:active {
+      transform: translate(-50%, -50%) scale(0.98);
+    }
+
+    /* Secret Medallion Hotspot -> Admin Generator */
+    .hs-stream-medallion-trigger {
+      left: 50.0%;
+      top: 68.5%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* ── INTERACTIVE GENRE PADS (LEFT SIDE ARTWORK HOTSPOTS) ──────────────── */
+    .hs-genre-pad {
+      position: absolute;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 22;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.25s ease;
+    }
+    .hs-genre-pad:hover {
+      background: rgba(255, 51, 0, 0.12);
+      border-color: rgba(255, 183, 3, 0.6);
+      box-shadow: 0 0 20px rgba(255, 51, 0, 0.4), inset 0 0 10px rgba(255, 183, 3, 0.2);
+      transform: scale(1.04);
+    }
+
+    /* ── "ON AIR" NEON TUBE FLICKER ───────────────────────────────────────── */
+    .hs-on-air-sign {
+      position: absolute;
+      left: 92.2%;
+      top: 40.2%;
+      width: 6.2%;
+      height: 3.5%;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 22;
+      animation: neonTubePulse 3.5s infinite alternate;
+    }
+    @keyframes neonTubePulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(255, 0, 51, 0.5), inset 0 0 6px rgba(255, 0, 51, 0.3); }
+      50% { box-shadow: 0 0 24px rgba(255, 51, 0, 0.85), inset 0 0 12px rgba(255, 51, 0, 0.6); }
+      52% { opacity: 0.85; }
+      54% { opacity: 1; }
+      88% { opacity: 0.92; }
+      90% { opacity: 1; }
+    }
+
+    /* ── TURNTABLE PLATTERS PULSE & SPIN FX ───────────────────────────────── */
+    .hs-turntable-platter {
+      position: absolute;
+      width: 17.0%;
+      height: 16.0%;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 22;
+      transition: all 0.3s ease;
+    }
+    .hs-turntable-platter.left-platter {
+      left: 3.0%;
+      top: 86.5%;
+    }
+    .hs-turntable-platter.right-platter {
+      left: 74.0%;
+      top: 58.0%;
+    }
+    .hs-turntable-platter:hover {
+      box-shadow: 0 0 30px rgba(255, 51, 0, 0.6);
+      transform: scale(1.03);
+    }
+    .hs-turntable-platter.scratching {
+      animation: vinylSpinScratch 0.4s ease;
+    }
+    @keyframes vinylSpinScratch {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(45deg) scale(1.05); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* ── HYPERSPACE WARP SPEED PORTAL OVERLAY ─────────────────────────────── */
+    .portal-warp-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 51, 0, 0.9) 0%, rgba(20, 2, 8, 0.98) 75%);
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .portal-warp-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    .warp-speed-rays {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 3px solid #ff3300;
+      box-shadow: 0 0 60px #ff3300, 0 0 120px #ffb703, inset 0 0 60px #ff3300;
+      animation: warpVortex 0.8s infinite linear;
+      position: relative;
+    }
+    @keyframes warpVortex {
+      0% { transform: rotate(0deg) scale(0.6); opacity: 0.4; }
+      50% { transform: rotate(180deg) scale(1.4); opacity: 1; }
+      100% { transform: rotate(360deg) scale(2.2); opacity: 0; }
+    }
+    .warp-text-title {
+      margin-top: 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 0 0 25px #ff3300;
+    }
+
+    /* ── TOUCH KEYPAD DRAWER (MOBILE FRIENDLY) ────────────────────────────── */
+    .touch-keypad-container {
+      position: absolute;
+      bottom: 12px;
+      right: 18px;
+      background: rgba(14, 4, 10, 0.95);
+      border: 1px solid rgba(255, 51, 0, 0.6);
+      border-radius: 16px;
+      padding: 8px;
+      display: none;
+      grid-template-columns: repeat(3, 42px);
+      gap: 6px;
+      z-index: 35;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+    }
+    .touch-keypad-container.open {
+      display: grid;
+    }
+    .touch-key-btn {
+      height: 38px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 51, 0, 0.35);
+      border-radius: 8px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .touch-key-btn:hover, .touch-key-btn:active {
+      background: var(--stream-fire);
+      color: #000000;
+      box-shadow: 0 0 15px var(--stream-fire);
+    }
+
+    /* ── BIOMETRIC / 24/7 STREAM SCANNER MODAL HUD OVERLAY ───────────────── */
+    .biometric-scanner-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 2, 8, 0.92);
+      backdrop-filter: blur(28px) saturate(210%);
+      -webkit-backdrop-filter: blur(28px) saturate(210%);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeInHUD 0.3s ease forwards;
+    }
+
+    @keyframes fadeInHUD {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .bio-scanner-card {
+      position: relative;
+      width: min(92vw, 440px);
+      background: rgba(8, 3, 14, 0.94);
+      border: 2px solid #00e5ff;
+      border-radius: 24px;
+      box-shadow: 0 0 50px rgba(0, 229, 255, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.85);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bio-scanner-card.granted {
+      border-color: #00ff88 !important;
+      box-shadow: 0 0 60px rgba(0, 255, 136, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.85) !important;
+    }
+
+    .bio-scanner-card.denied {
+      border-color: #ff0033 !important;
+      box-shadow: 0 0 60px rgba(255, 0, 51, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.85) !important;
+    }
+
+    .bio-close-modal-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 32, 58, 0.2);
+      border: 1px solid rgba(255, 32, 58, 0.6);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      transition: all 0.2s ease;
+    }
+    .bio-close-modal-btn:hover {
+      background: #ff203a;
+      transform: scale(1.1);
+    }
+
+    .bio-scanner-ring {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #00e5ff;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.9);
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.35s ease;
+      flex-shrink: 0;
+    }
+
+    .bio-scanner-ring.granted {
+      border-color: #00ff88 !important;
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.9), inset 0 0 20px rgba(0, 255, 136, 0.5) !important;
+    }
+
+    .bio-scanner-ring.denied {
+      border-color: #ff0033 !important;
+      box-shadow: 0 0 40px rgba(255, 0, 51, 0.95), inset 0 0 20px rgba(0, 255, 0, 51, 0.5) !important;
+    }
+
+    .bio-mugshot-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 0.92;
+      transition: opacity 0.15s ease;
+      display: block;
+    }
+
+    .bio-laser-sweep {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #00e5ff;
+      box-shadow: 0 0 12px #00e5ff, 0 0 24px #ffffff;
+      animation: laserSweep 1.2s infinite alternate ease-in-out;
+      pointer-events: none;
+      z-index: 5;
+    }
+    @keyframes laserSweep {
+      0% { top: 4%; opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { top: 94%; opacity: 0.5; }
+    }
+
+    .bio-hud-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 6px;
+      animation: fadeInHUD 0.3s ease forwards;
+    }
+
+    .bio-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #00e5ff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+    }
+
+    .bio-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00e5ff;
+      box-shadow: 0 0 8px #00e5ff;
+      animation: agDotPulse 1s infinite alternate;
+      flex-shrink: 0;
+    }
+    @keyframes agDotPulse {
+      0% { opacity: 0.5; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .bio-status-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 1.5px;
+      margin: 2px 0;
+      text-shadow: 0 0 15px rgba(0, 229, 255, 0.8);
+    }
+
+    .bio-progress-bar-wrap {
+      width: 100%;
+      max-width: 290px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      margin: 4px 0;
+    }
+
+    .bio-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff203a 0%, #00e5ff 60%, #00ff88 100%);
+      box-shadow: 0 0 12px #00e5ff;
+      transition: width 0.08s linear;
+    }
+
+    .bio-sub-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    .access-granted-card-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 8px;
+      animation: fadeInHUD 0.3s ease forwards;
+    }
+
+    .granted-title-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 10%, #00e5ff 60%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      margin: 0;
+      filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.7));
+      text-transform: uppercase;
+    }
+
+    .granted-sub-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      margin: 0;
+    }
+
+    .single-use-burned-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 255, 136, 0.12) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(0, 255, 136, 0.6) !important;
+      color: #00ff88 !important;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 4px 0;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.35);
+    }
+
+    .btn-enter-stream {
+      width: 100%;
+      max-width: 290px;
+      padding: 11px 20px;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.35) 0%, rgba(0, 140, 255, 0.5) 100%) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+      border-radius: 40px;
+      color: #ffffff !important;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.7), inset 0 1px 2px #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-enter-stream:hover {
+      background: linear-gradient(135deg, #00e5ff 0%, #00ff88 100%) !important;
+      color: #000000 !important;
+      border-color: #ffffff !important;
+      box-shadow: 0 0 50px rgba(0, 255, 136, 0.9), inset 0 1px 2px #ffffff;
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .access-denied-card-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 8px;
+      animation: fadeInHUD 0.3s ease forwards;
+    }
+
+    .denied-alert-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ff0033;
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 0 15px rgba(255, 0, 51, 0.8);
+      text-transform: uppercase;
+    }
+
+    .denied-sub-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+    }
+
+    .btn-retry-code {
+      padding: 8px 20px;
+      background: rgba(255, 0, 51, 0.2);
+      border: 1px solid #ff0033;
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: all 0.2s ease;
+    }
+    .btn-retry-code:hover {
+      background: #ff0033;
+      box-shadow: 0 0 20px #ff0033;
+    }
+
+    /* ══ STAGE 3A: ACCESS GRANTED TEMPLATE (access_granted.png) ══ */
+    .bio-scanner-card.granted {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      max-width: 680px !important;
+      width: min(94vw, 680px) !important;
+    }
+
+    .access-granted-card-view {
+      display: none;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      animation: fadeInHUD 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .ag-template-chassis {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 612 / 408;
+      background: url('/access_granted.png') no-repeat center center / contain;
+      filter: drop-shadow(0 25px 65px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 45px rgba(0, 229, 255, 0.55));
+      display: flex;
+      align-items: center;
+    }
+
+    /* Left Fingerprint / Portal Ring */
+    .ag-left-portal {
+      position: absolute;
+      left: 7.2%;
+      top: 23.5%;
+      width: 24.8%;
+      height: 52.8%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .ag-fingerprint-core {
+      position: relative;
+      width: 82%;
+      height: 82%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ag-laser-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #00e5ff;
+      border-right-color: #00ff88;
+      animation: agRingSpin 2.5s linear infinite;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+    }
+    @keyframes agRingSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .ag-icon-glow {
+      font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+      filter: drop-shadow(0 0 15px #00e5ff) drop-shadow(0 0 30px rgba(0, 255, 136, 0.7));
+      animation: agPulse 1.8s infinite alternate ease-in-out;
+    }
+    @keyframes agPulse {
+      0% { transform: scale(0.94); opacity: 0.85; }
+      100% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 25px #00e5ff) drop-shadow(0 0 45px #00ff88); }
+    }
+
+    /* Right Glass HUD Info & Actions */
+    .ag-right-hud {
+      position: absolute;
+      left: 35.0%;
+      right: 7.5%;
+      top: 17.5%;
+      bottom: 17.5%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      gap: 6px;
+      padding-left: 6px;
+      z-index: 10;
+    }
+
+    .ag-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.55rem, 0.85vw, 0.68rem);
+      font-weight: 800;
+      color: #00e5ff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+    }
+
+    .ag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+      animation: agDotPulse 1s infinite alternate;
+    }
+    @keyframes agDotPulse {
+      0% { opacity: 0.5; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .ag-right-hud .granted-title-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.15rem, 2.1vw, 1.6rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 10%, #00e5ff 60%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      margin: 0;
+      filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.7));
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .ag-right-hud .granted-sub-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(0.68rem, 1.0vw, 0.82rem);
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .ag-right-hud .single-use-burned-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 255, 136, 0.12) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(0, 255, 136, 0.6) !important;
+      color: var(--neon-green) !important;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 2px 0 4px 0;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.35);
+    }
+
+    .ag-right-hud .btn-enter-stream {
+      width: 100%;
+      max-width: 280px;
+      padding: 10px 18px;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.35) 0%, rgba(0, 140, 255, 0.5) 100%) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+      border-radius: 40px;
+      color: #ffffff !important;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.72rem, 1.1vw, 0.82rem);
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.7), inset 0 1px 2px #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 2px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ag-right-hud .btn-enter-stream:hover {
+      background: linear-gradient(135deg, #00e5ff 0%, #00ff88 100%) !important;
+      color: #000000 !important;
+      border-color: #ffffff !important;
+      box-shadow: 0 0 50px rgba(0, 255, 136, 0.9), inset 0 1px 2px #ffffff;
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    /* ── ACCESS DENIED OVERLAY ───────────────────────────────────────────── */
+    .access-denied-card-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: fadeInHUD 0.3s ease forwards;
+    }
+
+    .denied-title-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #ff0033;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      text-shadow: 0 0 25px rgba(255, 0, 51, 0.8);
+    }
+
+    .denied-explanation-p {
+      font-size: 0.82rem;
+      color: #ffccd5;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .denied-action-btns-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .btn-retry-pass {
+      flex: 1;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-retry-pass:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: #ffffff;
+    }
+
+    .btn-contact-dispatch {
+      flex: 1.4;
+      padding: 12px;
+      background: linear-gradient(135deg, #ff0033, #800010);
+      border: 1.5px solid #ff3366;
+      border-radius: 24px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 0, 51, 0.6);
+      transition: all 0.2s ease;
+    }
+    .btn-contact-dispatch:hover {
+      background: linear-gradient(135deg, #ff3366, #ff0033);
+      box-shadow: 0 0 30px rgba(255, 0, 51, 0.9);
+      transform: scale(1.03);
+    }
+
+    /* ── ADMIN / GENERATOR MODAL ─────────────────────────────────────────── */
+    .admin-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(3, 1, 6, 0.94);
+      backdrop-filter: blur(24px);
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .admin-card-chassis {
+      position: relative;
+      width: 100%;
+      max-width: 580px;
+      background: #0f0408;
+      border: 1.5px solid var(--stream-fire);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 0 50px rgba(255, 51, 0, 0.4);
+    }
+
+    .admin-card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--stream-gold);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .admin-code-display-box {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      letter-spacing: 6px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1.5px dashed var(--neon-cyan);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 16px 0;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+    }
+
+    .admin-btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .admin-action-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-apply-code {
+      background: linear-gradient(135deg, #00e5ff, #00ff88);
+      color: #000000;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    }
+    .btn-apply-code:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+    }
+
+    .btn-close-admin {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .btn-close-admin:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ── TOAST NOTIFICATION ──────────────────────────────────────────────── */
+    .portal-hud-toast {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(50px);
+      background: rgba(16, 4, 10, 0.94);
+      border: 1px solid var(--stream-fire);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 30px rgba(255, 51, 0, 0.5);
+      white-space: nowrap;
+    }
+    .portal-hud-toast.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC DIMENSION HUB FLOATING MEGA-MENU HEADER
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <header class="site-header floating-header" id="siteHeader">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="Chinese Assassin Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="Chinese Assassin Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="Chinese Assassin Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="Chinese Assassin Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <div class="nav-item"><a href="/">HOME</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">DIMENSION HUB</a></div>
+
+      <div class="nav-item has-mega-menu">
+        <a href="javascript:void(0)">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+        <div class="mega-menu">
+          <div class="mega-menu-content">
+            <div class="mega-col">
+              <h4>VIP Exclusives</h4>
+              <ul>
+                <li><a href="/streaming-gateway.html" style="color:var(--primary-neon,#ff0055); font-weight:700;">🔴 24/7 Live Stream</a></li>
+                <li><a href="/mobile-mixes-gateway-v2.html">👑 Street Kings 2026</a></li>
+                <li><a href="/vault-gateway.html">⚡ Techno Riddim Vol 4</a></li>
+                <li><a href="/vault-gateway.html">🗝️ Assassin Dubplates</a></li>
+                <li><a href="/flashdrive.html">💾 Secret Stash Vol 1</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Mix Gallery</h4>
+              <div class="mix-gallery-grid">
+                <div class="mix-thumb"><a href="/vault-gateway.html" title="The Vault"><img src="/VAULT-2.jpg" alt="Riddim Vault"></a></div>
+                <div class="mix-thumb"><a href="/vip-gateway.html" title="VIP Citadel"><img src="/CODE-1.jpg" alt="VIP Citadel"></a></div>
+                <div class="mix-thumb"><a href="/mobile-mixes-gateway-v2.html" title="Mobile Mixes"><img src="/MOBILE_MIXES.png" alt="Mobile Mixes"></a></div>
+                <div class="mix-thumb"><a href="/tv-gateway.html" title="Assassin TV"><img src="/CODE-TV.png" alt="Assassin TV"></a></div>
+              </div>
+            </div>
+            <div class="mega-col featured-set">
+              <h4>Live Preview (30s)</h4>
+              <div class="featured-img" style="background-image: url('/MOBILE_MIXES.png'); background-size: cover; background-position: center;">
+                <button class="mega-preview-btn" onclick="event.stopPropagation(); showToast('▶ Playing Assassin Elite Mix (30s Sample)');" style="background:var(--primary-neon,#ff0055); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255,0,85,0.8);" title="Play 30s Sample">
+                  <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+              <h5 style="font-size:0.85rem; margin-top:8px; color:#fff;">ASSASSIN ELITE MIX</h5>
+              <p style="font-size: 0.75rem; color: #aaa;">Flashy transitions and heavy bass.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item"><a href="/admin-vault.html" title="Master Admin Code Vault">👑 ADMIN VAULT</a></div>
+      <div class="nav-item"><a href="/merch.html">MERCH</a></div>
+      <div class="nav-item"><a href="/flashdrive.html">SHOP</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">ABOUT US</a></div>
+      <div class="nav-item"><a href="mailto:bookings@chineseassassin.com">CONTACT</a></div>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="header-actions">
+      <button class="icon-btn search-btn" aria-label="Search" onclick="showToast('🔍 Search Chinese Assassin Vaults')">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="/admin-vault.html" class="sign-in-btn">SIGN IN</a>
+      <button class="icon-btn menu-toggle-btn" aria-label="Menu" id="mobileDrawerBtn" onclick="toggleMobileDrawer()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-Screen Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-drawer-overlay" onclick="if(event.target===this) toggleMobileDrawer();">
+    <div class="mobile-drawer-card">
+      <div class="mobile-drawer-header">
+        <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        <button class="mobile-drawer-close-btn" onclick="toggleMobileDrawer()">&times;</button>
+      </div>
+      <nav class="mobile-drawer-nav">
+        <a href="/" class="mobile-nav-item">🏠 HOME</a>
+        <a href="/dimension-hub.html" class="mobile-nav-item">🌀 DIMENSION HUB</a>
+        <a href="/streaming-gateway.html" class="mobile-nav-item active">🔴 24/7 STREAM</a>
+        <a href="/tv-gateway.html" class="mobile-nav-item">📺 ASSASSIN TV</a>
+        <a href="/mobile-mixes-gateway-v2.html" class="mobile-nav-item">📱 MOBILE MIXES</a>
+        <a href="/mix-kitchen-gateway.html" class="mobile-nav-item">🍳 THE MIX KITCHEN</a>
+        <a href="/radio-gateway.html" class="mobile-nav-item">📻 ASSASSIN RADIO</a>
+        <a href="/vip-gateway.html" class="mobile-nav-item">👑 VIP CITADEL</a>
+        <a href="/merch.html" class="mobile-nav-item">👕 MERCH</a>
+        <a href="/flashdrive.html" class="mobile-nav-item">🛍️ SHOP / USB FLASH DRIVE</a>
+        <a href="/vault-gateway.html" class="mobile-nav-item">🗝️ THE VAULT</a>
+        <a href="/admin-vault.html" class="mobile-nav-item">🔒 ADMIN VAULT</a>
+      </nav>
+      <div class="mobile-drawer-footer">
+        <span>© 2026 CHINESE ASSASSIN VIP UNIVERSE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       2. AMBIENT BACKGROUND FLOATING GLOW EFFECTS
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="ambient-bg-effects">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <!-- MASTER 3:2 STAGE CONTAINER -->
+  <div class="master-stage-wrapper" id="masterStage">
+    <div class="stage-inner-box">
+
+      <!-- Authentic CODE-STREAMING-1.png Artwork Background -->
+      <img src="/CODE-STREAMING-1.png" alt="Chinese Assassin 24/7 Streaming Artwork" class="master-code-streaming-bg-img" onerror="this.src='/CODE-STREAMING.png';" />
+
+    <!-- INTERACTIVE ARTWORK HOTSPOT LAYER -->
+    <div class="artwork-hotspots-layer">
+
+      <!-- Top-Left Logo Hotspot -> Home -->
+      <a href="/" class="invisible-hotspot hs-top-logo-home" title="Chinese Assassin Home"></a>
+
+      <!-- 8 INTERACTIVE GENRE PADS (LEFT SIDE) -->
+      <div class="hs-genre-pad" style="left: 1.0%; top: 59.5%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Dancehall', 440)" title="Dancehall Stream"></div>
+      <div class="hs-genre-pad" style="left: 6.8%; top: 59.5%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Reggae', 493.88)" title="Reggae Stream"></div>
+      <div class="hs-genre-pad" style="left: 12.6%; top: 59.5%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Soca', 554.37)" title="Soca Stream"></div>
+      <div class="hs-genre-pad" style="left: 18.4%; top: 59.5%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Hip Hop', 587.33)" title="Hip Hop Stream"></div>
+
+      <div class="hs-genre-pad" style="left: 1.0%; top: 70.0%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Afro-Beat', 659.25)" title="Afro-Beat Stream"></div>
+      <div class="hs-genre-pad" style="left: 6.8%; top: 70.0%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Old School', 739.99)" title="Old School Stream"></div>
+      <div class="hs-genre-pad" style="left: 12.6%; top: 70.0%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('New School', 830.61)" title="New School Stream"></div>
+      <div class="hs-genre-pad" style="left: 18.4%; top: 70.0%; width: 5.5%; height: 8.8%;" onclick="selectGenreStation('Classics', 880.00)" title="Classics Stream"></div>
+
+      <!-- "ON AIR" NEON SIGN HOTSPOT -->
+      <div class="hs-on-air-sign" onclick="toggleOnAirStation()" title="24/7 Global Stream On Air"></div>
+
+      <!-- INTERACTIVE TURNTABLE PLATTERS (LEFT & RIGHT) -->
+      <div class="hs-turntable-platter left-platter" id="leftTurntable" onclick="scratchTurntable('left')" title="Scratch Stream Deck A"></div>
+      <div class="hs-turntable-platter right-platter" id="rightTurntable" onclick="scratchTurntable('right')" title="Scratch Stream Deck B"></div>
+
+      <!-- 6-DIGIT PASSCODE INPUT GROUP (Positioned inside the box of CODE-STREAMING-1.png) -->
+      <div class="hs-code-entry-chassis" id="pinEntryChassis">
+        <div class="hs-pin-inputs-row">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]*" class="hs-pin-digit-box filled" data-index="0" value="8" autocomplete="off" />
+          <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]*" class="hs-pin-digit-box filled" data-index="1" value="8" autocomplete="off" />
+          <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]*" class="hs-pin-digit-box filled" data-index="2" value="8" autocomplete="off" />
+          <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]*" class="hs-pin-digit-box filled" data-index="3" value="8" autocomplete="off" />
+          <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]*" class="hs-pin-digit-box filled" data-index="4" value="8" autocomplete="off" />
+          <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]*" class="hs-pin-digit-box filled" data-index="5" value="8" autocomplete="off" />
+        </div>
+      </div>
+
+      <!-- Action Button Hotspot: Red Painted Plaque in Artwork -->
+      <button class="invisible-hotspot hs-btn-generate-code" id="btnSubmitHotspot" onclick="openAdminGeneratorModal()" title="GET CODE — Generate 6-Digit Streaming VIP Pass"></button>
+
+      <!-- Secret Dragon Medallion Hotspot -->
+      <button class="invisible-hotspot hs-stream-medallion-trigger" onclick="openAdminGeneratorModal()" title="Stream Frequency Key Vault"></button>
+
+    </div>
+  </div>
+
+  <!-- ── ADMIN / GENERATOR MODAL ─────────────────────────────────────────── -->
+  <div class="admin-modal-overlay" id="adminGeneratorModal">
+    <div class="admin-card-chassis">
+      <div class="admin-card-title">🔴 24/7 STREAMING VIP PASS GENERATOR</div>
+      <p style="font-size: 0.8rem; color: #ffccd5; margin-bottom: 12px;">
+        Generate your official 6-digit VIP pass or use master override keys to unlock Chinese Assassin 24/7 Streaming.
+      </p>
+
+      <div class="admin-code-display-box" id="adminGeneratedCodeBox">888888</div>
+
+      <div class="admin-btn-row">
+        <button class="admin-action-btn" style="background: rgba(255,51,0,0.3); color: #fff; border: 1px solid #ff3300;" onclick="generateNewStreamCode()">🎲 GENERATE NEW</button>
+        <button class="admin-action-btn btn-apply-code" onclick="applyGeneratedCodeToInputs()">✅ APPLY TO STREAM</button>
+        <a href="/admin-vault.html?section=streaming" class="admin-action-btn" style="text-decoration:none; background:rgba(0,229,255,0.25); border:1px solid #00e5ff; color:#00e5ff; display:inline-flex; align-items:center; justify-content:center;" title="Master Admin Terminal for All Realms">🌐 ALL REALMS VAULT</a>
+        <button class="admin-action-btn btn-close-admin" onclick="closeAdminGeneratorModal()">✕ CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD TOAST -->
+  <div class="portal-hud-toast" id="portalToast"></div>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════════════
+    // 0. ROTATING LOGO ENGINE
+    // ════════════════════════════════════════════════════════════════════════
+    (function initRotatingLogo() {
+      const rotator = document.getElementById('rotating-logo');
+      if (!rotator) return;
+      const images = Array.from(rotator.querySelectorAll('.site-logo-img'));
+      if (images.length < 2) return;
+      let currentIdx = 0;
+      setInterval(() => {
+        const prevImg = images[currentIdx];
+        if (prevImg) {
+          prevImg.classList.remove('rot-active');
+          prevImg.classList.add('rot-exit');
+        }
+        currentIdx = (currentIdx + 1) % images.length;
+        const nextImg = images[currentIdx];
+        if (nextImg) {
+          nextImg.classList.remove('rot-exit');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              nextImg.classList.add('rot-active');
+            });
+          });
+        }
+      }, 450);
+    })();
+
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 1. SOUND SYNTHESIZER ENGINE (Web Audio API)
+    // ════════════════════════════════════════════════════════════════════════
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playBeep(freq, duration, type = 'sine', vol = 0.18) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(vol, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playVinylScratch() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const now = ctx.currentTime;
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(120, now + 0.18);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.18);
+      } catch (e) {}
+    }
+
+    function playVictoryChime() {
+      try {
+        const ctx = getAudioContext();
+        const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        const now = ctx.currentTime;
+        freqs.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.2, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.35);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.35);
+        });
+      } catch (e) {}
+    }
+
+    function playAlarmBuzzer() {
+      try {
+        const ctx = getAudioContext();
+        const freqs = [220, 196, 185];
+        const now = ctx.currentTime;
+        freqs.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now + i * 0.12);
+          gain.gain.setValueAtTime(0.3, now + i * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.28);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.12);
+          osc.stop(now + i * 0.12 + 0.28);
+        });
+      } catch (e) {}
+    }
+
+    function playSubBassDrop() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const now = ctx.currentTime;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(35, now + 0.65);
+        gain.gain.setValueAtTime(0.45, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.65);
+      } catch (e) {}
+    }
+
+    function selectGenreStation(genreName, toneFreq) {
+      playBeep(toneFreq || 520, 0.12, 'triangle', 0.22);
+      showToast(`🔴 24/7 ${genreName.toUpperCase()} STREAM SELECTED`);
+      localStorage.setItem('CA_STREAMING_ACTIVE_GENRE', genreName);
+    }
+
+    function toggleOnAirStation() {
+      playBeep(880, 0.08, 'sine', 0.2);
+      showToast('🔴 LIVE ON AIR: 24/7 NON-STOP ENTERTAINMENT BROADCASTING');
+    }
+
+    function scratchTurntable(side) {
+      playVinylScratch();
+      const el = document.getElementById(side === 'left' ? 'leftTurntable' : 'rightTurntable');
+      if (el) {
+        el.classList.add('scratching');
+        setTimeout(() => el.classList.remove('scratching'), 400);
+      }
+      showToast(`🎧 STREAM DECK: ${side.toUpperCase()} ACTIVE`);
+    }
+
+    function toggleTouchKeypad() {
+      const pad = document.getElementById('touchKeypadContainer');
+      if (pad) {
+        pad.classList.toggle('open');
+        playBeep(600, 0.05, 'sine', 0.15);
+      }
+    }
+
+    function pressTouchKey(key) {
+      if (key === 'DEL') {
+        const code = getCode();
+        if (code.length > 0) {
+          setCode(code.slice(0, -1));
+          playVinylScratch();
+        }
+      } else if (key === 'GO') {
+        submitPasscode();
+      } else {
+        const code = getCode();
+        if (code.length < 6) {
+          setCode(code + key);
+          playBeep(320 + code.length * 60, 0.06, 'sine', 0.15);
+          scratchTurntable(code.length % 2 === 0 ? 'left' : 'right');
+          checkAutoSubmit();
+        }
+      }
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 2. PASSCODE REGISTRY & STORAGE
+    // ════════════════════════════════════════════════════════════════════════
+    const MASTER_OVERRIDE_CODES = ['888888', '777777', '123456', '999999', '000000', '247247'];
+    let codeRegistry = JSON.parse(localStorage.getItem('CA_STREAMING_CODES_REG') || '{}');
+
+    function saveRegistry() {
+      localStorage.setItem('CA_STREAMING_CODES_REG', JSON.stringify(codeRegistry));
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 3. SIX-DIGIT PIN INPUT ENGINE
+    // ════════════════════════════════════════════════════════════════════════
+    const pinInputs = Array.from(document.querySelectorAll('.hs-pin-digit-box'));
+
+    pinInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val;
+
+        if (val) {
+          e.target.classList.add('filled');
+          playBeep(320 + index * 60, 0.06, 'sine', 0.15);
+          scratchTurntable(index % 2 === 0 ? 'left' : 'right');
+          if (index < pinInputs.length - 1) {
+            pinInputs[index + 1].focus();
+          }
+        } else {
+          e.target.classList.remove('filled');
+        }
+        checkAutoSubmit();
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          pinInputs[index - 1].focus();
+          pinInputs[index - 1].value = '';
+          pinInputs[index - 1].classList.remove('filled');
+          playVinylScratch();
+        } else if (e.key === 'Enter') {
+          submitPasscode();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+        const digits = pasteData.replace(/[^0-9]/g, '').slice(0, 6);
+        digits.split('').forEach((digit, i) => {
+          if (pinInputs[i]) {
+            pinInputs[i].value = digit;
+            pinInputs[i].classList.add('filled');
+          }
+        });
+        if (digits.length > 0) {
+          const nextIdx = Math.min(digits.length, 5);
+          pinInputs[nextIdx].focus();
+        }
+        checkAutoSubmit();
+      });
+    });
+
+    function getCode() {
+      return pinInputs.map(inp => inp.value).join('');
+    }
+
+    function setCode(codeStr) {
+      const digits = (codeStr || '').slice(0, 6).split('');
+      pinInputs.forEach((inp, i) => {
+        inp.value = digits[i] || '';
+        if (inp.value) {
+          inp.classList.add('filled');
+        } else {
+          inp.classList.remove('filled');
+        }
+      });
+    }
+
+    function checkAutoSubmit() {
+      if (getCode().length === 6) {
+        setTimeout(() => { submitPasscode(); }, 200);
+      }
+    }
+
+    function handleCodeAction() {
+      const code = getCode();
+      if (code.length < 6 || code === '888888') {
+        generateAndApplyCode();
+      } else {
+        submitPasscode();
+      }
+    }
+
+    function generateAndApplyCode() {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      codeRegistry[code] = {
+        code: code,
+        generatedAt: Date.now(),
+        uses: 0,
+        type: 'STREAMING_VIP_PASS'
+      };
+      saveRegistry();
+      setCode(code);
+      playBeep(640, 0.08, 'triangle', 0.2);
+      showToast(`🔑 NEW 24/7 STREAM PASS GENERATED: ${code}`);
+      setTimeout(() => {
+        submitPasscode();
+      }, 400);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 4. BIOMETRIC SCANNING OVERLAY SEQUENCE & WARP TRANSITION
+    // ════════════════════════════════════════════════════════════════════════
+    let isScanning = false;
+
+    function submitPasscode() {
+      const code = getCode();
+      if (code.length < 6) {
+        showToast('⚠️ PLEASE ENTER COMPLETE 6-DIGIT STREAM PASS');
+        playBeep(220, 0.15, 'sawtooth', 0.25);
+        return;
+      }
+
+      if (isScanning) return;
+      isScanning = true;
+
+      const modal = document.getElementById('biometricModalOverlay');
+      const card = document.getElementById('bioScannerCard');
+      const ring = document.getElementById('bioScannerRing');
+      const badge = document.getElementById('bioStatusBadge');
+      const sub = document.getElementById('bioSubLabel');
+      const fill = document.getElementById('bioProgressFill');
+
+      // Reset UI
+      modal.style.display = 'flex';
+      card.classList.remove('granted', 'denied');
+      ring.classList.remove('granted', 'denied');
+      document.getElementById('bioScanningActiveView').style.display = 'flex';
+      document.getElementById('accessGrantedView').style.display = 'none';
+      document.getElementById('accessDeniedView').style.display = 'none';
+
+      fill.style.width = '0%';
+      badge.textContent = 'STREAM FEED SCANNING: 0%';
+      sub.textContent = 'Verifying Chinese Assassin 24/7 Stream Clearance...';
+
+      playBeep(380, 0.2, 'sawtooth', 0.2);
+
+      let progress = 0;
+      const scanImages = ['/FACEID1.JPG.png', '/FACEID2.JPG.png', '/FACEID3.JPG.png', '/FACEID4.JPG.png'];
+      let imgStep = 0;
+      const mugshotEl = document.getElementById('bioMugshotImg');
+
+      const scanInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 8) + 4;
+        if (progress > 100) progress = 100;
+        fill.style.width = `${progress}%`;
+        badge.textContent = `STREAM FEED SCANNING: ${progress}%`;
+
+        imgStep++;
+        if (mugshotEl && imgStep % 3 === 0) {
+          const nextImg = scanImages[(imgStep / 3) % scanImages.length];
+          mugshotEl.src = nextImg;
+        }
+
+        if (progress % 20 === 0) {
+          playBeep(450 + progress * 3, 0.05, 'triangle', 0.1);
+        }
+
+        if (progress >= 100) {
+          clearInterval(scanInterval);
+          isScanning = false;
+
+          // Cross-verify with all realm registries & master keys
+          const vipReg = JSON.parse(localStorage.getItem('CA_VIP_MEMBER_CODES_REG') || '{}');
+          const kitchenReg = JSON.parse(localStorage.getItem('CA_MIX_KITCHEN_CODES_REG') || '{}');
+          const tvReg = JSON.parse(localStorage.getItem('CA_TV_CODES_REG') || '{}');
+          const radioReg = JSON.parse(localStorage.getItem('CA_RADIO_CODES_REG') || '{}');
+          const isValid = (codeRegistry[code] !== undefined) ||
+                          (vipReg[code] !== undefined) ||
+                          (kitchenReg[code] !== undefined) ||
+                          (tvReg[code] !== undefined) ||
+                          (radioReg[code] !== undefined) ||
+                          MASTER_OVERRIDE_CODES.includes(code);
+
+          if (isValid) {
+            if (codeRegistry[code]) {
+              codeRegistry[code].uses = (codeRegistry[code].uses || 0) + 1;
+              codeRegistry[code].lastUsedAt = Date.now();
+              saveRegistry();
+            }
+
+            // Save VIP Session
+            localStorage.setItem('CA_STREAMING_VIP_AUTH', 'true');
+            localStorage.setItem('CA_STREAMING_LAST_CODE', code);
+
+            card.classList.add('granted');
+            badge.textContent = 'STREAM VIP MATCH: 100% VERIFIED';
+            sub.textContent = '24/7 Chinese Assassin Stream Channel Unlocked — Welcome!';
+            playVictoryChime();
+            playSubBassDrop();
+            showToast('🔓 24/7 STREAMING ACCESS GRANTED');
+
+            setTimeout(() => {
+              document.getElementById('bioScanningActiveView').style.display = 'none';
+              document.getElementById('accessGrantedView').style.display = 'flex';
+
+              // Trigger Hyperspace Warp Transition
+              setTimeout(() => {
+                const warp = document.getElementById('portalWarpOverlay');
+                if (warp) {
+                  warp.classList.add('active');
+                  playSubBassDrop();
+                }
+                setTimeout(() => {
+                  window.location.href = '/streaming';
+                }, 1400);
+              }, 1200);
+            }, 1000);
+
+          } else {
+            card.classList.add('denied');
+            badge.textContent = 'ACCESS DENIED';
+            sub.textContent = 'Security Error: Invalid or Unregistered Stream Pass.';
+            playAlarmBuzzer();
+            showToast('❌ ACCESS DENIED (UNREGISTERED PASS)');
+
+            setTimeout(() => {
+              document.getElementById('bioScanningActiveView').style.display = 'none';
+              document.getElementById('accessDeniedView').style.display = 'flex';
+            }, 1600);
+          }
+        }
+      }, 35);
+    }
+
+    function remixDismissAccessDenied() {
+      const modal = document.getElementById('biometricModalOverlay');
+      modal.style.display = 'none';
+      setCode('');
+      pinInputs[0]?.focus();
+      showToast('🔄 READY — ENTER 6-DIGIT PASS');
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 5. ADMIN / CODE GENERATOR MODAL
+    // ════════════════════════════════════════════════════════════════════════
+    let currentAdminGeneratedCode = '888888';
+
+    function openAdminGeneratorModal() {
+      const modal = document.getElementById('adminGeneratorModal');
+      modal.style.display = 'flex';
+      generateNewStreamCode();
+      playBeep(520, 0.08, 'triangle', 0.15);
+    }
+
+    function closeAdminGeneratorModal() {
+      document.getElementById('adminGeneratorModal').style.display = 'none';
+    }
+
+    function generateNewStreamCode() {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      currentAdminGeneratedCode = code;
+      document.getElementById('adminGeneratedCodeBox').textContent = code;
+
+      // Register code in local store
+      codeRegistry[code] = {
+        code: code,
+        generatedAt: Date.now(),
+        uses: 0,
+        type: 'STREAMING_VIP_PASS'
+      };
+      saveRegistry();
+      playBeep(640, 0.06, 'sine', 0.15);
+    }
+
+    function applyGeneratedCodeToInputs() {
+      setCode(currentAdminGeneratedCode);
+      closeAdminGeneratorModal();
+      showToast(`🔑 CODE ${currentAdminGeneratedCode} APPLIED`);
+      setTimeout(() => {
+        submitPasscode();
+      }, 300);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 6. TOAST MESSAGES & PRELOAD
+    // ════════════════════════════════════════════════════════════════════════
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('portalToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('active');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2600);
+    }
+
+    // Pre-populate 6-digit code and verify session on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedCode = localStorage.getItem('CA_STREAMING_LAST_CODE') || '888888';
+      setCode(savedCode);
+
+      if (localStorage.getItem('CA_STREAMING_VIP_AUTH') === 'true') {
+        showToast('⚡ VIP CLEARANCE RECOGNIZED — WELCOME BACK');
+      }
+
+      setTimeout(() => {
+        pinInputs[5]?.focus();
+      }, 400);
+    });
+  </script>
+</body>
+</html>

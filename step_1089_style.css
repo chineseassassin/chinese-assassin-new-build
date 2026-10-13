@@ -1,0 +1,301 @@
+/* ============================================================================
+   CHINESE ASSASSIN CINEMATIC PLAYER — FINAL IMPLEMENTATION
+   ============================================================================ */
+#cinematic-intro {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  /* Premium soft black background */
+  background: #09090b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: opacity 1.2s ease-out;
+}
+
+#stage {
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0px;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#camera-rig {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 38%;
+  will-change: transform;
+}
+
+#bg-page1 {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: transparent;
+  z-index: 1;
+}
+
+/* ── 2. CARD SIZE (LOCKED: 78vw, MAX 1500px, 16:9 PROPORTIONS, CENTERED) ── */
+.ca-stage-unit {
+  position: relative;
+  width: 78vw;
+  max-width: 1500px;
+  aspect-ratio: 16 / 9;
+  max-height: 86vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.nf-screen-unit {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  background: transparent;
+}
+
+.nf-screen-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 35px rgba(220, 15, 35, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9));
+  transition: opacity 0.5s ease;
+}
+
+.nf-main-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  z-index: 1;
+  background: #09090b;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.nf-screen-unit.in-playback-mode .nf-screen-img {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.nf-screen-unit.in-playback-mode .nf-main-video {
+  opacity: 1;
+  z-index: 3;
+}
+
+/* ── INTERACTIVE HOTSPOTS OVERLAY (BOUND 1:1 TO WICKED3) ─────────────────── */
+.ca-hotspots-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Play Button Hotspot (red pill in artwork) */
+.ca-hotspot-play {
+  position: absolute;
+  top: 50.5%;
+  left: 5.5%;
+  width: 11.0%;
+  height: 5.0%;
+  border-radius: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-play:hover {
+  border-color: #ff1e38;
+  box-shadow: 0 0 16px rgba(255, 30, 56, 0.6);
+  background: rgba(255, 30, 56, 0.15);
+}
+
+/* Description Button Hotspot (glass pill in artwork) */
+.ca-hotspot-desc {
+  position: absolute;
+  top: 50.5%;
+  left: 17.0%;
+  width: 11.5%;
+  height: 5.0%;
+  border-radius: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-desc:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Tabs Hotspots */
+.ca-hotspot-tab {
+  position: absolute;
+  top: 57.5%;
+  height: 4.0%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-tab.tab-overview {
+  left: 5.5%;
+  width: 6.0%;
+}
+.ca-hotspot-tab.tab-episodes {
+  left: 12.5%;
+  width: 11.0%;
+}
+.ca-hotspot-tab.tab-details {
+  left: 24.5%;
+  width: 10.5%;
+}
+.ca-hotspot-tab:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Media Player Controls Hotspots */
+.ca-hotspot-shuffle {
+  position: absolute;
+  top: 75.5%;
+  left: 33.5%;
+  width: 4.5%;
+  height: 6.5%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-prev {
+  position: absolute;
+  top: 75.5%;
+  left: 40.0%;
+  width: 4.5%;
+  height: 6.5%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-deck-play {
+  position: absolute;
+  top: 73.5%;
+  left: 46.0%;
+  width: 7.5%;
+  height: 10.0%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-deck-play:hover {
+  border-color: #ff1e38;
+  box-shadow: 0 0 20px rgba(255, 30, 56, 0.8);
+  background: rgba(255, 30, 56, 0.2);
+}
+.ca-hotspot-next {
+  position: absolute;
+  top: 75.5%;
+  left: 54.5%;
+  width: 4.5%;
+  height: 6.5%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-repeat {
+  position: absolute;
+  top: 75.5%;
+  left: 61.5%;
+  width: 4.5%;
+  height: 6.5%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-volume {
+  position: absolute;
+  top: 79.0%;
+  left: 68.5%;
+  width: 13.5%;
+  height: 4.0%;
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 12;
+}
+.ca-hotspot-dj-filter {
+  position: absolute;
+  top: 74.5%;
+  left: 86.5%;
+  width: 8.5%;
+  height: 9.0%;
+  border-radius: 8px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}

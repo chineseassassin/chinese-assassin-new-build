@@ -1,0 +1,89 @@
+Created At: 2026-08-14T20:29:27-04:00
+Completed At: 2026-08-14T20:29:27-04:00
+File Path: `file:///C:/SadTalker/cinematic-dj/src/style.css`
+Total Lines: 15578
+Total Bytes: 327340
+Showing lines 1260 to 1340
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1260:   display: flex;
+1261:   flex-direction: column;
+1262:   gap: 4px;
+1263:   font-size: 12px;
+1264:   color: rgba(255, 255, 255, 0.7);
+1265: }
+1266: 
+1267: .ca-desc-details .lbl {
+1268:   color: #ff4d60;
+1269:   font-weight: 700;
+1270:   margin-right: 6px;
+1271: }
+1272: 
+1273: /* ── Hotspot Interactive Layer (100% Invisible) ── */
+1274: #heroPlayHotspot {
+1275:   position: absolute;
+1276:   left: 7.9%;
+1277:   top: 50.8%;
+1278:   width: 8.0%;
+1279:   height: 4.2%;
+1280:   border-radius: 6px;
+1281:   background: transparent;
+1282:   border: 0;
+1283:   outline: 0;
+1284:   box-shadow: none;
+1285:   cursor: pointer;
+1286:   z-index: 99999 !important;
+1287:   pointer-events: auto !important;
+1288:   -webkit-tap-highlight-color: transparent;
+1289:   user-select: none;
+1290: }
+1291: 
+1292: #descHotspot {
+1293:   position: absolute;
+1294:   left: 17.0%;
+1295:   top: 50.8%;
+1296:   width: 11.8%;
+1297:   height: 4.2%;
+1298:   border-radius: 6px;
+1299:   background: transparent;
+1300:   border: 0;
+1301:   outline: 0;
+1302:   box-shadow: none;
+1303:   cursor: pointer;
+1304:   z-index: 99999 !important;
+1305:   pointer-events: auto !important;
+1306:   -webkit-tap-highlight-color: transparent;
+1307:   user-select: none;
+1308: }
+1309: 
+1310: #bottomPlayHotspot {
+1311:   position: absolute;
+1312:   left: 46.89%;
+1313:   top: 74.32%;
+1314:   width: 6.38%;
+1315:   height: 6.38%;
+1316:   border-radius: 50%;
+1317:   background: transparent;
+1318:   border: 0;
+1319:   outline: 0;
+1320:   box-shadow: none;
+1321:   cursor: pointer;
+1322:   z-index: 99999 !important;
+1323:   pointer-events: auto !important;
+1324:   -webkit-tap-highlight-color: transparent;
+1325:   user-select: none;
+1326: }
+1327: 
+1328: 
+1329: /* ── VIP ENTER CA UNIVERSE Tab (Positioned above the main title CHINESE ASSASSIN on the right) ── */
+1330: .ca-proceed-website-btn {
+1331:   position: absolute;
+1332:   left: 66.5%;
+1333:   top: 44.5%;
+1334:   height: 28px;
+1335:   display: inline-flex;
+1336:   align-items: center;
+1337:   gap: 6px;
+1338:   padding: 0 12px 0 10px;
+1339:   background: rgba(12, 10, 16, 0.88);
+1340:   backdrop-filter: blur(14px);
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

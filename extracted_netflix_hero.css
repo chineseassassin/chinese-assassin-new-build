@@ -1,0 +1,325 @@
+/* ── PAGE 1: UPLOADED CHINESE ASSASSIN STAGE UNIT (WICKED.png) ─────────── */
+.ca-stage-unit {
+  position: relative;
+  width: 96vw;
+  max-width: 1600px;
+  height: 94vh;
+  max-height: 960px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.nf-screen-unit {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  background: transparent;
+}
+
+.nf-screen-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 35px rgba(255, 10, 40, 0.45));
+  transition: opacity 0.5s ease;
+}
+
+.nf-main-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  z-index: 1;
+  background: #000000;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.nf-screen-unit.in-playback-mode .nf-screen-img {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.nf-screen-unit.in-playback-mode .nf-main-video {
+  opacity: 1;
+  z-index: 3;
+}
+
+/* ── INTERACTIVE HOTSPOTS OVERLAY ───────────────────────────────────────── */
+.ca-hotspots-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(96vw, calc(94vh * 1.5), 1600px);
+  height: min(calc(96vw / 1.5), 94vh, 1066px);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Play Button Hotspot (red pill in artwork) */
+.ca-hotspot-play {
+  position: absolute;
+  top: 44.5%;
+  left: 6.2%;
+  width: 11.5%;
+  height: 7.2%;
+  border-radius: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-play:hover {
+  border-color: #ff1e38;
+  box-shadow: 0 0 16px rgba(255, 30, 56, 0.6);
+  background: rgba(255, 30, 56, 0.15);
+}
+
+/* Description Button Hotspot (glass pill in artwork) */
+.ca-hotspot-desc {
+  position: absolute;
+  top: 44.5%;
+  left: 18.8%;
+  width: 9.8%;
+  height: 7.2%;
+  border-radius: 6px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-desc:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Tabs Hotspots */
+.ca-hotspot-tab {
+  position: absolute;
+  top: 54.5%;
+  height: 5.0%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-tab.tab-overview {
+  left: 6.0%;
+  width: 5.8%;
+}
+.ca-hotspot-tab.tab-episodes {
+  left: 12.2%;
+  width: 9.8%;
+}
+.ca-hotspot-tab.tab-details {
+  left: 22.5%;
+  width: 9.5%;
+}
+.ca-hotspot-tab:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Media Player Controls Hotspots */
+.ca-hotspot-shuffle {
+  position: absolute;
+  top: 81.5%;
+  left: 33.2%;
+  width: 4.8%;
+  height: 12.0%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-prev {
+  position: absolute;
+  top: 81.5%;
+  left: 38.8%;
+  width: 4.8%;
+  height: 12.0%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-deck-play {
+  position: absolute;
+  top: 78.5%;
+  left: 44.8%;
+  width: 7.2%;
+  height: 16.5%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-deck-play:hover {
+  border-color: #ff1e38;
+  box-shadow: 0 0 20px rgba(255, 30, 56, 0.8);
+  background: rgba(255, 30, 56, 0.2);
+}
+.ca-hotspot-next {
+  position: absolute;
+  top: 81.5%;
+  left: 53.0%;
+  width: 4.8%;
+  height: 12.0%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-repeat {
+  position: absolute;
+  top: 81.5%;
+  left: 58.8%;
+  width: 4.8%;
+  height: 12.0%;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-volume {
+  position: absolute;
+  top: 89.0%;
+  left: 68.0%;
+  width: 13.0%;
+  height: 7.0%;
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 12;
+}
+.ca-hotspot-dj-filter {
+  position: absolute;
+  top: 78.5%;
+  left: 83.5%;
+  width: 7.5%;
+  height: 16.5%;
+  border-radius: 8px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.ca-hotspot-dj-filter:hover {
+  border-color: #ff1e38;
+  box-shadow: 0 0 16px rgba(255, 30, 56, 0.6);
+  background: rgba(255, 30, 56, 0.15);
+}
+.ca-hotspot-shuffle:hover,
+.ca-hotspot-prev:hover,
+.ca-hotspot-next:hover,
+.ca-hotspot-repeat:hover {
+  background: rgba(255, 30, 60, 0.18);
+  box-shadow: 0 0 12px rgba(255, 30, 60, 0.5);
+  border-color: rgba(255, 60, 90, 0.4);
+}
+
+/* ── TRANSLUCENT GLASS DESCRIPTION PANEL ────────────────────────────────── */
+.ca-description-panel {
+  position: absolute;
+  top: 28%;
+  left: 5%;
+  width: 380px;
+  max-width: 90%;
+  z-index: 30;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.97);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.ca-description-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.ca-panel-glass-content {
+  background: rgba(12, 12, 16, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 30, 56, 0.3);
+}
+.ca-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.ca-panel-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ff1e38;
+}
+.ca-panel-title-wrap h3 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 2px 0 0;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: 800;
+}
+.ca-panel-close-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+.ca-panel-close-btn:hover {
+  color: #ffffff;
+}
+.ca-panel-synopsis {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+}

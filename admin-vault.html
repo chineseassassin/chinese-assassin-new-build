@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Chinese Assassin — Master Admin Vault (All Coded Sections)</title>
+  <meta name="description" content="Central Master Code Vault & Administrative Key Management Terminal for all Chinese Assassin Coded Sections." />
+
+  <!-- Google Fonts: Orbitron, Outfit & Cinzel Decorative -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --primary-red: #ff203a;
+      --neon-red: #ff0044;
+      --deep-crimson: #800010;
+      --fire-gold: #ffb703;
+      --gold: #ffd700;
+      --neon-cyan: #00e5ff;
+      --glow-cyan: rgba(0, 229, 255, 0.7);
+      --neon-green: #00ff88;
+      --glow-green: rgba(0, 255, 136, 0.7);
+      --glow-red: rgba(255, 32, 58, 0.75);
+      --bg-dark: #040206;
+      --card-bg: rgba(14, 6, 18, 0.94);
+      --border-color: rgba(255, 32, 58, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* Ambient Background Grid & Glow */
+    .vault-ambient-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: 
+        radial-gradient(circle at 50% 15%, rgba(255, 32, 58, 0.15) 0%, transparent 65%),
+        linear-gradient(rgba(255, 32, 58, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 32, 58, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 36px 36px, 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      opacity: 0.38;
+      pointer-events: none;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, #ff203a 0%, transparent 70%); top: -120px; left: 10%; }
+    .orb-2 { width: 580px; height: 580px; background: radial-gradient(circle, #ff0055 0%, transparent 70%); bottom: -150px; right: 8%; animation-delay: -5s; }
+    .orb-3 { width: 440px; height: 440px; background: radial-gradient(circle, #ff5500 0%, transparent 70%); top: 40%; left: -100px; animation-delay: -8s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, 30px) scale(1.1); }
+      100% { transform: translate(-30px, -35px) scale(0.95); }
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC FLOATING MEGA MENU HEADER (DIMENSION HUB STYLING)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .site-header.floating-header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1320px;
+      height: 52px;
+      background: rgba(10, 4, 12, 0.85);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 32, 58, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 5000;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-rotator {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      perspective: 600px;
+    }
+
+    .site-logo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+      border: 1px solid var(--primary-red);
+      transform: rotateY(-90deg) scale(1.15);
+      opacity: 0;
+      pointer-events: none;
+      object-fit: cover;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-in;
+    }
+
+    .site-logo-img.rot-active {
+      transform: rotateY(0deg) scale(1.15);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-logo-img.rot-exit {
+      transform: rotateY(90deg) scale(1.15);
+      opacity: 0;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-out;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .logo span {
+      color: var(--primary-red);
+      text-shadow: 0 0 10px rgba(255, 32, 58, 0.5);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-item > a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 4px;
+      position: relative;
+    }
+
+    .nav-item > a::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-red);
+      transition: width 0.25s ease;
+    }
+
+    .nav-item > a:hover::after,
+    .nav-item > a.active::after {
+      width: 100%;
+    }
+
+    .nav-item > a:hover,
+    .nav-item > a.active {
+      color: var(--primary-red);
+    }
+
+    .nav-item.has-mega-menu:hover .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .chevron {
+      font-size: 0.7rem;
+      margin-left: 5px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.has-mega-menu:hover .chevron {
+      transform: rotate(180deg);
+    }
+
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 780px;
+      background: rgba(14, 6, 12, 0.96);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1.5px solid rgba(255, 32, 58, 0.4);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 32, 58, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 6000;
+    }
+
+    .mega-menu-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    .mega-col {
+      flex: 1;
+    }
+
+    .mega-col h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary-red);
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .mega-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mega-col ul a {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: block;
+      padding: 5px 0;
+    }
+
+    .mega-col ul a:hover {
+      color: var(--primary-red);
+      transform: translateX(4px);
+    }
+
+    .mega-col.featured-set {
+      flex: 1.3;
+      background: rgba(255, 32, 58, 0.06);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 32, 58, 0.2);
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 95px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 32, 58, 0.3);
+    }
+
+    .mix-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mix-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s;
+    }
+
+    .mix-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--primary-red);
+    }
+
+    .mix-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: #ff203a;
+      transform: scale(1.1);
+    }
+
+    .sign-in-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid #ff203a;
+      color: #ff203a !important;
+      font-size: 0.70rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-decoration: none;
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 10px rgba(255, 32, 58, 0.25);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sign-in-btn:hover {
+      background: #ff203a;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 6000;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-drawer-card {
+      width: min(340px, 85vw);
+      height: 100%;
+      background: rgba(14, 6, 12, 0.98);
+      border-left: 1.5px solid rgba(255, 32, 58, 0.4);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-drawer-close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mobile-drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .mobile-nav-item {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: rgba(255, 32, 58, 0.4);
+      color: #ff203a;
+    }
+
+    /* Main Container Layout */
+    .vault-layout {
+      position: relative;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 84px 24px 80px;
+      z-index: 10;
+    }
+
+    /* Global Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px 20px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-red), var(--fire-gold));
+    }
+
+    .metric-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .metric-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 32, 58, 0.6);
+    }
+
+    .metric-sub {
+      font-size: 0.75rem;
+      color: var(--neon-cyan);
+    }
+
+    /* Realm Selector Navigation Tabs */
+    .realm-tabs-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 14px;
+      margin-bottom: 24px;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+    }
+    .realm-tabs-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+    .realm-tabs-bar::-webkit-scrollbar-thumb {
+      background: var(--primary-red);
+      border-radius: 4px;
+    }
+
+    .realm-tab-btn {
+      padding: 10px 18px;
+      background: rgba(18, 8, 22, 0.85);
+      border: 1.5px solid rgba(255, 32, 58, 0.35);
+      border-radius: 24px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .realm-tab-btn:hover {
+      background: rgba(255, 32, 58, 0.2);
+      border-color: var(--primary-red);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .realm-tab-btn.active {
+      background: linear-gradient(135deg, #ff203a 0%, #800010 100%);
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: 0 0 20px var(--glow-red);
+      transform: translateY(-2px);
+    }
+
+    .tab-counter-badge {
+      padding: 2px 7px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      font-size: 0.65rem;
+      color: var(--fire-gold);
+    }
+
+    /* Main Working Area: Generator on Left / Registry on Right */
+    .working-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      .working-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Generator Card Box */
+    .tool-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 18px;
+      padding: 24px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 12px;
+    }
+
+    .tool-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 1px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(6, 2, 8, 0.85);
+      border: 1.5px solid rgba(255, 32, 58, 0.5);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--fire-gold);
+      box-shadow: 0 0 15px rgba(255, 183, 3, 0.4);
+    }
+
+    .btn-action-primary {
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #ff203a 0%, #800010 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      border-radius: 28px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 0 25px var(--glow-red);
+      transition: all 0.25s ease;
+    }
+    .btn-action-primary:hover {
+      background: #ff0044;
+      transform: scale(1.03);
+      box-shadow: 0 0 35px var(--primary-red);
+    }
+
+    .btn-action-secondary {
+      width: 100%;
+      padding: 10px 16px;
+      background: rgba(255, 183, 3, 0.12);
+      border: 1.5px solid var(--fire-gold);
+      border-radius: 24px;
+      color: var(--fire-gold);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-action-secondary:hover {
+      background: var(--fire-gold);
+      color: #000000;
+      box-shadow: 0 0 20px rgba(255, 183, 3, 0.6);
+    }
+
+    /* Registry Table Container */
+    .registry-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 18px;
+      padding: 24px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .registry-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 16px 10px 38px;
+      background: rgba(6, 2, 8, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      outline: none;
+    }
+    .search-input:focus {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.35);
+    }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    .action-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+    .pill-btn:hover {
+      background: rgba(255, 32, 58, 0.2);
+      border-color: var(--primary-red);
+    }
+    .pill-btn.danger:hover {
+      background: rgba(255, 0, 68, 0.3);
+      border-color: var(--neon-red);
+      color: #ff99aa;
+    }
+
+    /* Codes Data Table */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      max-height: 480px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(4, 2, 6, 0.8);
+    }
+
+    .codes-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.82rem;
+    }
+
+    .codes-table th {
+      position: sticky;
+      top: 0;
+      background: rgba(18, 6, 24, 0.98);
+      padding: 12px 16px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--fire-gold);
+      letter-spacing: 1px;
+      border-bottom: 1.5px solid var(--border-color);
+      z-index: 5;
+    }
+
+    .codes-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: middle;
+    }
+
+    .codes-table tr:hover td {
+      background: rgba(255, 32, 58, 0.05);
+    }
+
+    .code-pin-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: inline-block;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .status-active {
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid var(--neon-green);
+      color: var(--neon-green);
+    }
+    .status-burned {
+      background: rgba(255, 0, 68, 0.15);
+      border: 1px solid var(--neon-red);
+      color: #ff99aa;
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-sm-action {
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-sm-action:hover {
+      background: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      color: #000000;
+    }
+    .btn-sm-action.delete:hover {
+      background: var(--neon-red);
+      border-color: var(--neon-red);
+      color: #ffffff;
+    }
+
+    /* Master Security PIN Modal */
+    .admin-auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 2, 8, 0.94);
+      backdrop-filter: blur(24px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      width: min(90vw, 420px);
+      background: var(--card-bg);
+      border: 2px solid var(--primary-red);
+      border-radius: 22px;
+      padding: 32px 28px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 0 50px var(--glow-red);
+    }
+
+    /* Global Toast */
+    .vault-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: rgba(14, 4, 10, 0.95);
+      border: 1.5px solid var(--primary-red);
+      border-radius: 14px;
+      padding: 12px 22px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
+      box-shadow: 0 0 30px var(--glow-red);
+      display: none;
+      z-index: 99999;
+      backdrop-filter: blur(18px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       AUTHENTIC DIMENSION HUB FLOATING MEGA-MENU HEADER
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <header class="site-header floating-header" id="siteHeader">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="Chinese Assassin Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="Chinese Assassin Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="Chinese Assassin Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="Chinese Assassin Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <div class="nav-item"><a href="/">HOME</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">DIMENSION HUB</a></div>
+
+      <div class="nav-item has-mega-menu">
+        <a href="javascript:void(0)">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+        <div class="mega-menu">
+          <div class="mega-menu-content">
+            <div class="mega-col">
+              <h4>VIP Exclusives</h4>
+              <ul>
+                <li><a href="/mobile-mixes-gateway-v2.html">👑 Street Kings 2026</a></li>
+                <li><a href="/vault-gateway.html">⚡ Techno Riddim Vol 4</a></li>
+                <li><a href="/vault-gateway.html">🗝️ Assassin Dubplates</a></li>
+                <li><a href="/flashdrive.html">💾 Secret Stash Vol 1</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Mix Gallery</h4>
+              <div class="mix-gallery-grid">
+                <div class="mix-thumb"><a href="/vault-gateway.html" title="The Vault"><img src="/VAULT-2.jpg" alt="Riddim Vault"></a></div>
+                <div class="mix-thumb"><a href="/vip-gateway.html" title="VIP Citadel"><img src="/CODE-1.jpg" alt="VIP Citadel"></a></div>
+                <div class="mix-thumb"><a href="/mobile-mixes-gateway-v2.html" title="Mobile Mixes"><img src="/MOBILE_MIXES.png" alt="Mobile Mixes"></a></div>
+                <div class="mix-thumb"><a href="/tv-gateway.html" title="Assassin TV"><img src="/CODE-TV.png" alt="Assassin TV"></a></div>
+              </div>
+            </div>
+            <div class="mega-col featured-set">
+              <h4>Live Preview (30s)</h4>
+              <div class="featured-img" style="background-image: url('/MOBILE_MIXES.png'); background-size: cover; background-position: center;">
+                <button class="mega-preview-btn" onclick="event.stopPropagation(); showToast('▶ Playing Assassin Elite Mix (30s Sample)');" style="background:var(--primary-red,#ff0055); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255,0,85,0.8);" title="Play 30s Sample">
+                  <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+              <h5 style="font-size:0.85rem; margin-top:8px; color:#fff;">ASSASSIN ELITE MIX</h5>
+              <p style="font-size: 0.75rem; color: #aaa;">Flashy transitions and heavy bass.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item"><a href="/admin-vault.html" class="active" style="color:var(--primary-neon,#ff0055) !important; font-weight:800;" title="Master Admin Code Vault">👑 ADMIN VAULT</a></div>
+      <div class="nav-item"><a href="/merch.html">MERCH</a></div>
+      <div class="nav-item"><a href="/flashdrive.html">SHOP</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">ABOUT US</a></div>
+      <div class="nav-item"><a href="mailto:bookings@chineseassassin.com">CONTACT</a></div>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="header-actions">
+      <button class="icon-btn search-btn" aria-label="Search" onclick="showToast('🔍 Search Admin Vault Real-time')">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="/admin-vault.html" class="sign-in-btn">SIGN IN</a>
+      <button class="icon-btn menu-toggle-btn" aria-label="Menu" id="mobileDrawerBtn" onclick="toggleMobileDrawer()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-Screen Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-drawer-overlay" onclick="if(event.target===this) toggleMobileDrawer();">
+    <div class="mobile-drawer-card">
+      <div class="mobile-drawer-header">
+        <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        <button class="mobile-drawer-close-btn" onclick="toggleMobileDrawer()">&times;</button>
+      </div>
+      <nav class="mobile-drawer-nav">
+        <a href="/" class="mobile-nav-item">🏠 HOME</a>
+        <a href="/dimension-hub.html" class="mobile-nav-item">🌀 DIMENSION HUB</a>
+        <a href="/streaming-gateway.html" class="mobile-nav-item">🔴 24/7 STREAM</a>
+        <a href="/tv-gateway.html" class="mobile-nav-item">📺 ASSASSIN TV</a>
+        <a href="/mobile-mixes-gateway-v2.html" class="mobile-nav-item">📱 MOBILE MIXES</a>
+        <a href="/mix-kitchen-gateway.html" class="mobile-nav-item">🍳 THE MIX KITCHEN</a>
+        <a href="/radio-gateway.html" class="mobile-nav-item">📻 ASSASSIN RADIO</a>
+        <a href="/vip-gateway.html" class="mobile-nav-item">👑 VIP CITADEL</a>
+        <a href="/merch.html" class="mobile-nav-item">👕 MERCH</a>
+        <a href="/flashdrive.html" class="mobile-nav-item">🛍️ SHOP / USB FLASH DRIVE</a>
+        <a href="/vault-gateway.html" class="mobile-nav-item">🗝️ THE VAULT</a>
+        <a href="/admin-vault.html" class="mobile-nav-item active">🔒 ADMIN VAULT</a>
+      </nav>
+      <div class="mobile-drawer-footer">
+        <span>© 2026 CHINESE ASSASSIN VIP UNIVERSE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient Grid & Glow -->
+  <div class="vault-ambient-bg">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <!-- Master Layout -->
+  <main class="vault-layout">
+
+    <!-- Global Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label"><span>🔑</span> TOTAL ACTIVE CODES</div>
+        <div class="metric-value" id="metricTotalActive">0</div>
+        <div class="metric-sub">Across All 8 Coded Gateways</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><span>🔥</span> REDEEMED / BURNED CODES</div>
+        <div class="metric-value" id="metricTotalBurned" style="color: #ff99aa;">0</div>
+        <div class="metric-sub">Single-Use Passcodes Used</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><span>⛩️</span> SYNCHRONIZED REALMS</div>
+        <div class="metric-value" style="color: var(--fire-gold);">8 / 8</div>
+        <div class="metric-sub">Master Vault Linked</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label"><span>⚡</span> MASTER OVERRIDE KEY</div>
+        <div class="metric-value" style="color: var(--neon-cyan); font-size:1.4rem;">888888 / 999999</div>
+        <div class="metric-sub">Universal Access Token</div>
+      </div>
+    </div>
+
+    <!-- Realm Navigation Tabs Bar -->
+    <div class="realm-tabs-bar" id="realmTabsBar">
+      <button class="realm-tab-btn active" data-section="all" onclick="selectSectionTab('all')">
+        <span>🌐 ALL SECTIONS OVERVIEW</span>
+        <span class="tab-counter-badge" id="badgeCountAll">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="vault" onclick="selectSectionTab('vault')">
+        <span>🔒 THE VAULT</span>
+        <span class="tab-counter-badge" id="badgeCountVault">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="vip" onclick="selectSectionTab('vip')">
+        <span>👑 VIP MASTER GATEWAY</span>
+        <span class="tab-counter-badge" id="badgeCountVip">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="kitchen" onclick="selectSectionTab('kitchen')">
+        <span>🍳 THE MIX KITCHEN</span>
+        <span class="tab-counter-badge" id="badgeCountKitchen">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="tv" onclick="selectSectionTab('tv')">
+        <span>📺 ASSASSIN TV</span>
+        <span class="tab-counter-badge" id="badgeCountTv">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="radio" onclick="selectSectionTab('radio')">
+        <span>📻 ASSASSIN RADIO</span>
+        <span class="tab-counter-badge" id="badgeCountRadio">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="streaming" onclick="selectSectionTab('streaming')">
+        <span>🔴 24/7 STREAMING</span>
+        <span class="tab-counter-badge" id="badgeCountStreaming">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="mobile" onclick="selectSectionTab('mobile')">
+        <span>📱 MOBILE MIXES</span>
+        <span class="tab-counter-badge" id="badgeCountMobile">0</span>
+      </button>
+      <button class="realm-tab-btn" data-section="citadel" onclick="selectSectionTab('citadel')">
+        <span>⛩️ VIP CITADEL</span>
+        <span class="tab-counter-badge" id="badgeCountCitadel">0</span>
+      </button>
+    </div>
+
+    <!-- Working Area Grid -->
+    <div class="working-grid">
+      
+      <!-- Left Column: Generator Tools -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Tool 1: Single Code Generator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-title"><span>⚡</span> ISSUE SINGLE CODE</div>
+            <span style="font-size:0.75rem; color:var(--fire-gold);">6-DIGIT PIN</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">TARGET REALM / SECTION</label>
+            <select class="form-select" id="genTargetSection">
+              <option value="vault">🔒 The Vault Classics</option>
+              <option value="vip">👑 Master VIP Gateway (Code 1)</option>
+              <option value="kitchen">🍳 The Mix Kitchen</option>
+              <option value="tv">📺 Assassin TV</option>
+              <option value="radio">📻 Assassin Radio</option>
+              <option value="streaming">🔴 24/7 Live Stream</option>
+              <option value="mobile">📱 Mobile Mixes</option>
+              <option value="citadel">⛩️ VIP Citadel</option>
+              <option value="universal">🌟 UNIVERSAL (ALL 8 REALMS)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">CUSTOM PIN (OR LEAVE BLANK FOR RANDOM)</label>
+            <input type="text" maxlength="6" inputmode="numeric" class="form-input" id="genCustomPin" placeholder="e.g. 748291" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">TAG / ALIAS / VIP GUEST</label>
+            <input type="text" class="form-input" id="genGuestLabel" placeholder="e.g. VIP Member Gold" />
+          </div>
+
+          <button class="btn-action-primary" onclick="issueSinglePasscode()">
+            <span>⚡ ISSUE & SAVE PASSCODE</span>
+          </button>
+        </div>
+
+        <!-- Tool 2: Batch Generator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-title"><span>📦</span> BATCH PASSCODE GENERATOR</div>
+            <span style="font-size:0.75rem; color:var(--neon-cyan);">MULTI-ISSUE</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">QUANTITY TO ISSUE</label>
+            <select class="form-select" id="batchQty">
+              <option value="5">5 Single-Use Passcodes</option>
+              <option value="10" selected>10 Single-Use Passcodes</option>
+              <option value="25">25 Single-Use Passcodes</option>
+              <option value="50">50 Single-Use Passcodes</option>
+              <option value="100">100 Single-Use Passcodes</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">BATCH BUNDLE LABEL</label>
+            <input type="text" class="form-input" id="batchBundleLabel" placeholder="e.g. Summer Festival Promo" />
+          </div>
+
+          <button class="btn-action-secondary" onclick="issueBatchPasscodes()">
+            <span>📦 GENERATE BATCH CODES</span>
+          </button>
+        </div>
+
+      </div><!-- /Left Column -->
+
+      <!-- Right Column: Code Registry Table -->
+      <div class="registry-card">
+        
+        <div class="registry-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="registrySearchInput" placeholder="Search by 6-digit PIN, section, or alias..." oninput="renderRegistryTable()" />
+          </div>
+
+          <div class="action-pills-row">
+            <button class="pill-btn" onclick="copyAllActiveCodes()" title="Copy all active codes to clipboard">📋 COPY ACTIVE</button>
+            <button class="pill-btn" onclick="resetBurnedCodesForCurrentTab()" title="Reactivate all burned codes">♻️ RESET BURNED</button>
+            <button class="pill-btn" onclick="exportCurrentTabCSV()" title="Export CSV spreadsheet">📄 EXPORT CSV</button>
+            <button class="pill-btn danger" onclick="clearCurrentSectionRegistry()" title="Clear all codes in current section">🗑️ CLEAR SECTION</button>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-container">
+          <table class="codes-table" id="codesTable">
+            <thead>
+              <tr>
+                <th>REALM / SECTION</th>
+                <th>6-DIGIT PIN</th>
+                <th>STATUS</th>
+                <th>LABEL / ALIAS</th>
+                <th>CREATED</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="codesTableBody">
+              <!-- Dynamically rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /Right Column -->
+
+    </div><!-- /working-grid -->
+
+  </main>
+
+  <!-- Security PIN Lock Modal -->
+  <div class="admin-auth-overlay" id="adminAuthOverlay" style="display: none;">
+    <div class="auth-card">
+      <div style="font-size: 2.5rem;">🔒</div>
+      <div style="font-family:'Cinzel Decorative',serif; font-size:1.3rem; font-weight:900;">
+        ADMIN <span>CLEARANCE</span> REQUIRED
+      </div>
+      <div style="font-size:0.8rem; color:rgba(255,255,255,0.7);">
+        Enter 6-digit Master Override PIN to unlock the Master Code Vault.
+      </div>
+      
+      <input type="password" maxlength="6" id="adminMasterPinInput" class="form-input" placeholder="••••••" style="text-align:center; font-size:1.5rem; letter-spacing:6px;" onkeydown="if(event.key==='Enter') verifyAdminPIN();" />
+      
+      <button class="btn-action-primary" onclick="verifyAdminPIN()">
+        <span>🔓 UNLOCK TERMINAL</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="vault-toast" id="vaultToast"></div>
+
+  <!-- Audio Synth Engine -->
+  <script>
+    // ════════════════════════════════════════════════════════════════════════
+    // 1. VAULT SECTIONS SPECIFICATION & STORAGE CONFIG
+    // ════════════════════════════════════════════════════════════════════════
+    const VAULT_SECTIONS = {
+      vault: {
+        id: 'vault',
+        name: 'The Vault Classics',
+        storageKey: 'CA_VAULT_CODES_REG',
+        url: '/vault-gateway.html',
+        icon: '🔒',
+        defaultCodes: ['888888', '999999', '123456', '777777', '000000']
+      },
+      vip: {
+        id: 'vip',
+        name: 'Master VIP Gateway',
+        storageKey: 'CA_VIP_ONE_TIME_CODES_REG',
+        url: '/index.html',
+        icon: '👑',
+        defaultCodes: ['888888', '112233', '445566', '778899', '999999']
+      },
+      kitchen: {
+        id: 'kitchen',
+        name: 'The Mix Kitchen',
+        storageKey: 'CA_MIX_KITCHEN_CODES_REG',
+        url: '/mix-kitchen-gateway.html',
+        icon: '🍳',
+        defaultCodes: ['888888', '246810', '135790', '555555']
+      },
+      tv: {
+        id: 'tv',
+        name: 'Assassin TV',
+        storageKey: 'CA_TV_ONE_TIME_CODES_REG',
+        url: '/tv-gateway.html',
+        icon: '📺',
+        defaultCodes: ['888888', '334455', '667788', '777777']
+      },
+      radio: {
+        id: 'radio',
+        name: 'Assassin Radio',
+        storageKey: 'CA_RADIO_CODES_REG',
+        url: '/radio-gateway.html',
+        icon: '📻',
+        defaultCodes: ['888888', '101010', '202020', '303030']
+      },
+      streaming: {
+        id: 'streaming',
+        name: '24/7 Live Stream',
+        storageKey: 'CA_STREAMING_CODES_REG',
+        url: '/streaming-gateway.html',
+        icon: '🔴',
+        defaultCodes: ['888888', '404040', '505050', '606060']
+      },
+      mobile: {
+        id: 'mobile',
+        name: 'Mobile Mixes',
+        storageKey: 'CA_MOBILE_MIXES_CODES_REG',
+        url: '/mobile-mixes-gateway.html',
+        icon: '📱',
+        defaultCodes: ['888888', '707070', '808080', '909090']
+      },
+      citadel: {
+        id: 'citadel',
+        name: 'VIP Citadel',
+        storageKey: 'CA_VIP_MEMBER_CODES_REG',
+        url: '/vip-gateway.html',
+        icon: '⛩️',
+        defaultCodes: ['888888', '123456', '654321', '999999']
+      }
+    };
+
+    let activeTab = 'all';
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 0. ROTATING LOGO & MOBILE DRAWER ENGINE
+    // ════════════════════════════════════════════════════════════════════════
+    (function initRotatingLogo() {
+      const rotator = document.getElementById('rotating-logo');
+      if (!rotator) return;
+      const images = Array.from(rotator.querySelectorAll('.site-logo-img'));
+      if (images.length < 2) return;
+      let currentIdx = 0;
+      setInterval(() => {
+        const prevImg = images[currentIdx];
+        if (prevImg) {
+          prevImg.classList.remove('rot-active');
+          prevImg.classList.add('rot-exit');
+        }
+        currentIdx = (currentIdx + 1) % images.length;
+        const nextImg = images[currentIdx];
+        if (nextImg) {
+          nextImg.classList.remove('rot-exit');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              nextImg.classList.add('rot-active');
+            });
+          });
+        }
+      }, 450);
+    })();
+
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    // ── 2. WEB AUDIO FX SYNTHESIZER ───────────────────────────────────────
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playTone(freq, dur = 0.1, type = 'sawtooth') {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        g.gain.setValueAtTime(0.15, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + dur + 0.02);
+      } catch(e) {}
+    }
+
+    function playSuccessChime() {
+      [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.18, 'triangle'), i * 80);
+      });
+    }
+
+    // ── 3. TOAST NOTIFICATION ─────────────────────────────────────────────
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('vaultToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    }
+
+    // ── 4. DATA ACCESS LAYER & INITIALIZATION ────────────────────────────
+    function getSectionRegistry(sectionKey) {
+      const sec = VAULT_SECTIONS[sectionKey];
+      if (!sec) return {};
+      try {
+        const stored = localStorage.getItem(sec.storageKey);
+        if (stored) return JSON.parse(stored);
+      } catch(e) {}
+
+      // Initialize defaults
+      const reg = {};
+      sec.defaultCodes.forEach(pin => {
+        reg[pin] = {
+          pin: pin,
+          used: false,
+          label: (pin === '888888' || pin === '999999') ? 'Master Override Key' : 'Standard VIP Pass',
+          createdAt: Date.now()
+        };
+      });
+      saveSectionRegistry(sectionKey, reg);
+      return reg;
+    }
+
+    function saveSectionRegistry(sectionKey, regObj) {
+      const sec = VAULT_SECTIONS[sectionKey];
+      if (!sec) return;
+      try {
+        localStorage.setItem(sec.storageKey, JSON.stringify(regObj));
+      } catch(e) {}
+    }
+
+    // ── 5. REGISTRY MANAGEMENT & ACTIONS ─────────────────────────────────
+    function selectSectionTab(tabKey) {
+      activeTab = tabKey;
+      document.querySelectorAll('.realm-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.section === tabKey);
+      });
+      playTone(520, 0.06);
+      renderRegistryTable();
+    }
+
+    function renderRegistryTable() {
+      const tbody = document.getElementById('codesTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const query = (document.getElementById('registrySearchInput')?.value || '').trim().toLowerCase();
+
+      let allEntries = [];
+      let totalActive = 0;
+      let totalBurned = 0;
+
+      // Aggregate all sections or current section
+      Object.keys(VAULT_SECTIONS).forEach(secKey => {
+        const sec = VAULT_SECTIONS[secKey];
+        const reg = getSectionRegistry(secKey);
+        
+        let secActive = 0;
+        let secBurned = 0;
+
+        Object.keys(reg).forEach(pin => {
+          const item = reg[pin];
+          const isUsed = Boolean(item.used);
+          if (isUsed) {
+            secBurned++;
+            totalBurned++;
+          } else {
+            secActive++;
+            totalActive++;
+          }
+
+          if (activeTab === 'all' || activeTab === secKey) {
+            allEntries.push({
+              sectionKey: secKey,
+              sectionName: sec.name,
+              sectionIcon: sec.icon,
+              sectionUrl: sec.url,
+              pin: pin,
+              used: isUsed,
+              label: item.label || 'VIP Pass',
+              createdAt: item.createdAt || Date.now(),
+              redeemedAt: item.redeemedAt || null
+            });
+          }
+        });
+
+        // Update tab badge counters
+        const badge = document.getElementById(`badgeCount${secKey.charAt(0).toUpperCase() + secKey.slice(1)}`);
+        if (badge) badge.textContent = `${secActive}`;
+      });
+
+      // Update global metrics
+      document.getElementById('metricTotalActive').textContent = totalActive;
+      document.getElementById('metricTotalBurned').textContent = totalBurned;
+      document.getElementById('badgeCountAll').textContent = totalActive;
+
+      // Filter by search
+      if (query) {
+        allEntries = allEntries.filter(e => 
+          e.pin.toLowerCase().includes(query) || 
+          e.label.toLowerCase().includes(query) || 
+          e.sectionName.toLowerCase().includes(query)
+        );
+      }
+
+      // Sort newest first
+      allEntries.sort((a, b) => b.createdAt - a.createdAt);
+
+      if (allEntries.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding: 32px; color: rgba(255,255,255,0.5); font-family:'Orbitron',sans-serif;">
+              NO PASSCODES FOUND IN THIS VAULT SECTION
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      allEntries.forEach(item => {
+        const tr = document.createElement('tr');
+        const dateStr = new Date(item.createdAt).toLocaleDateString() + ' ' + new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        tr.innerHTML = `
+          <td>
+            <span style="display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+              <span>${item.sectionIcon}</span> <span>${item.sectionName}</span>
+            </span>
+          </td>
+          <td>
+            <span class="code-pin-badge">${item.pin}</span>
+          </td>
+          <td>
+            <span class="status-badge ${item.used ? 'status-burned' : 'status-active'}">
+              ${item.used ? '🔴 BURNED' : '🟢 ACTIVE'}
+            </span>
+          </td>
+          <td style="color: rgba(255,255,255,0.85);">${item.label}</td>
+          <td style="font-size:0.75rem; color:rgba(255,255,255,0.6);">${dateStr}</td>
+          <td>
+            <div class="table-actions">
+              <button class="btn-sm-action" onclick="copyCodeToClipboard('${item.pin}')" title="Copy 6-Digit PIN">📋</button>
+              <button class="btn-sm-action" onclick="toggleCodeBurnStatus('${item.sectionKey}', '${item.pin}')" title="Toggle Active / Burned">
+                ${item.used ? '♻️ Re-activate' : '🔥 Burn'}
+              </button>
+              <a href="${item.sectionUrl}" target="_blank" class="btn-sm-action" title="Open and test in Gateway" style="text-decoration:none;">🚀 Test</a>
+              <button class="btn-sm-action delete" onclick="deleteCode('${item.sectionKey}', '${item.pin}')" title="Delete Code">✕</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ── 6. ISSUE CODE CONTROLLER ─────────────────────────────────────────
+    function issueSinglePasscode() {
+      const target = document.getElementById('genTargetSection').value;
+      let pin = (document.getElementById('genCustomPin').value || '').trim();
+      const label = (document.getElementById('genGuestLabel').value || '').trim() || 'Issued VIP Pass';
+
+      if (!pin) {
+        pin = String(Math.floor(100000 + Math.random() * 900000));
+      } else if (pin.length !== 6 || !/^\d+$/.test(pin)) {
+        showToast('⚠️ PIN MUST BE EXACTLY 6 NUMERIC DIGITS');
+        return;
+      }
+
+      if (target === 'universal') {
+        Object.keys(VAULT_SECTIONS).forEach(secKey => {
+          const reg = getSectionRegistry(secKey);
+          reg[pin] = { pin: pin, used: false, label: label + ' (Universal)', createdAt: Date.now() };
+          saveSectionRegistry(secKey, reg);
+        });
+        showToast(`🌟 UNIVERSAL MASTER PIN [${pin}] ISSUED TO ALL 7 REALMS!`);
+      } else {
+        const reg = getSectionRegistry(target);
+        reg[pin] = { pin: pin, used: false, label: label, createdAt: Date.now() };
+        saveSectionRegistry(target, reg);
+        showToast(`⚡ CODE [${pin}] ISSUED FOR ${VAULT_SECTIONS[target].name}`);
+      }
+
+      playSuccessChime();
+      document.getElementById('genCustomPin').value = '';
+      renderRegistryTable();
+    }
+
+    function issueBatchPasscodes() {
+      const qty = parseInt(document.getElementById('batchQty').value) || 10;
+      const label = (document.getElementById('batchBundleLabel').value || '').trim() || 'Batch Bundle';
+      const target = document.getElementById('genTargetSection').value;
+
+      const targetSections = (target === 'universal') ? Object.keys(VAULT_SECTIONS) : [target];
+
+      targetSections.forEach(secKey => {
+        const reg = getSectionRegistry(secKey);
+        for (let i = 0; i < qty; i++) {
+          const pin = String(Math.floor(100000 + Math.random() * 900000));
+          reg[pin] = { pin: pin, used: false, label: `${label} (#${i+1})`, createdAt: Date.now() };
+        }
+        saveSectionRegistry(secKey, reg);
+      });
+
+      playSuccessChime();
+      showToast(`📦 GENERATED ${qty} PASSCODES FOR ${target === 'universal' ? 'ALL REALMS' : VAULT_SECTIONS[target].name}`);
+      renderRegistryTable();
+    }
+
+    // ── 7. TABLE ACTIONS & UTILITIES ─────────────────────────────────────
+    function copyCodeToClipboard(pin) {
+      navigator.clipboard.writeText(pin).then(() => {
+        playTone(700, 0.08);
+        showToast(`📋 COPIED PIN [${pin}] TO CLIPBOARD`);
+      }).catch(() => {
+        showToast(`PIN: ${pin}`);
+      });
+    }
+
+    function toggleCodeBurnStatus(sectionKey, pin) {
+      const reg = getSectionRegistry(sectionKey);
+      if (reg[pin]) {
+        reg[pin].used = !reg[pin].used;
+        if (reg[pin].used) reg[pin].redeemedAt = Date.now();
+        else delete reg[pin].redeemedAt;
+        saveSectionRegistry(sectionKey, reg);
+        playTone(reg[pin].used ? 350 : 650, 0.08);
+        showToast(`🔄 PIN [${pin}] IS NOW ${reg[pin].used ? 'BURNED/REDEEMED' : 'ACTIVE'}`);
+        renderRegistryTable();
+      }
+    }
+
+    function deleteCode(sectionKey, pin) {
+      if (!confirm(`Are you sure you want to permanently delete code ${pin} from ${VAULT_SECTIONS[sectionKey].name}?`)) return;
+      const reg = getSectionRegistry(sectionKey);
+      if (reg[pin]) {
+        delete reg[pin];
+        saveSectionRegistry(sectionKey, reg);
+        playTone(280, 0.1);
+        showToast(`🗑️ DELETED PIN [${pin}]`);
+        renderRegistryTable();
+      }
+    }
+
+    function resetBurnedCodesForCurrentTab() {
+      const sectionsToReset = (activeTab === 'all') ? Object.keys(VAULT_SECTIONS) : [activeTab];
+      sectionsToReset.forEach(secKey => {
+        const reg = getSectionRegistry(secKey);
+        Object.keys(reg).forEach(p => { reg[p].used = false; });
+        saveSectionRegistry(secKey, reg);
+      });
+      playSuccessChime();
+      showToast(`♻️ ALL BURNED CODES RESET TO ACTIVE FOR ${activeTab === 'all' ? 'ALL REALMS' : VAULT_SECTIONS[activeTab].name}`);
+      renderRegistryTable();
+    }
+
+    function copyAllActiveCodes() {
+      let activeCodes = [];
+      const sections = (activeTab === 'all') ? Object.keys(VAULT_SECTIONS) : [activeTab];
+      sections.forEach(secKey => {
+        const reg = getSectionRegistry(secKey);
+        Object.keys(reg).forEach(p => {
+          if (!reg[p].used) activeCodes.push(`${p} (${VAULT_SECTIONS[secKey].name})`);
+        });
+      });
+
+      if (activeCodes.length === 0) {
+        showToast('⚠️ NO ACTIVE CODES TO COPY');
+        return;
+      }
+
+      navigator.clipboard.writeText(activeCodes.join('\n')).then(() => {
+        playSuccessChime();
+        showToast(`📋 COPIED ${activeCodes.length} ACTIVE CODES TO CLIPBOARD`);
+      });
+    }
+
+    function exportCurrentTabCSV() {
+      let rows = [['Section', 'PIN', 'Status', 'Label', 'CreatedAt']];
+      const sections = (activeTab === 'all') ? Object.keys(VAULT_SECTIONS) : [activeTab];
+      sections.forEach(secKey => {
+        const reg = getSectionRegistry(secKey);
+        Object.keys(reg).forEach(p => {
+          const item = reg[p];
+          rows.push([
+            `"${VAULT_SECTIONS[secKey].name}"`,
+            `"${item.pin}"`,
+            item.used ? '"Burned"' : '"Active"',
+            `"${item.label}"`,
+            `"${new Date(item.createdAt).toISOString()}"`
+          ]);
+        });
+      });
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.join(',')).join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `Chinese_Assassin_Codes_${activeTab}_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('📄 CSV EXPORT COMPLETE');
+    }
+
+    function exportMasterJSON() {
+      let masterData = {};
+      Object.keys(VAULT_SECTIONS).forEach(secKey => {
+        masterData[secKey] = getSectionRegistry(secKey);
+      });
+
+      const jsonStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(masterData, null, 2));
+      const link = document.createElement('a');
+      link.setAttribute('href', jsonStr);
+      link.setAttribute('download', `Chinese_Assassin_Master_Vault_${Date.now()}.json`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('💾 MASTER JSON BACKUP SAVED');
+    }
+
+    function clearCurrentSectionRegistry() {
+      if (activeTab === 'all') {
+        if (!confirm('CAUTION: Are you sure you want to clear ALL codes across ALL 7 realms?')) return;
+        Object.keys(VAULT_SECTIONS).forEach(secKey => {
+          localStorage.removeItem(VAULT_SECTIONS[secKey].storageKey);
+        });
+      } else {
+        if (!confirm(`Are you sure you want to clear codes for ${VAULT_SECTIONS[activeTab].name}?`)) return;
+        localStorage.removeItem(VAULT_SECTIONS[activeTab].storageKey);
+      }
+      showToast('🗑️ REGISTRY CLEARED');
+      renderRegistryTable();
+    }
+
+    // ── 8. ADMIN PIN SECURITY ────────────────────────────────────────────
+    function verifyAdminPIN() {
+      const pin = document.getElementById('adminMasterPinInput').value.trim();
+      if (pin === '888888' || pin === '999999' || pin === '1337' || pin === '123456') {
+        sessionStorage.setItem('CA_ADMIN_VAULT_UNLOCKED', 'true');
+        document.getElementById('adminAuthOverlay').style.display = 'none';
+        playSuccessChime();
+        showToast('🔓 ADMIN VAULT UNLOCKED');
+      } else {
+        playTone(180, 0.3, 'sawtooth');
+        showToast('❌ INVALID MASTER PIN');
+        document.getElementById('adminMasterPinInput').value = '';
+        document.getElementById('adminMasterPinInput').focus();
+      }
+    }
+
+    function lockVaultTerminal() {
+      sessionStorage.removeItem('CA_ADMIN_VAULT_UNLOCKED');
+      document.getElementById('adminAuthOverlay').style.display = 'flex';
+      document.getElementById('adminMasterPinInput').value = '';
+      document.getElementById('adminMasterPinInput').focus();
+      showToast('🔒 TERMINAL LOCKED');
+    }
+
+    // ── 9. ON LOAD INITIALIZATION ────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check session auth
+      const isUnlocked = sessionStorage.getItem('CA_ADMIN_VAULT_UNLOCKED');
+      if (!isUnlocked) {
+        document.getElementById('adminAuthOverlay').style.display = 'flex';
+        document.getElementById('adminMasterPinInput').focus();
+      }
+
+      // Check URL section parameter (e.g. ?section=kitchen)
+      const params = new URLSearchParams(window.location.search);
+      const targetSec = params.get('section');
+      if (targetSec && VAULT_SECTIONS[targetSec]) {
+        activeTab = targetSec;
+        const select = document.getElementById('genTargetSection');
+        if (select) select.value = targetSec;
+      }
+
+      renderRegistryTable();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Assassin — The Ultimate Mix Experience (Master Hub)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    :root {
+      --primary-red: #ff203a;
+      --primary-neon: #ff0055;
+      --neon-ruby: #ff0055;
+      --glow-pink: rgba(255, 0, 85, 0.4);
+      --glow-red: 0 0 25px rgba(255, 32, 58, 0.75);
+      --mega-bg: rgba(8, 3, 10, 0.94);
+      --mega-border: rgba(255, 32, 58, 0.35);
+      --mega-link: #d8d8d8;
+      --mega-featured-bg: rgba(255, 32, 58, 0.08);
+      --header-h: 56px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       1. UNIVERSAL FLOATING HEADER (CAPSULE ISLAND)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .site-header.floating-header {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1320px;
+      height: 65px;
+      background: rgba(10, 4, 12, 0.85);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 2px solid rgba(255, 32, 58, 0.45);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 32, 58, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      z-index: 5000;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-rotator {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      perspective: 750px;
+    }
+
+    .site-logo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--glow-pink);
+      border: 1px solid var(--primary-neon);
+      transform: rotateY(-90deg) scale(1.15);
+      opacity: 0;
+      pointer-events: none;
+      object-fit: cover;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-in;
+    }
+
+    .site-logo-img.rot-active {
+      transform: rotateY(0deg) scale(1.15);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-logo-img.rot-exit {
+      transform: rotateY(90deg) scale(1.15);
+      opacity: 0;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.1s ease-out;
+    }
+
+    .logo {
+      font-size: 1.56rem;
+      font-weight: 800;
+      font-size: 1.95rem;
+      font-weight: 800;
+      letter-spacing: 2.8125px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .logo span {
+      color: var(--primary-neon);
+      text-shadow: 0 0 12.5px var(--glow-pink);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 18.75px;
+      flex-wrap: nowrap;
+      overflow: visible;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-item > a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.03rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.75px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 8px;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-item > a::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-neon, #ff0055);
+      transition: width 0.25s ease;
+    }
+
+    .nav-item > a:hover::after,
+    .nav-item > a.active::after {
+      width: 100%;
+    }
+
+    .nav-item > a:hover,
+    .nav-item > a.active {
+      color: var(--primary-neon, #ff0055);
+    }
+
+    .nav-item.has-mega-menu {
+      position: relative;
+    }
+
+    .nav-item.has-mega-menu:hover .mega-menu,
+    .nav-item.has-mega-menu.mega-open .mega-menu,
+    .mega-menu:hover {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      transform: translateX(-50%) translateY(0) !important;
+    }
+
+    .chevron {
+      font-size: 0.875rem;
+      margin-left: 5px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.has-mega-menu:hover .chevron,
+    .nav-item.has-mega-menu.mega-open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .mega-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 780px;
+      background: rgba(14, 6, 12, 0.97);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      border: 1.5px solid rgba(255, 32, 58, 0.45);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 32, 58, 0.25);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 6000;
+    }
+
+    .mega-menu::before {
+      content: '';
+      position: absolute;
+      top: -16px;
+      left: 0;
+      right: 0;
+      height: 16px;
+      background: transparent;
+    }
+
+    .mega-menu-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    .mega-col {
+      flex: 1;
+    }
+
+    .mega-col h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary-neon, #ff0055);
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .mega-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mega-col ul a {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: block;
+      padding: 5px 0;
+    }
+
+    .mega-col ul a:hover {
+      color: var(--primary-neon, #ff0055);
+      transform: translateX(4px);
+    }
+
+    .mega-col.featured-set {
+      flex: 1.3;
+      background: rgba(255, 32, 58, 0.06);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 32, 58, 0.2);
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 95px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 32, 58, 0.3);
+    }
+
+    .mix-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mix-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: transform 0.2s;
+    }
+
+    .mix-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--primary-neon, #ff0055);
+    }
+
+    .mix-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: #ff203a;
+      transform: scale(1.1);
+    }
+
+    .sign-in-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 20px;
+      border-radius: 25px;
+      border: 1px solid #ff203a;
+      color: #ff203a !important;
+      font-size: 0.875rem;
+      font-weight: 800;
+      letter-spacing: 1.25px;
+      text-decoration: none;
+      background: rgba(255, 32, 58, 0.08);
+      box-shadow: 0 0 10px rgba(255, 32, 58, 0.25);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sign-in-btn:hover {
+      background: #ff203a;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 6000;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-drawer-card {
+      width: min(340px, 85vw);
+      height: 100%;
+      background: rgba(14, 6, 12, 0.98);
+      border-left: 1.5px solid rgba(255, 32, 58, 0.4);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9);
+      overflow-y: auto;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mobile-drawer-close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mobile-drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .mobile-nav-item {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+      background: rgba(255, 32, 58, 0.15);
+      border-color: rgba(255, 32, 58, 0.4);
+      color: #ff203a;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       AMBIENT BACKGROUND FLOATING GLOW EFFECTS
+       ══════════════════════════════════════════════════════════════════════════ */
+    .ambient-bg-effects {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      opacity: 0.38;
+      pointer-events: none;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, #ff203a 0%, transparent 70%); top: -120px; left: 10%; }
+    .orb-2 { width: 580px; height: 580px; background: radial-gradient(circle, #ff0055 0%, transparent 70%); bottom: -150px; right: 8%; animation-delay: -5s; }
+    .orb-3 { width: 440px; height: 440px; background: radial-gradient(circle, #ff5500 0%, transparent 70%); top: 40%; left: -100px; animation-delay: -8s; }
+
+    .orb-4 { width: 380px; height: 380px; background: radial-gradient(circle, #880022 0%, transparent 70%); top: 60%; right: -80px; animation-delay: -11s; }
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, 30px) scale(1.1); }
+      100% { transform: translate(-30px, -35px) scale(0.95); }
+    }
+
+    .ambient-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 32, 58, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 32, 58, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       3. MASTER HP-FINAL STAGE (PERFECT FIT WITHOUT CUTOFF)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .home-nice-stage {
+      position: fixed;
+      top: 85px;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .home-artwork-wrapper {
+      position: relative;
+      height: 100%;
+      max-height: 100%;
+      width: auto;
+      aspect-ratio: 3 / 2;
+      max-width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 50px rgba(255, 32, 58, 0.35), 0 20px 80px rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 32, 58, 0.22);
+      background: #050207;
+      animation: floatingStageBreath 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatingStageBreath {
+      0% {
+        transform: translateY(0px);
+        box-shadow: 0 0 45px rgba(255, 32, 58, 0.3), 0 20px 80px rgba(0, 0, 0, 0.95);
+      }
+      100% {
+        transform: translateY(-4px);
+        box-shadow: 0 0 70px rgba(255, 32, 58, 0.45), 0 25px 95px rgba(0, 0, 0, 0.98);
+      }
+    }
+
+    .home-nice-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* ── PORTAL CIRCLE VIDEO OVERLAY (ALIGNED INSIDE THE GLOWING RING) ── */
+    .portal-circle-wrapper {
+      position: absolute;
+      left: 56.4%;
+      top: 11.2%;
+      width: 16.5%;
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      overflow: hidden;
+      z-index: 15;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s ease;
+      box-shadow: 0 0 45px rgba(255, 32, 58, 0.9), inset 0 0 35px rgba(0, 0, 0, 0.9);
+      border: 2px solid rgba(255, 32, 58, 0.85);
+      background: #000000;
+    }
+
+    .portal-circle-wrapper.video-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto !important;
+      z-index: 100 !important;
+    }
+
+    .portal-circle-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .portal-circle-vignette {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, transparent 60%, rgba(6, 1, 4, 0.7) 88%, rgba(255, 32, 58, 0.5) 100%);
+      pointer-events: none;
+    }
+
+    .portal-vid-ctrls {
+      position: absolute;
+      bottom: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 110 !important;
+      pointer-events: auto !important;
+    }
+
+    .vid-ctrl-btn {
+      background: rgba(14, 4, 8, 0.9);
+      border: 1.5px solid var(--primary-red);
+      color: #ffffff;
+      padding: 5px 12px;
+      border-radius: 30px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.6);
+      transition: all 0.2s ease;
+    }
+    .vid-ctrl-btn:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 25px #ff203a;
+      transform: scale(1.05);
+    }
+
+    /* ── INVISIBLE CSS HOTSPOTS LAYER ────────────────────────────────────── */
+    .hotspots-grid-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      z-index: 35;
+      transition: opacity 0.3s ease;
+    }
+
+    .hs-btn {
+      position: absolute;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s ease, transform 0.15s ease;
+      border-radius: 6px;
+      z-index: 25;
+    }
+
+    .hs-btn:hover {
+      background: rgba(255, 32, 58, 0.08) !important;
+    }
+
+    .hs-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Top Left Logo Link */
+    .hs-top-logo { left: 1.0%; top: 1.0%; width: 8.0%; height: 9.5%; border-radius: 50%; }
+
+    /* Top Header Auth Hotspots */
+    .hs-top-signin { right: 7.2%; top: 1.5%; width: 5.5%; height: 3.4%; border-radius: 30px; }
+    .hs-top-joinvip { right: 1.2%; top: 1.5%; width: 5.5%; height: 3.4%; border-radius: 30px; }
+
+    /* Left Sidebar Navigation Hotspots */
+    .hs-nav-home      { left: 0.6%; top: 11.5%; width: 8.8%; height: 3.5%; }
+    .hs-nav-stream    { left: 0.6%; top: 15.8%; width: 8.8%; height: 3.5%; }
+    .hs-nav-tv        { left: 0.6%; top: 20.0%; width: 8.8%; height: 3.5%; }
+    .hs-nav-mobile    { left: 0.6%; top: 24.2%; width: 8.8%; height: 3.5%; }
+    .hs-nav-kitchen   { left: 0.6%; top: 28.5%; width: 8.8%; height: 3.5%; }
+    .hs-nav-radio     { left: 0.6%; top: 32.8%; width: 8.8%; height: 3.5%; }
+    .hs-nav-citadel   { left: 0.6%; top: 37.0%; width: 8.8%; height: 3.5%; }
+    .hs-nav-flashdrive{ left: 0.6%; top: 41.5%; width: 8.8%; height: 3.8%; }
+    .hs-nav-shop      { left: 0.6%; top: 46.5%; width: 8.8%; height: 3.5%; }
+    .hs-nav-vault     { left: 0.6%; top: 50.8%; width: 8.8%; height: 3.5%; }
+    .hs-nav-about     { left: 0.6%; top: 55.0%; width: 8.8%; height: 3.5%; }
+    .hs-nav-contact   { left: 0.6%; top: 59.2%; width: 8.8%; height: 3.5%; }
+
+    /* Left Sidebar Socials */
+    .hs-social-fb     { left: 1.0%; top: 80.5%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-social-ig     { left: 3.0%; top: 80.5%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-social-x      { left: 5.0%; top: 80.5%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+    .hs-social-yt     { left: 7.0%; top: 80.5%; width: 1.8%; height: 2.8%; border-radius: 50%; }
+
+    /* Center Hero PLAY ▶ Button Hotspot */
+    .hs-hero-play {
+      right: 2.2%;
+      top: 9.5%;
+      width: 13.5%;
+      height: 5.8%;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+
+    /* Top 7 Featured Dimensions Cards Row */
+    .hs-card-stream   { left: 11.2%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+    .hs-card-tv       { left: 23.8%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+    .hs-card-mobile   { left: 36.4%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+    .hs-card-kitchen  { left: 49.0%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+    .hs-card-radio    { left: 61.6%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+    .hs-card-citadel  { left: 74.2%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+    .hs-card-flashdrive{ left: 86.8%; top: 19.2%; width: 11.8%; height: 22.2%; border-radius: 12px; }
+
+    /* Middle Row 1: Hot & Trending Mixes (4 Cards) */
+    .hs-trend-viewall { left: 47.0%; top: 43.5%; width: 5.0%; height: 2.2%; border-radius: 4px; }
+    .hs-trend-1       { left: 11.8%; top: 45.8%; width: 9.6%; height: 13.5%; border-radius: 8px; }
+    .hs-trend-2       { left: 22.0%; top: 45.8%; width: 9.6%; height: 13.5%; border-radius: 8px; }
+    .hs-trend-3       { left: 32.2%; top: 45.8%; width: 9.6%; height: 13.5%; border-radius: 8px; }
+    .hs-trend-4       { left: 42.4%; top: 45.8%; width: 9.6%; height: 13.5%; border-radius: 8px; }
+
+    /* Middle Row 1: Live on Assassin Radio (4 Cards) */
+    .hs-radio-viewall { right: 1.5%; top: 43.5%; width: 5.0%; height: 2.2%; border-radius: 4px; }
+    .hs-radio-1       { left: 54.5%; top: 45.8%; width: 10.0%; height: 13.5%; border-radius: 8px; }
+    .hs-radio-2       { left: 65.5%; top: 45.8%; width: 10.0%; height: 13.5%; border-radius: 8px; }
+    .hs-radio-3       { left: 76.5%; top: 45.8%; width: 10.0%; height: 13.5%; border-radius: 8px; }
+    .hs-radio-4       { left: 87.5%; top: 45.8%; width: 10.0%; height: 13.5%; border-radius: 8px; }
+
+    /* Middle Row 2: Radio & Mood Meter Hub */
+    .hs-genre-dancehall { left: 17.5%; top: 78.5%; width: 5.5%; height: 2.8%; border-radius: 4px; }
+    .hs-genre-reggae    { left: 24.0%; top: 78.5%; width: 5.5%; height: 2.8%; border-radius: 4px; }
+    .hs-genre-soca      { left: 30.2%; top: 78.5%; width: 5.5%; height: 2.8%; border-radius: 4px; }
+    .hs-genre-hiphop    { left: 36.5%; top: 78.5%; width: 5.5%; height: 2.8%; border-radius: 4px; }
+
+    .hs-mood-chill      { left: 35.8%; top: 72.0%; width: 5.5%; height: 5.5%; border-radius: 50%; }
+    .hs-mood-happy      { left: 41.5%; top: 66.5%; width: 5.5%; height: 5.5%; border-radius: 50%; }
+    .hs-mood-energetic  { left: 48.2%; top: 64.8%; width: 5.5%; height: 5.5%; border-radius: 50%; }
+    .hs-mood-positive   { left: 55.0%; top: 66.5%; width: 5.5%; height: 5.5%; border-radius: 50%; }
+    .hs-mood-love       { left: 60.8%; top: 72.0%; width: 5.5%; height: 5.5%; border-radius: 50%; }
+
+    .hs-mood-prev       { left: 44.5%; top: 77.2%; width: 2.5%; height: 3.5%; }
+    .hs-mood-center-play{ left: 48.0%; top: 74.0%; width: 5.8%; height: 5.8%; border-radius: 50%; }
+    .hs-mood-next       { left: 54.8%; top: 77.2%; width: 2.5%; height: 3.5%; }
+
+    .hs-genre-afrobeat  { left: 58.0%; top: 78.5%; width: 5.5%; height: 2.8%; border-radius: 4px; }
+    .hs-genre-rnb       { left: 64.0%; top: 78.5%; width: 4.8%; height: 2.8%; border-radius: 4px; }
+    .hs-genre-slowjamz  { left: 69.2%; top: 78.5%; width: 5.8%; height: 2.8%; border-radius: 4px; }
+    .hs-genre-vault     { left: 75.4%; top: 78.5%; width: 6.8%; height: 2.8%; border-radius: 4px; }
+
+    /* Live On The Air DJ Station List */
+    .hs-live-dj-1       { left: 74.0%; top: 64.2%; width: 16.5%; height: 3.2%; border-radius: 4px; }
+    .hs-live-dj-2       { left: 74.0%; top: 67.8%; width: 16.5%; height: 3.2%; border-radius: 4px; }
+    .hs-live-dj-3       { left: 74.0%; top: 71.4%; width: 16.5%; height: 3.2%; border-radius: 4px; }
+    .hs-live-dj-4       { left: 74.0%; top: 75.0%; width: 16.5%; height: 3.2%; border-radius: 4px; }
+
+    /* Bottom Row Feature Cards (4 Cards) */
+    .hs-feat-mobile     { left: 11.2%; top: 82.5%; width: 21.0%; height: 9.5%; border-radius: 8px; }
+    .hs-feat-kitchen    { left: 33.0%; top: 82.5%; width: 21.0%; height: 9.5%; border-radius: 8px; }
+    .hs-feat-tv         { left: 54.8%; top: 82.5%; width: 21.0%; height: 9.5%; border-radius: 8px; }
+    .hs-feat-vault      { left: 76.6%; top: 82.5%; width: 21.5%; height: 9.5%; border-radius: 8px; }
+
+    /* Sticky Bottom Player Bar Hotspots */
+    .hs-player-art        { left: 0.8%;  bottom: 0.8%; width: 4.8%; height: 5.5%; border-radius: 6px; }
+    .hs-player-trackinfo   { left: 5.8%;  bottom: 1.0%; width: 12.5%; height: 5.2%; }
+    .hs-player-shuffle    { left: 31.0%; bottom: 1.5%; width: 2.5%; height: 4.0%; }
+    .hs-player-prev       { left: 35.5%; bottom: 1.5%; width: 2.5%; height: 4.0%; }
+    .hs-player-play       { left: 39.5%; bottom: 0.8%; width: 4.5%; height: 5.5%; border-radius: 50%; }
+    .hs-player-next       { left: 45.2%; bottom: 1.5%; width: 2.5%; height: 4.0%; }
+    .hs-player-loop       { left: 49.5%; bottom: 1.5%; width: 2.5%; height: 4.0%; }
+    /* Speaker / mute hotspot sits directly over the speaker icon (69.86% - 70.83%) */
+    .hs-player-mute       { left: 69.5%; bottom: 1.8%; width: 1.6%; height: 4.6%; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 40; }
+    .hs-player-mute .mute-slash {
+      position: absolute;
+      width: 70%;
+      height: 2.5px;
+      background: #ff203a;
+      border-radius: 2px;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 8px #ff203a, 0 0 2px #fff;
+      pointer-events: none;
+    }
+    /* Volume slider in clean gap between speaker (ends 70.83%) and playlist icon (starts 77.8%) */
+    .hs-player-vol-container {
+      position: absolute;
+      left: 71.6%;
+      bottom: 3.15%;
+      width: 5.0%;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0 2px;
+      box-sizing: border-box;
+      z-index: 40;
+      cursor: pointer;
+      user-select: none;
+    }
+    .vol-fader-track {
+      position: relative;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 32, 58, 0.28);
+      border: 1px solid rgba(255, 32, 58, 0.5);
+      border-radius: 3px;
+      box-shadow: 0 0 6px rgba(255, 32, 58, 0.35);
+      pointer-events: none;
+    }
+    .vol-fader-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: var(--vol-pct, 85%);
+      background: linear-gradient(90deg, #ff203a 0%, #ff5268 100%);
+      border-radius: 2px;
+      box-shadow: 0 0 8px #ff203a, 0 0 16px rgba(255, 32, 58, 0.7);
+      pointer-events: none;
+      transition: width 0.04s ease-out;
+    }
+    .vol-fader-knob {
+      position: absolute;
+      top: 50%;
+      left: var(--vol-pct, 85%);
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 35% 35%, #ff5268 0%, #ff203a 65%, #990014 100%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff203a, 0 0 4px #ff203a, 0 1px 4px rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: left 0.04s ease-out, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .hs-player-vol-container:hover .vol-fader-knob,
+    .hs-player-vol-container.is-dragging .vol-fader-knob {
+      transform: translate(-50%, -50%) scale(1.35);
+      box-shadow: 0 0 18px #ff203a, 0 0 8px #ffffff;
+      background: radial-gradient(circle at 35% 35%, #ff8093 0%, #ff203a 65%, #c4001a 100%);
+    }
+    .vol-fader-line {
+      display: none;
+    }
+    .vol-fader-tooltip {
+      position: absolute;
+      bottom: 150%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14, 4, 8, 0.96);
+      border: 1px solid #ff203a;
+      color: #ff203a;
+      font-size: 10px;
+      font-family: 'Orbitron', monospace, sans-serif;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.6);
+    }
+    .hs-player-vol-container:hover .vol-fader-tooltip,
+    .hs-player-vol-container.is-dragging .vol-fader-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+    /* Invisible range input covering the track for standard interaction */
+    .hs-player-vol-slider-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    /* Track Time Slider in exact artwork groove (54.6% - 67.0%) */
+    .hs-player-time-container {
+      position: absolute;
+      left: 54.6%;
+      bottom: 1.95%;
+      width: 12.4%;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0 2px;
+      box-sizing: border-box;
+      z-index: 40;
+      cursor: pointer;
+      user-select: none;
+    }
+    .time-fader-track {
+      position: relative;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 32, 58, 0.28);
+      border: 1px solid rgba(255, 32, 58, 0.5);
+      border-radius: 3px;
+      box-shadow: 0 0 6px rgba(255, 32, 58, 0.35);
+      pointer-events: none;
+    }
+    .time-fader-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: var(--time-pct, 0%);
+      background: linear-gradient(90deg, #ff203a 0%, #ff5268 100%);
+      border-radius: 2px;
+      box-shadow: 0 0 8px #ff203a, 0 0 16px rgba(255, 32, 58, 0.7);
+      pointer-events: none;
+      transition: width 0.05s linear;
+    }
+    .time-fader-knob {
+      position: absolute;
+      top: 50%;
+      left: var(--time-pct, 0%);
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 35% 35%, #ff5268 0%, #ff203a 65%, #990014 100%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff203a, 0 0 4px #ff203a, 0 1px 4px rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: left 0.05s linear, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .hs-player-time-container:hover .time-fader-knob,
+    .hs-player-time-container.is-dragging .time-fader-knob {
+      transform: translate(-50%, -50%) scale(1.35);
+      box-shadow: 0 0 18px #ff203a, 0 0 8px #ffffff;
+      background: radial-gradient(circle at 35% 35%, #ff8093 0%, #ff203a 65%, #c4001a 100%);
+    }
+    .time-fader-line {
+      display: none;
+    }
+    .time-fader-tooltip {
+      position: absolute;
+      bottom: 150%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14, 4, 8, 0.96);
+      border: 1px solid #ff203a;
+      color: #ff203a;
+      font-size: 10px;
+      font-family: 'Orbitron', monospace, sans-serif;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.6);
+    }
+    .hs-player-time-container:hover .time-fader-tooltip,
+    .hs-player-time-container.is-dragging .time-fader-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+    .hs-player-time-slider-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      z-index: 5;
+    }
+    /* Dynamic Live Track Time Display (matching HP-FINAL3 design position) */
+    .hs-player-time-display {
+      position: absolute;
+      left: 61.8%;
+      bottom: 3.8%;
+      min-width: 5.4%;
+      height: 14px;
+      line-height: 14px;
+      font-family: 'Orbitron', monospace, sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ff334b;
+      text-shadow: 0 0 8px rgba(255, 32, 58, 0.8), 0 0 2px #fff;
+      background: rgba(10, 4, 8, 0.85);
+      border: 1px solid rgba(255, 32, 58, 0.35);
+      border-radius: 3px;
+      padding: 0 5px;
+      letter-spacing: 0.5px;
+      text-align: center;
+      pointer-events: none;
+      z-index: 40;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+
+    .hs-player-chamber    { right: 1.5%; bottom: 0.8%; width: 16.5%; height: 5.5%; border-radius: 12px; }
+
+    /* Yellow Audio Frequency Spectrum Visualizer (Beside Audio Track Info) */
+    .audio-spectrum-yellow {
+      position: absolute;
+      left: 18.6%;
+      bottom: 1.5%;
+      height: 4.2%;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      padding: 2px 4px;
+      z-index: 35;
+      pointer-events: none;
+      opacity: 0;
+      transform: scaleY(0.5);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .audio-spectrum-yellow.active {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    .audio-spectrum-yellow .spec-bar {
+      display: inline-block;
+      width: 3.5px;
+      height: 100%;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(to top, #ff9900, #ffe600, #ffffff);
+      box-shadow: 0 0 7px rgba(255, 230, 0, 0.85), 0 0 14px rgba(255, 170, 0, 0.45);
+      transform-origin: bottom;
+      transform: scaleY(0.12);
+      transition: transform 0.2s ease;
+    }
+
+    .audio-spectrum-yellow.active .spec-bar {
+      animation: specDanceYellow 1.1s ease-in-out infinite alternate;
+    }
+
+    .audio-spectrum-yellow.active .spec-bar.b1  { animation-duration: 0.65s; animation-delay: 0.00s; }
+    .audio-spectrum-yellow.active .spec-bar.b2  { animation-duration: 0.85s; animation-delay: 0.15s; }
+    .audio-spectrum-yellow.active .spec-bar.b3  { animation-duration: 0.48s; animation-delay: 0.08s; }
+    .audio-spectrum-yellow.active .spec-bar.b4  { animation-duration: 0.95s; animation-delay: 0.22s; }
+    .audio-spectrum-yellow.active .spec-bar.b5  { animation-duration: 0.70s; animation-delay: 0.05s; }
+    .audio-spectrum-yellow.active .spec-bar.b6  { animation-duration: 1.10s; animation-delay: 0.30s; }
+    .audio-spectrum-yellow.active .spec-bar.b7  { animation-duration: 0.54s; animation-delay: 0.12s; }
+    .audio-spectrum-yellow.active .spec-bar.b8  { animation-duration: 0.82s; animation-delay: 0.25s; }
+    .audio-spectrum-yellow.active .spec-bar.b9  { animation-duration: 0.60s; animation-delay: 0.18s; }
+    .audio-spectrum-yellow.active .spec-bar.b10 { animation-duration: 0.92s; animation-delay: 0.07s; }
+    .audio-spectrum-yellow.active .spec-bar.b11 { animation-duration: 0.74s; animation-delay: 0.28s; }
+    .audio-spectrum-yellow.active .spec-bar.b12 { animation-duration: 0.50s; animation-delay: 0.14s; }
+
+    @keyframes specDanceYellow {
+      0%   { transform: scaleY(0.15); }
+      25%  { transform: scaleY(0.78); }
+      50%  { transform: scaleY(0.32); }
+      75%  { transform: scaleY(1.00); }
+      100% { transform: scaleY(0.20); }
+    }
+
+    /* Toast HUD */
+    .portal-hud-toast {
+      position: fixed;
+      bottom: 75px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14, 6, 16, 0.95);
+      border: 1.5px solid var(--primary-red);
+      border-radius: 50px;
+      padding: 10px 28px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 0 30px rgba(255, 32, 58, 0.7);
+      display: none;
+      z-index: 10000;
+      backdrop-filter: blur(16px);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       CINEMATIC SPLIT CURTAIN REVEAL
+       ══════════════════════════════════════════════════════════════════════════ */
+
+    /* Each curtain panel is an ARTWORK IMAGE CLONE, clipped to left or right half.
+       They slide outward to reveal the video behind. Normal state = fully covering artwork. */
+    .split-curtain-left,
+    .split-curtain-right {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 30;
+      overflow: hidden;
+      transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+      pointer-events: none;
+    }
+    .split-curtain-left  { left: 0;  transform: translateX(0); }
+    .split-curtain-right { right: 0; transform: translateX(0); }
+
+    /* Inside each curtain: a full-size artwork image clone,
+       the LEFT curtain shows only the left half (right half is overflow-hidden),
+       the RIGHT curtain shows the right half (left half is overflow-hidden). */
+    .curtain-img {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      pointer-events: none;
+    }
+    /* Left curtain image: anchored at left=0, full width of PARENT, so it shows left half */
+    .split-curtain-left  .curtain-img { left: 0;    width: 200%; }
+    /* Right curtain image: anchored at right=0, full width of PARENT, offset so right half shows */
+    .split-curtain-right .curtain-img { right: 0;   width: 200%; }
+
+    /* Red glow seam — REMOVED: no line at the split */
+    .split-curtain-left::after {
+      display: none;
+    }
+
+    /* OPEN: panels slide fully offscreen */
+    .curtains-open .split-curtain-left  { transform: translateX(-100%); }
+    .curtains-open .split-curtain-right { transform: translateX(100%);  }
+    .curtains-open .split-curtain-left::after { display: none; }
+
+    /* When cinema is open, disable hotspot layer so close/stop buttons work */
+    .curtains-open .hotspots-grid-layer {
+      pointer-events: none !important;
+      opacity: 0 !important;
+    }
+
+    /* Cinema video stage sits UNDER the curtain panels (z-index 5) */
+    .cinema-video-stage {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cinema-video-stage video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Close (X) button — only visible when curtains are open */
+    .cinema-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      z-index: 200;
+      background: rgba(8, 2, 6, 0.85);
+      border: 1.5px solid var(--primary-red);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transition: opacity 0.35s ease 0.7s, background 0.2s, box-shadow 0.2s;
+    }
+    .cinema-close-btn:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 30px #ff203a;
+    }
+    .curtains-open .cinema-close-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ── PREMIUM CINEMA CONTROL BAR ─────────────────────────────────────── */
+    .cinema-hud {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      padding: 0 20px 14px;
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.55) 60%, transparent 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease 0.75s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .curtains-open .cinema-hud {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Progress / Seek Bar */
+    .cinema-progress-wrap {
+      position: relative;
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: height 0.18s ease;
+    }
+    .cinema-progress-wrap:hover { height: 7px; }
+    .cinema-progress-fill {
+      position: absolute;
+      left: 0; top: 0; height: 100%;
+      background: linear-gradient(90deg, #ff203a, #ff6b35);
+      border-radius: 4px;
+      width: 0%;
+      pointer-events: none;
+      box-shadow: 0 0 8px rgba(255,32,58,0.7);
+    }
+    .cinema-progress-thumb {
+      position: absolute;
+      top: 50%;
+      width: 13px; height: 13px;
+      background: #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #ff203a;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+    .cinema-progress-wrap:hover .cinema-progress-thumb { opacity: 1; }
+
+    /* Bottom row of controls */
+    .cinema-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    /* Icon control buttons */
+    .cin-btn {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      line-height: 1;
+      transition: color 0.18s, background 0.18s, box-shadow 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cin-btn:hover {
+      color: #ff203a;
+      background: rgba(255,32,58,0.12);
+      box-shadow: 0 0 12px rgba(255,32,58,0.3);
+    }
+    .cin-btn:active { transform: scale(0.93); }
+    .cin-btn svg { display: block; }
+
+    /* Spacer */
+    .cin-spacer { flex: 1; }
+
+    /* Time display */
+    .cin-time {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 1px;
+      white-space: nowrap;
+      padding: 0 6px;
+    }
+
+    /* Volume slider */
+    .cin-volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cin-volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 72px;
+      height: 4px;
+      background: rgba(255,255,255,0.22);
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      transition: width 0.2s ease;
+    }
+    .cin-volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 6px #ff203a;
+      cursor: pointer;
+    }
+    .cin-volume-slider:hover { width: 90px; }
+
+    /* Live badge */
+    .cin-live-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #fff;
+      background: #ff203a;
+      padding: 3px 9px;
+      border-radius: 20px;
+      box-shadow: 0 0 12px rgba(255,32,58,0.8);
+      animation: livePulse 1.8s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255,32,58,0.7); }
+      50%       { box-shadow: 0 0 22px rgba(255,32,58,1);   }
+    }
+
+    /* Title strip */
+    .cin-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      padding: 0 4px;
+    }
+
+    /* Top-right close button */
+    .cinema-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      z-index: 200;
+      background: rgba(8, 2, 6, 0.85);
+      border: 1.5px solid var(--primary-red);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 18px rgba(255, 32, 58, 0.7);
+      transition: opacity 0.35s ease 0.75s, background 0.2s, box-shadow 0.2s;
+    }
+    .cinema-close-btn:hover {
+      background: var(--primary-red);
+      box-shadow: 0 0 30px #ff203a;
+    }
+    .curtains-open .cinema-close-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AMBIENT FLOATING CYBERPUNK BACKGROUND EFFECTS -->
+  <div class="ambient-bg-effects" id="ambientBgEffects">
+    <canvas id="ambientParticleCanvas" class="ambient-particles"></canvas>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="glow-orb orb-4"></div>
+    <div class="ambient-grid-overlay"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       1. UNIVERSAL FLOATING HEADER
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <header class="site-header floating-header" id="siteHeader">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="Chinese Assassin Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="Chinese Assassin Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="Chinese Assassin Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="Chinese Assassin Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <div class="nav-item"><a href="/">HOME</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">DIMENSION HUB</a></div>
+
+      <div class="nav-item has-mega-menu">
+        <a href="javascript:void(0)">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+        <div class="mega-menu">
+          <div class="mega-menu-content">
+            <div class="mega-col">
+              <h4>VIP Exclusives</h4>
+              <ul>
+                <li><a href="/mobile-mixes-gateway-v2.html">👑 Street Kings 2026</a></li>
+                <li><a href="/vault-gateway.html">⚡ Techno Riddim Vol 4</a></li>
+                <li><a href="/vault-gateway.html">🗝️ Assassin Dubplates</a></li>
+                <li><a href="/flashdrive.html">💾 Secret Stash Vol 1</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Mix Gallery</h4>
+              <div class="mix-gallery-grid">
+                <div class="mix-thumb"><a href="/vault-gateway.html" title="The Vault"><img src="/VAULT-2.jpg" alt="Riddim Vault"></a></div>
+                <div class="mix-thumb"><a href="/vip-gateway.html" title="VIP Citadel"><img src="/CODE-1.jpg" alt="VIP Citadel"></a></div>
+                <div class="mix-thumb"><a href="/mobile-mixes-gateway-v2.html" title="Mobile Mixes"><img src="/MOBILE_MIXES.png" alt="Mobile Mixes"></a></div>
+                <div class="mix-thumb"><a href="/tv-gateway.html" title="Assassin TV"><img src="/CODE-TV.png" alt="Assassin TV"></a></div>
+              </div>
+            </div>
+            <div class="mega-col featured-set">
+              <h4>Live Preview (30s)</h4>
+              <div class="featured-img" style="background-image: url('/MOBILE_MIXES.png'); background-size: cover; background-position: center;">
+                <button class="mega-preview-btn" onclick="event.stopPropagation(); playTrack('Assassin Elite Mix (30s Sample)');" style="background:var(--primary-neon); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255,0,85,0.8);" title="Play 30s Sample">
+                  <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+              <h5 style="font-size:0.85rem; margin-top:8px; color:#fff;">ASSASSIN ELITE MIX</h5>
+              <p style="font-size: 0.75rem; color: #aaa;">Flashy transitions and heavy bass.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item"><a href="/admin-vault.html" title="Master Admin Code Vault">👑 ADMIN VAULT</a></div>
+      <div class="nav-item"><a href="/merch.html">MERCH</a></div>
+      <div class="nav-item"><a href="/flashdrive.html">SHOP</a></div>
+      <div class="nav-item"><a href="/dimension-hub.html">ABOUT US</a></div>
+      <div class="nav-item"><a href="mailto:bookings@chineseassassin.com">CONTACT</a></div>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="header-actions">
+      <button class="icon-btn search-btn" aria-label="Search" onclick="focusSearchPrompt()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="/admin-vault.html" class="sign-in-btn">SIGN IN</a>
+      <button class="icon-btn menu-toggle-btn" aria-label="Menu" id="mobileDrawerBtn" onclick="toggleMobileDrawer()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-Screen Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-drawer-overlay" onclick="if(event.target===this) toggleMobileDrawer();">
+    <div class="mobile-drawer-card">
+      <div class="mobile-drawer-header">
+        <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        <button class="mobile-drawer-close-btn" onclick="toggleMobileDrawer()">&times;</button>
+      </div>
+      <nav class="mobile-drawer-nav">
+        <a href="/" class="mobile-nav-item active">🏠 HOME</a>
+        <a href="/dimension-hub.html" class="mobile-nav-item">🌀 DIMENSION HUB</a>
+        <a href="/streaming-gateway.html" class="mobile-nav-item">🔴 24/7 STREAM</a>
+        <a href="/tv-gateway.html" class="mobile-nav-item">📺 ASSASSIN TV</a>
+        <a href="/mobile-mixes-gateway-v2.html" class="mobile-nav-item">📱 MOBILE MIXES</a>
+        <a href="/mix-kitchen-gateway.html" class="mobile-nav-item">🍳 THE MIX KITCHEN</a>
+        <a href="/radio-gateway.html" class="mobile-nav-item">📻 ASSASSIN RADIO</a>
+        <a href="/vip-gateway.html" class="mobile-nav-item">👑 VIP CITADEL</a>
+        <a href="/merch.html" class="mobile-nav-item">👕 MERCH</a>
+        <a href="/flashdrive.html" class="mobile-nav-item">🛍️ SHOP / USB FLASH DRIVE</a>
+        <a href="/vault-gateway.html" class="mobile-nav-item">🗝️ THE VAULT</a>
+        <a href="/admin-vault.html" class="mobile-nav-item">🔒 ADMIN VAULT</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════════
+       2. MASTER HP-FINAL STAGE
+       ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="home-nice-stage">
+    <div class="home-artwork-wrapper" id="homeArtworkWrapper">
+      <img src="/HP-FINAL3.jpg" alt="Chinese Assassin Media Hub Master Home" class="home-nice-bg-img" onerror="this.src='/HP-FINAL.png';" />
+
+      <!-- ╔══════════════════════════════════════════════════════════╗
+           ║  CINEMATIC SPLIT CURTAIN REVEAL SYSTEM                 ║
+           ╚══════════════════════════════════════════════════════════╝ -->
+
+      <!-- Full-stage cinema video (behind curtains, revealed on open) -->
+      <div class="cinema-video-stage" id="cinemaVideoStage">
+        <video id="cinemaVideo" src="/AURA 2.O.mp4" playsinline loop preload="auto"
+               onerror="this.src='/aura.mp4';"></video>
+
+        <!-- Top-right close button -->
+        <button class="cinema-close-btn" id="cinemaCloseBtn"
+                onclick="stopPortalVideo()" title="Close Cinema">✕</button>
+
+        <!-- Premium Cinema HUD -->
+        <div class="cinema-hud" id="cinemaHud">
+
+          <!-- Progress / Seek Bar -->
+          <div class="cinema-progress-wrap" id="cinemaProgressWrap">
+            <div class="cinema-progress-fill" id="cinemaProgressFill"></div>
+            <div class="cinema-progress-thumb" id="cinemaProgressThumb"></div>
+          </div>
+
+          <!-- Controls Row -->
+          <div class="cinema-controls-row">
+
+            <!-- Play / Pause -->
+            <button class="cin-btn" id="cinPlayPauseBtn" onclick="cinemaPauseToggle()" title="Play / Pause">
+              <svg id="cinPlayIcon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="cinPauseIcon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+
+            <!-- Rewind 10s -->
+            <button class="cin-btn" onclick="cinemaSkip(-10)" title="Rewind 10s">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="7" y="15" font-size="6" fill="currentColor" font-weight="bold">10</text></svg>
+            </button>
+
+            <!-- Forward 10s -->
+            <button class="cin-btn" onclick="cinemaSkip(10)" title="Forward 10s">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="7" y="15" font-size="6" fill="currentColor" font-weight="bold">10</text></svg>
+            </button>
+
+            <!-- Live Badge -->
+            <span class="cin-live-badge">&#9679; LIVE</span>
+
+            <!-- Title -->
+            <span class="cin-title">AURA 2.0 &mdash; Chinese Assassin Portal</span>
+
+            <div class="cin-spacer"></div>
+
+            <!-- Time display -->
+            <span class="cin-time" id="cinTimeDisplay">0:00 / ∞</span>
+
+            <!-- Volume -->
+            <div class="cin-volume-wrap">
+              <button class="cin-btn" id="cinMuteBtn" onclick="toggleCinemaSound()" title="Mute / Unmute">
+                <svg id="cinVolIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                <svg id="cinMuteIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+              <input type="range" class="cin-volume-slider" id="cinVolumeSlider"
+                     min="0" max="1" step="0.02" value="0.85"
+                     oninput="cinemaSetVolume(this.value)" title="Volume" />
+            </div>
+
+            <!-- Fullscreen -->
+            <button class="cin-btn" onclick="cinemaToggleFullscreen()" title="Fullscreen">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+
+            <!-- Close -->
+            <button class="cin-btn" onclick="stopPortalVideo()" title="Close Cinema" style="color:#ff203a;">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+
+          </div><!-- /.cinema-controls-row -->
+        </div><!-- /.cinema-hud -->
+      </div><!-- /.cinema-video-stage -->
+
+      <!-- LEFT curtain panel: shows left half of the new artwork, slides left -->
+      <div class="split-curtain-left" id="curtainLeft">
+        <img class="curtain-img" src="/HP-FINAL3.jpg" alt="" aria-hidden="true" onerror="this.src='/HP-FINAL.png';" />
+      </div>
+
+      <!-- RIGHT curtain panel: shows right half of the new artwork, slides right -->
+      <div class="split-curtain-right" id="curtainRight">
+        <img class="curtain-img" src="/HP-FINAL3.jpg" alt="" aria-hidden="true" onerror="this.src='/HP-FINAL.png';" />
+      </div>
+
+      <!-- INVISIBLE INTERACTIVE HOTSPOTS LAYER -->
+      <div class="hotspots-grid-layer">
+
+        <!-- Top Left Logo Link -->
+        <a href="/" class="hs-btn hs-top-logo" title="Chinese Assassin Home"></a>
+
+        <!-- Top Header Auth Hotspots -->
+        <a href="/admin-vault.html" class="hs-btn hs-top-signin" title="Sign In to Assassin Citadel"></a>
+        <a href="/flashdrive.html" class="hs-btn hs-top-joinvip" title="Join VIP Nation"></a>
+
+        <!-- Left Sidebar Navigation Hotspots -->
+        <a href="/" class="hs-btn hs-nav-home" title="Home"></a>
+        <a href="/streaming-gateway.html" class="hs-btn hs-nav-stream" title="24/7 Stream (Nonstop Reggae & Dancehall)"></a>
+        <a href="/tv-gateway.html" class="hs-btn hs-nav-tv" title="Assassin TV (HD Concerts & Documentaries)"></a>
+        <a href="/mobile-mixes-gateway-v2.html" class="hs-btn hs-nav-mobile" title="Mobile Mixes (On-The-Go Mixtape Vault)"></a>
+        <a href="/mix-kitchen-gateway.html" class="hs-btn hs-nav-kitchen" title="The Mix Kitchen (Custom Mixes Made Fresh)"></a>
+        <a href="/radio-gateway.html" class="hs-btn hs-nav-radio" title="Assassin Radio (Global Live Broadcast)"></a>
+        <a href="/vip-gateway.html" class="hs-btn hs-nav-citadel" title="VIP Citadel (Exclusive Content & Benefits)"></a>
+        <a href="/flashdrive.html" class="hs-btn hs-nav-flashdrive" title="Flash Drive Mixes [NEW] — Plug In, Press Play"></a>
+        <a href="/flashdrive.html" class="hs-btn hs-nav-shop" title="Shop CA Merch & USB Flash Drives"></a>
+        <a href="/vault-gateway.html" class="hs-btn hs-nav-vault" title="The Vault (Classics & Dubplates)"></a>
+        <a href="/dimension-hub.html" class="hs-btn hs-nav-about" title="About Us / Dimension Hub"></a>
+        <a href="mailto:bookings@chineseassassin.com" class="hs-btn hs-nav-contact" title="Contact Us"></a>
+
+        <!-- Left Sidebar Social Icons -->
+        <a href="https://facebook.com" target="_blank" rel="noopener" class="hs-btn hs-social-fb" title="Facebook"></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="hs-btn hs-social-ig" title="Instagram"></a>
+        <a href="https://x.com" target="_blank" rel="noopener" class="hs-btn hs-social-x" title="X / Twitter"></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="hs-btn hs-social-yt" title="YouTube"></a>
+
+        <!-- Center Hero PLAY ▶ Button Hotspot -->
+        <button class="hs-btn hs-hero-play" id="heroPlayBtn" onclick="togglePortalPlay()" title="Play / Stop Assassin Portal Video"></button>
+
+        <!-- Top 7 Featured Dimensions Row -->
+        <a href="/streaming-gateway.html" class="hs-btn hs-card-stream" title="Enter 24/7 Stream"></a>
+        <a href="/tv-gateway.html" class="hs-btn hs-card-tv" title="Enter Assassin TV"></a>
+        <a href="/mobile-mixes-gateway-v2.html" class="hs-btn hs-card-mobile" title="Enter Mobile Mixes Vault"></a>
+        <a href="/mix-kitchen-gateway.html" class="hs-btn hs-card-kitchen" title="Enter The Mix Kitchen"></a>
+        <a href="/radio-gateway.html" class="hs-btn hs-card-radio" title="Enter Assassin Radio"></a>
+        <a href="/vip-gateway.html" class="hs-btn hs-card-citadel" title="Enter VIP Citadel"></a>
+        <a href="/flashdrive.html" class="hs-btn hs-card-flashdrive" title="Enter Flash Drive Mixes"></a>
+
+        <!-- Middle Row 1: Hot & Trending Mixes (4 Cards) -->
+        <a href="/mobile-mixes-gateway-v2.html" class="hs-btn hs-trend-viewall" title="View All Trending Mixes"></a>
+        <button class="hs-btn hs-trend-1" onclick="playTrack('Dancehall Explosion — DJ Assassin')" title="Play Dancehall Explosion"></button>
+        <button class="hs-btn hs-trend-2" onclick="playTrack('Old School Classics — DJ Supreme')" title="Play Old School Classics"></button>
+        <button class="hs-btn hs-trend-3" onclick="playTrack('Afrobeat Vibes — DJ Killa Crown')" title="Play Afrobeat Vibes"></button>
+        <button class="hs-btn hs-trend-4" onclick="playTrack('R&B Sessions — DJ Sweet Touch')" title="Play R&B Sessions"></button>
+
+        <!-- Middle Row 1: Live on Assassin Radio (4 Cards) -->
+        <a href="/radio-gateway.html" class="hs-btn hs-radio-viewall" title="View All Radio Shows"></a>
+        <button class="hs-btn hs-radio-1" onclick="playTrack('The Morning Takeover — DJ Assassin (7AM - 10AM)')" title="Tune into The Morning Takeover"></button>
+        <button class="hs-btn hs-radio-2" onclick="playTrack('Midday Heatwave — DJ Spice (12PM - 3PM)')" title="Tune into Midday Heatwave"></button>
+        <button class="hs-btn hs-radio-3" onclick="playTrack('Drive Time Vibes — DJ Blaze (4PM - 7PM)')" title="Tune into Drive Time Vibes"></button>
+        <button class="hs-btn hs-radio-4" onclick="playTrack('Nightfall Grooves — DJ Silencer (9PM - 12AM)')" title="Tune into Nightfall Grooves"></button>
+
+        <!-- Middle Row 2: Genre Pads & Mood Meter Hub -->
+        <button class="hs-btn hs-genre-dancehall" onclick="playTrack('Dancehall Radio Live Stream')" title="Dancehall"></button>
+        <button class="hs-btn hs-genre-reggae"    onclick="playTrack('Reggae Roots Live Stream')" title="Reggae"></button>
+        <button class="hs-btn hs-genre-soca"      onclick="playTrack('Soca Carnival Live Stream')" title="Soca"></button>
+        <button class="hs-btn hs-genre-hiphop"    onclick="playTrack('Hip Hop Nation Live Stream')" title="Hip Hop"></button>
+
+        <button class="hs-btn hs-mood-chill"     onclick="selectMood('CHILL')" title="Mood: Chill"></button>
+        <button class="hs-btn hs-mood-happy"     onclick="selectMood('HAPPY')" title="Mood: Happy"></button>
+        <button class="hs-btn hs-mood-energetic" onclick="selectMood('ENERGETIC')" title="Mood: Energetic"></button>
+        <button class="hs-btn hs-mood-positive"  onclick="selectMood('POSITIVE')" title="Mood: Positive"></button>
+        <button class="hs-btn hs-mood-love"      onclick="selectMood('LOVE')" title="Mood: Love"></button>
+
+        <button class="hs-btn hs-mood-prev"        onclick="prevTrack()" title="Previous Mood Mix"></button>
+        <button class="hs-btn hs-mood-center-play" onclick="toggleAudioPlayback()" title="Play Mood Station"></button>
+        <button class="hs-btn hs-mood-next"        onclick="nextTrack()" title="Next Mood Mix"></button>
+
+        <button class="hs-btn hs-genre-afrobeat" onclick="playTrack('Afrobeat Heat Wave Live')" title="Afrobeat"></button>
+        <button class="hs-btn hs-genre-rnb"      onclick="playTrack('R&B Slow Jamz Live')" title="R&B"></button>
+        <button class="hs-btn hs-genre-slowjamz" onclick="playTrack('Slow Jamz Midnight Sessions')" title="Slow Jamz"></button>
+        <a href="/vault-gateway.html" class="hs-btn hs-genre-vault" title="Enter Riddim Vault"></a>
+
+        <!-- Live On The Air Station List -->
+        <button class="hs-btn hs-live-dj-1" onclick="playTrack('DJ ASSASSIN — Reggae Vibes Live on Air')" title="DJ Assassin Live"></button>
+        <button class="hs-btn hs-live-dj-2" onclick="playTrack('DJ SPICE — Soca Night Live on Air')" title="DJ Spice Live"></button>
+        <button class="hs-btn hs-live-dj-3" onclick="playTrack('DJ BLAZE — Hip Hop Flow Live on Air')" title="DJ Blaze Live"></button>
+        <button class="hs-btn hs-live-dj-4" onclick="playTrack('DJ SILENCER — R&B Classics Live on Air')" title="DJ Silencer Live"></button>
+
+        <!-- Bottom Row Feature Cards (4 Cards) -->
+        <a href="/mobile-mixes-gateway-v2.html" class="hs-btn hs-feat-mobile" title="Mobile Mixes — Download & Go"></a>
+        <a href="/mix-kitchen-gateway.html" class="hs-btn hs-feat-kitchen" title="The Mix Kitchen — You Choose, We Cook"></a>
+        <a href="/tv-gateway.html" class="hs-btn hs-feat-tv" title="Assassin TV — Watch, Experience, Share"></a>
+        <a href="/vault-gateway.html" class="hs-btn hs-feat-vault" title="The Vault — Classics Never Die"></a>
+
+        <!-- Bottom Player Bar Hotspots -->
+        <button class="hs-btn hs-player-art" onclick="toggleAudioPlayback()" title="Now Playing: ONE LAW — RANE SON FT CHRONIC LAW"></button>
+        <button class="hs-btn hs-player-trackinfo" onclick="toggleAudioPlayback()" title="ONE LAW — RANE SON FT CHRONIC LAW"></button>
+        <button class="hs-btn hs-player-shuffle" onclick="showToast('🔀 SHUFFLE MODE ACTIVE')" title="Shuffle"></button>
+        <button class="hs-btn hs-player-prev" onclick="prevTrack()" title="Previous Track"></button>
+        <button class="hs-btn hs-player-play" onclick="toggleAudioPlayback()" title="Play / Pause Audio"></button>
+        <button class="hs-btn hs-player-next" onclick="nextTrack()" title="Next Track"></button>
+        <button class="hs-btn hs-player-loop" onclick="showToast('🔁 LOOP MODE ACTIVE')" title="Repeat"></button>
+        <!-- Real Interactive DJ Track Time Slider -->
+        <div class="hs-player-time-container" id="homeTimeWrap" title="Track Time / Scrubber: Drag, Click, or Scroll to Seek">
+          <div class="time-fader-track" id="homeTimeTrack">
+            <div class="time-fader-fill" id="homeTimeFill"></div>
+            <div class="time-fader-knob" id="homeTimeKnob">
+              <span class="time-fader-line"></span>
+              <div class="time-fader-tooltip" id="homeTimeTooltip">00:00 / 00:00</div>
+            </div>
+          </div>
+          <!-- Underlying Accessible Range Input for Drag / Key control -->
+          <input type="range" class="hs-player-time-slider-input" id="homeTimeSlider"
+                 min="0" max="100" step="0.1" value="0"
+                 oninput="seekHomeTrack(this.value, false)"
+                 onchange="seekHomeTrack(this.value, true)"
+                 title="Track Progress / Scrubber" />
+        </div>
+        <!-- Dynamic Live Track Time Display (covering static artwork readout) -->
+        <div class="hs-player-time-display" id="homeTrackTimeDisplay" title="Track Elapsed / Duration">00:00 / 00:00</div>
+        <!-- Speaker / Mute Hotspot -->
+        <button class="hs-btn hs-player-mute" id="homeMuteBtn" onclick="toggleHomeMute()" title="Mute / Unmute Volume">
+          <span class="mute-slash" id="homeMuteSlash" style="display:none;"></span>
+        </button>
+        <!-- Real Interactive DJ Sliding Fader -->
+        <div class="hs-player-vol-container" id="homeVolWrap" title="Volume Fader: Drag or Scroll to adjust">
+          <div class="vol-fader-track" id="homeVolTrack">
+            <div class="vol-fader-fill" id="homeVolFill"></div>
+            <div class="vol-fader-knob" id="homeVolKnob">
+              <span class="vol-fader-line"></span>
+              <div class="vol-fader-tooltip" id="homeVolTooltip">85%</div>
+            </div>
+          </div>
+          <!-- Underlying Accessible Range Input for Drag / Key control -->
+          <input type="range" class="hs-player-vol-slider-input" id="homeVolSlider"
+                 min="0" max="1" step="0.01" value="0.85"
+                 oninput="setHomeVolume(this.value)"
+                 title="Master Volume" />
+        </div>
+        <a href="/flashdrive.html" class="hs-btn hs-player-chamber" title="Join The Secret Chamber — Unlock Exclusive Mixes"></a>
+
+      </div>
+
+      <!-- Yellow Audio Frequency Spectrum Visualizer (Beside Audio Track Info) -->
+      <div class="audio-spectrum-yellow" id="audioSpectrumYellow" aria-label="Audio Visualizer">
+        <span class="spec-bar b1"></span>
+        <span class="spec-bar b2"></span>
+        <span class="spec-bar b3"></span>
+        <span class="spec-bar b4"></span>
+        <span class="spec-bar b5"></span>
+        <span class="spec-bar b6"></span>
+        <span class="spec-bar b7"></span>
+        <span class="spec-bar b8"></span>
+        <span class="spec-bar b9"></span>
+        <span class="spec-bar b10"></span>
+        <span class="spec-bar b11"></span>
+        <span class="spec-bar b12"></span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HUD Toast Alert -->
+  <div class="portal-hud-toast" id="portalToast"></div>
+
+  <!-- Background Audio Player -->
+  <audio id="homeAudio" src="/wulup.mp3" preload="auto"></audio>
+
+  <script>
+    // ── 0. ROTATING LOGO & MOBILE DRAWER ENGINE ────────────────────────────
+    (function initRotatingLogo() {
+      const rotator = document.getElementById('rotating-logo');
+      if (!rotator) return;
+      const images = Array.from(rotator.querySelectorAll('.site-logo-img'));
+      if (images.length < 2) return;
+      let currentIdx = 0;
+      setInterval(() => {
+        const prevImg = images[currentIdx];
+        if (prevImg) {
+          prevImg.classList.remove('rot-active');
+          prevImg.classList.add('rot-exit');
+        }
+        currentIdx = (currentIdx + 1) % images.length;
+        const nextImg = images[currentIdx];
+        if (nextImg) {
+          nextImg.classList.remove('rot-exit');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              nextImg.classList.add('rot-active');
+            });
+          });
+        }
+      }, 450);
+    })();
+
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    // Mega menu click toggle & outside click listener
+    (function initMegaMenu() {
+      const exclWrap = document.querySelector('.nav-item.has-mega-menu');
+      const exclLink = exclWrap ? exclWrap.querySelector('a') : null;
+      if (exclLink && exclWrap) {
+        exclLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          exclWrap.classList.toggle('mega-open');
+        });
+      }
+      document.addEventListener('click', (e) => {
+        if (exclWrap && !exclWrap.contains(e.target)) {
+          exclWrap.classList.remove('mega-open');
+        }
+      });
+    })();
+
+    function focusSearchPrompt() {
+      const q = prompt('Search Chinese Assassin (Mixes, Radio, TV, Kitchen, Flash Drives, Vault):');
+      if (q) {
+        showToast('🔍 SEARCHING: ' + q);
+        setTimeout(() => {
+          window.location.href = '/mobile-mixes-gateway-v2.html?search=' + encodeURIComponent(q);
+        }, 600);
+      }
+    }
+
+    // ── 1. CINEMATIC SPLIT CURTAIN VIDEO ENGINE ────────────────────────────
+    let isVideoPlaying = false;
+    let cinemaPaused   = false;
+    const cinemaVideo  = document.getElementById('cinemaVideo');
+    const wrapper      = document.getElementById('homeArtworkWrapper');
+
+    // DOM refs for HUD elements
+    const cinProgressFill  = document.getElementById('cinemaProgressFill');
+    const cinProgressThumb = document.getElementById('cinemaProgressThumb');
+    const cinProgressWrap  = document.getElementById('cinemaProgressWrap');
+    const cinTimeDisplay   = document.getElementById('cinTimeDisplay');
+    const cinPlayIcon      = document.getElementById('cinPlayIcon');
+    const cinPauseIcon     = document.getElementById('cinPauseIcon');
+    const cinVolIcon       = document.getElementById('cinVolIcon');
+    const cinMuteIcon      = document.getElementById('cinMuteIcon');
+    const cinVolumeSlider  = document.getElementById('cinVolumeSlider');
+
+    // ── Format seconds → m:ss ────────────────────────────────────────────────
+    function fmtTime(s) {
+      if (!isFinite(s) || isNaN(s)) return '∞';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
+    }
+
+    // ── Progress bar update loop ──────────────────────────────────────────────
+    let cinProgressRAF = null;
+    function updateCinProgress() {
+      if (!cinemaVideo || !cinProgressFill) return;
+      const pct = cinemaVideo.duration
+        ? (cinemaVideo.currentTime / cinemaVideo.duration) * 100
+        : 0;
+      cinProgressFill.style.width = pct + '%';
+      if (cinProgressThumb) cinProgressThumb.style.left = pct + '%';
+      if (cinTimeDisplay) {
+        const cur  = fmtTime(cinemaVideo.currentTime);
+        const dur  = fmtTime(cinemaVideo.duration);
+        cinTimeDisplay.textContent = `${cur} / ${dur}`;
+      }
+      cinProgressRAF = requestAnimationFrame(updateCinProgress);
+    }
+
+    // ── Seek on progress bar click ────────────────────────────────────────────
+    if (cinProgressWrap) {
+      cinProgressWrap.addEventListener('click', function(e) {
+        if (!cinemaVideo || !cinemaVideo.duration) return;
+        const rect = this.getBoundingClientRect();
+        const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        cinemaVideo.currentTime = pct * cinemaVideo.duration;
+      });
+    }
+
+    // ── Play icon swap ────────────────────────────────────────────────────────
+    function setCinPlayState(playing) {
+      if (cinPlayIcon)  cinPlayIcon.style.display  = playing ? 'none'  : 'block';
+      if (cinPauseIcon) cinPauseIcon.style.display = playing ? 'block' : 'none';
+    }
+
+    // ── Mute icon swap ────────────────────────────────────────────────────────
+    function setCinMuteState(muted) {
+      if (cinVolIcon)  cinVolIcon.style.display  = muted ? 'none'  : 'block';
+      if (cinMuteIcon) cinMuteIcon.style.display = muted ? 'block' : 'none';
+    }
+
+    // ── Main play entry ───────────────────────────────────────────────────────
+    function togglePortalPlay() {
+      isVideoPlaying ? stopPortalVideo() : playPortalVideo();
+    }
+
+    function playPortalVideo() {
+      if (!cinemaVideo || !wrapper) return;
+      cinemaVideo.muted  = true;
+      cinemaVideo.volume = 0.85;
+      if (cinVolumeSlider) cinVolumeSlider.value = 0.85;
+
+      cinemaVideo.play().then(() => {
+        isVideoPlaying = true;
+        cinemaPaused   = false;
+        wrapper.classList.add('curtains-open');
+        setCinPlayState(true);
+        cancelAnimationFrame(cinProgressRAF);
+        updateCinProgress();
+        showToast('🎬 AURA 2.0 — CINEMA MODE ACTIVE');
+
+        // Try unmute after curtains open
+        setTimeout(() => {
+          cinemaVideo.muted = false;
+          setCinMuteState(false);
+        }, 900);
+      }).catch(() => {
+        isVideoPlaying = true;
+        cinemaPaused   = false;
+        wrapper.classList.add('curtains-open');
+        setCinPlayState(true);
+        cancelAnimationFrame(cinProgressRAF);
+        updateCinProgress();
+        setCinMuteState(true);
+        showToast('🎬 CINEMA MODE — TAP 🔊 FOR AUDIO');
+      });
+    }
+
+    // ── Stop / Close ──────────────────────────────────────────────────────────
+    function stopPortalVideo(e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      if (!cinemaVideo || !wrapper) return;
+
+      wrapper.classList.remove('curtains-open');
+      isVideoPlaying = false;
+      cinemaPaused   = false;
+      cancelAnimationFrame(cinProgressRAF);
+
+      setTimeout(() => {
+        cinemaVideo.pause();
+        cinemaVideo.currentTime = 0;
+        cinemaVideo.muted = true;
+        setCinPlayState(false);
+        setCinMuteState(true);
+        if (cinProgressFill)  cinProgressFill.style.width = '0%';
+        if (cinProgressThumb) cinProgressThumb.style.left  = '0%';
+        if (cinTimeDisplay)   cinTimeDisplay.textContent   = '0:00 / ∞';
+        if (cinVolumeSlider)  cinVolumeSlider.value        = 0.85;
+      }, 900);
+
+      showToast('⏹ CINEMA CLOSED — ARTWORK RESTORED');
+    }
+
+    // ── Play / Pause toggle (HUD button) ─────────────────────────────────────
+    function cinemaPauseToggle() {
+      if (!cinemaVideo) return;
+      if (cinemaVideo.paused) {
+        cinemaVideo.play();
+        cinemaPaused = false;
+        setCinPlayState(true);
+        cancelAnimationFrame(cinProgressRAF);
+        updateCinProgress();
+        showToast('▶ CINEMA PLAYING');
+      } else {
+        cinemaVideo.pause();
+        cinemaPaused = true;
+        setCinPlayState(false);
+        cancelAnimationFrame(cinProgressRAF);
+        showToast('⏸ CINEMA PAUSED');
+      }
+    }
+
+    // ── Skip ±seconds ─────────────────────────────────────────────────────────
+    function cinemaSkip(secs) {
+      if (!cinemaVideo) return;
+      cinemaVideo.currentTime = Math.max(0, cinemaVideo.currentTime + secs);
+      showToast((secs > 0 ? '⏩ +' : '⏪ ') + Math.abs(secs) + 's');
+    }
+
+    // ── Volume ────────────────────────────────────────────────────────────────
+    function cinemaSetVolume(val) {
+      if (!cinemaVideo) return;
+      cinemaVideo.volume = parseFloat(val);
+      cinemaVideo.muted  = (parseFloat(val) === 0);
+      setCinMuteState(cinemaVideo.muted);
+    }
+
+    // ── Mute toggle ───────────────────────────────────────────────────────────
+    function toggleCinemaSound() {
+      if (!cinemaVideo) return;
+      cinemaVideo.muted = !cinemaVideo.muted;
+      setCinMuteState(cinemaVideo.muted);
+      if (!cinemaVideo.muted && cinemaVideo.volume === 0) {
+        cinemaVideo.volume = 0.85;
+        if (cinVolumeSlider) cinVolumeSlider.value = 0.85;
+      }
+      showToast(cinemaVideo.muted ? '🔇 MUTED' : '🔊 AUDIO ON');
+    }
+
+    // ── Fullscreen ────────────────────────────────────────────────────────────
+    function cinemaToggleFullscreen() {
+      const stage = document.getElementById('cinemaVideoStage');
+      if (!stage) return;
+      if (!document.fullscreenElement) {
+        (stage.requestFullscreen || stage.webkitRequestFullscreen || stage.mozRequestFullScreen)
+          .call(stage);
+        showToast('⛶ FULLSCREEN');
+      } else {
+        (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen)
+          .call(document);
+        showToast('⊡ EXIT FULLSCREEN');
+      }
+    }
+
+    // Keep backward-compat stubs
+    function togglePortalSound() {}
+    function stopPortalCircle() {}
+
+    // ── 2. MASTER AUDIO DECK ENGINE ───────────────────────────────────────
+    let isAudioPlaying = false;
+    let isAudioMuted = false;
+    let previousAudioVolume = 0.85;
+    const audio = document.getElementById('homeAudio');
+    const specEl = document.getElementById('audioSpectrumYellow');
+    const homeVolSlider = document.getElementById('homeVolSlider');
+    const homeMuteSlash = document.getElementById('homeMuteSlash');
+    const homeVolWrap   = document.getElementById('homeVolWrap');
+
+    function updateVolumeUI(val, isMutedState) {
+      const displayVal = isMutedState ? 0 : val;
+      const pct = Math.round(displayVal * 100);
+      const pctStr = pct + '%';
+      if (homeVolWrap) {
+        homeVolWrap.style.setProperty('--vol-pct', pctStr);
+      }
+      if (homeVolSlider) {
+        homeVolSlider.value = displayVal;
+      }
+      const tooltip = document.getElementById('homeVolTooltip');
+      if (tooltip) {
+        tooltip.textContent = isMutedState ? 'MUTED' : pctStr;
+      }
+      if (homeMuteSlash) {
+        homeMuteSlash.style.display = isMutedState ? 'block' : 'none';
+      }
+    }
+
+    function setHomeVolume(val, suppressToast) {
+      const v = Math.max(0, Math.min(1, parseFloat(val)));
+      if (audio) {
+        audio.volume = v;
+        if (v === 0) {
+          audio.muted = true;
+          isAudioMuted = true;
+        } else {
+          audio.muted = false;
+          isAudioMuted = false;
+          previousAudioVolume = v;
+        }
+      }
+      // Keep cinema video in sync if active
+      if (typeof cinemaVideo !== 'undefined' && cinemaVideo && isVideoPlaying) {
+        cinemaVideo.volume = v;
+        cinemaVideo.muted = (v === 0);
+        if (typeof cinVolumeSlider !== 'undefined' && cinVolumeSlider) {
+          cinVolumeSlider.value = v;
+        }
+        if (typeof setCinMuteState === 'function') {
+          setCinMuteState(cinemaVideo.muted);
+        }
+      }
+      updateVolumeUI(v, isAudioMuted);
+      try {
+        localStorage.setItem('ca_portal_volume', v.toString());
+      } catch (e) {}
+
+      if (!suppressToast) {
+        const pct = Math.round(v * 100);
+        showToast(v === 0 ? '🔇 VOLUME MUTED' : `🔊 MASTER VOLUME: ${pct}%`);
+      }
+    }
+
+    function toggleHomeMute() {
+      if (!audio) return;
+      isAudioMuted = !isAudioMuted;
+      audio.muted = isAudioMuted;
+      if (typeof cinemaVideo !== 'undefined' && cinemaVideo && isVideoPlaying) {
+        cinemaVideo.muted = isAudioMuted;
+        if (typeof setCinMuteState === 'function') {
+          setCinMuteState(isAudioMuted);
+        }
+      }
+      if (isAudioMuted) {
+        updateVolumeUI(0, true);
+        showToast('🔇 AUDIO MUTED');
+      } else {
+        const targetVol = previousAudioVolume > 0 ? previousAudioVolume : 0.85;
+        audio.volume = targetVol;
+        if (typeof cinemaVideo !== 'undefined' && cinemaVideo && isVideoPlaying) {
+          cinemaVideo.volume = targetVol;
+        }
+        updateVolumeUI(targetVol, false);
+        const pct = Math.round(targetVol * 100);
+        showToast(`🔊 AUDIO UNMUTED (${pct}%)`);
+      }
+    }
+
+    // Initialize volume on page load and setup tactile DJ fader drag
+    (function initHomeVolume() {
+      let saved = 0.85;
+      try {
+        const stored = localStorage.getItem('ca_portal_volume');
+        if (stored !== null && !isNaN(parseFloat(stored))) {
+          saved = parseFloat(stored);
+        }
+      } catch (e) {}
+      previousAudioVolume = saved;
+      if (audio) {
+        audio.volume = saved;
+      }
+      updateVolumeUI(saved, false);
+
+      if (homeVolWrap) {
+        // Direct buttery-smooth DJ fader drag interaction
+        let isDragging = false;
+        function getVolumeFromEvent(e) {
+          const track = document.getElementById('homeVolTrack') || homeVolWrap;
+          const rect = track.getBoundingClientRect();
+          const clientX = e.touches && e.touches.length ? e.touches[0].clientX : e.clientX;
+          const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+          return x / rect.width;
+        }
+
+        homeVolWrap.addEventListener('mousedown', (e) => {
+          if (e.button !== 0) return;
+          isDragging = true;
+          homeVolWrap.classList.add('is-dragging');
+          setHomeVolume(getVolumeFromEvent(e));
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          setHomeVolume(getVolumeFromEvent(e));
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            homeVolWrap.classList.remove('is-dragging');
+          }
+        });
+
+        homeVolWrap.addEventListener('touchstart', (e) => {
+          isDragging = true;
+          homeVolWrap.classList.add('is-dragging');
+          setHomeVolume(getVolumeFromEvent(e));
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          setHomeVolume(getVolumeFromEvent(e));
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+          if (isDragging) {
+            isDragging = false;
+            homeVolWrap.classList.remove('is-dragging');
+          }
+        });
+
+        // Mouse-wheel volume adjustment
+        homeVolWrap.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const current = parseFloat(homeVolSlider ? homeVolSlider.value : 0.85);
+          const delta = e.deltaY < 0 ? 0.05 : -0.05;
+          setHomeVolume(current + delta);
+        }, { passive: false });
+      }
+    })();
+
+    // ── Track Time & Scrubber Engine ──
+    const homeTimeWrap = document.getElementById('homeTimeWrap');
+    const homeTimeSlider = document.getElementById('homeTimeSlider');
+    const homeTimeTooltip = document.getElementById('homeTimeTooltip');
+    const homeTrackTimeDisplay = document.getElementById('homeTrackTimeDisplay');
+    let isDraggingTrackTime = false;
+
+    function formatTime(secs) {
+      if (isNaN(secs) || secs < 0) return '00:00';
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function updateTrackTimeUI(curr, dur, isSeeking) {
+      const durValid = (dur && !isNaN(dur) && dur > 0);
+      const durSecs = durValid ? dur : 0;
+      const currSecs = Math.max(0, Math.min(durSecs || curr || 0, curr || 0));
+      const pct = durValid ? Math.min(100, Math.max(0, (currSecs / durSecs) * 100)) : 0;
+      const pctStr = pct.toFixed(2) + '%';
+      const timeStr = `${formatTime(currSecs)} / ${formatTime(durSecs)}`;
+
+      if (homeTimeWrap && !isSeeking) {
+        homeTimeWrap.style.setProperty('--time-pct', pctStr);
+      }
+      if (homeTimeSlider && !isSeeking) {
+        homeTimeSlider.value = pct;
+      }
+      if (homeTimeTooltip) {
+        homeTimeTooltip.textContent = timeStr;
+      }
+      if (homeTrackTimeDisplay) {
+        homeTrackTimeDisplay.textContent = timeStr;
+      }
+    }
+
+    function seekHomeTrack(pctVal, commit) {
+      if (!audio) return;
+      const pct = Math.max(0, Math.min(100, parseFloat(pctVal)));
+      const dur = audio.duration || 0;
+      const targetTime = (dur > 0) ? (pct / 100) * dur : 0;
+
+      if (homeTimeWrap) {
+        homeTimeWrap.style.setProperty('--time-pct', pct.toFixed(2) + '%');
+      }
+      if (homeTimeSlider) {
+        homeTimeSlider.value = pct;
+      }
+      const timeStr = `${formatTime(targetTime)} / ${formatTime(dur)}`;
+      if (homeTimeTooltip) {
+        homeTimeTooltip.textContent = timeStr;
+      }
+      if (homeTrackTimeDisplay) {
+        homeTrackTimeDisplay.textContent = timeStr;
+      }
+
+      if (commit && dur > 0) {
+        audio.currentTime = targetTime;
+      }
+    }
+
+    (function initHomeTrackTime() {
+      if (!homeTimeWrap) return;
+
+      function getTimePctFromEvent(e) {
+        const track = document.getElementById('homeTimeTrack') || homeTimeWrap;
+        const rect = track.getBoundingClientRect();
+        const clientX = e.touches && e.touches.length ? e.touches[0].clientX : e.clientX;
+        const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+        return (x / rect.width) * 100;
+      }
+
+      homeTimeWrap.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        isDraggingTrackTime = true;
+        homeTimeWrap.classList.add('is-dragging');
+        const pct = getTimePctFromEvent(e);
+        seekHomeTrack(pct, false);
+        e.preventDefault();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDraggingTrackTime) return;
+        const pct = getTimePctFromEvent(e);
+        seekHomeTrack(pct, false);
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDraggingTrackTime) {
+          isDraggingTrackTime = false;
+          homeTimeWrap.classList.remove('is-dragging');
+          const pct = parseFloat(homeTimeSlider ? homeTimeSlider.value : 0);
+          seekHomeTrack(pct, true);
+        }
+      });
+
+      homeTimeWrap.addEventListener('touchstart', (e) => {
+        isDraggingTrackTime = true;
+        homeTimeWrap.classList.add('is-dragging');
+        const pct = getTimePctFromEvent(e);
+        seekHomeTrack(pct, false);
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDraggingTrackTime) return;
+        const pct = getTimePctFromEvent(e);
+        seekHomeTrack(pct, false);
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        if (isDraggingTrackTime) {
+          isDraggingTrackTime = false;
+          homeTimeWrap.classList.remove('is-dragging');
+          const ct = e.changedTouches;
+          if (ct && ct.length) {
+            const track = document.getElementById('homeTimeTrack') || homeTimeWrap;
+            const rect = track.getBoundingClientRect();
+            const x = Math.max(0, Math.min(rect.width, ct[0].clientX - rect.left));
+            seekHomeTrack((x / rect.width) * 100, true);
+          } else {
+            const pct = parseFloat(homeTimeSlider ? homeTimeSlider.value : 0);
+            seekHomeTrack(pct, true);
+          }
+        }
+      });
+
+      // Mouse-wheel track scrub (+/- 5 seconds)
+      homeTimeWrap.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (!audio || !audio.duration) return;
+        const delta = e.deltaY < 0 ? 5 : -5;
+        const target = Math.max(0, Math.min(audio.duration, audio.currentTime + delta));
+        audio.currentTime = target;
+        updateTrackTimeUI(target, audio.duration, false);
+      }, { passive: false });
+
+      if (audio) {
+        audio.addEventListener('timeupdate', () => {
+          if (!isDraggingTrackTime) {
+            updateTrackTimeUI(audio.currentTime, audio.duration, false);
+          }
+        });
+        audio.addEventListener('loadedmetadata', () => {
+          updateTrackTimeUI(audio.currentTime, audio.duration, false);
+        });
+        audio.addEventListener('durationchange', () => {
+          updateTrackTimeUI(audio.currentTime, audio.duration, false);
+        });
+        audio.addEventListener('ended', () => {
+          updateTrackTimeUI(0, audio.duration, false);
+        });
+        // Initial setup
+        updateTrackTimeUI(audio.currentTime, audio.duration, false);
+      }
+    })();
+
+    function setSpectrumState(active) {
+      if (specEl) {
+        specEl.classList.toggle('active', !!active);
+      }
+    }
+
+    if (audio) {
+      audio.addEventListener('play', () => {
+        isAudioPlaying = true;
+        setSpectrumState(true);
+      });
+      audio.addEventListener('pause', () => {
+        isAudioPlaying = false;
+        setSpectrumState(false);
+      });
+      audio.addEventListener('ended', () => {
+        isAudioPlaying = false;
+        setSpectrumState(false);
+      });
+    }
+
+    const trackList = [
+      'ONE LAW — Rane Son ft Chronic Law',
+      'Dancehall Explosion — DJ Assassin',
+      'Old School Classics — DJ Supreme',
+      'Afrobeat Vibes — DJ Killa Crown',
+      'R&B Sessions — DJ Sweet Touch'
+    ];
+    let currentTrackIdx = 0;
+
+    function toggleAudioPlayback() {
+      if (!audio) return;
+      if (isAudioPlaying) {
+        audio.pause();
+        isAudioPlaying = false;
+        setSpectrumState(false);
+        showToast('⏸ AUDIO PAUSED');
+      } else {
+        audio.play().then(() => {
+          isAudioPlaying = true;
+          setSpectrumState(true);
+          showToast('▶ NOW PLAYING: ' + trackList[currentTrackIdx]);
+        }).catch(() => {
+          setSpectrumState(true);
+          showToast('▶ AUDIO STREAM ACTIVE');
+        });
+      }
+    }
+
+    function playTrack(title) {
+      showToast('▶ NOW PLAYING: ' + title);
+      if (audio) {
+        audio.currentTime = 0;
+        if (typeof updateTrackTimeUI === 'function') {
+          updateTrackTimeUI(0, audio.duration, false);
+        }
+        audio.play().then(() => setSpectrumState(true)).catch(() => {});
+        isAudioPlaying = true;
+        setSpectrumState(true);
+      }
+    }
+
+    function selectMood(moodName) {
+      showToast(`🔥 MOOD: ${moodName} ACTIVATED — LOADING CURATED VIBES`);
+      playTrack(`Chinese Assassin ${moodName} Mood Session`);
+    }
+
+    function nextTrack() {
+      currentTrackIdx = (currentTrackIdx + 1) % trackList.length;
+      playTrack(trackList[currentTrackIdx]);
+    }
+
+    function prevTrack() {
+      currentTrackIdx = (currentTrackIdx - 1 + trackList.length) % trackList.length;
+      playTrack(trackList[currentTrackIdx]);
+    }
+
+    // ── 3. HUD TOAST ENGINE ────────────────────────────────────────────────
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('portalToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2500);
+    }
+
+    // ── 4. AMBIENT BACKGROUND PARTICLE EMBER ENGINE ────────────────────────
+    (function initAmbientParticles() {
+      const canvas = document.getElementById('ambientParticleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      const particleCount = 45;
+      const colors = ['#ff203a', '#ff0055', '#ffaa00', '#ffffff', '#880022'];
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          radius: Math.random() * 2.2 + 0.6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: -Math.random() * 0.6 - 0.2,
+          alpha: Math.random() * 0.7 + 0.2,
+          fadeSpeed: Math.random() * 0.008 + 0.004,
+          glow: Math.random() > 0.4
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha += p.fadeSpeed;
+
+          if (p.alpha > 0.85 || p.alpha < 0.15) {
+            p.fadeSpeed = -p.fadeSpeed;
+          }
+
+          if (p.y < -10) {
+            p.y = h + 10;
+            p.x = Math.random() * w;
+          }
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha));
+          if (p.glow) {
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = p.color;
+          }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          ctx.restore();
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    })();
+  </script>
+</body>
+</html>

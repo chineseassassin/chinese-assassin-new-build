@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chinese Assassin | VIP Universe - August 15 Morning Master</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <link rel="stylesheet" href="./src/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: #000000;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      perspective: 1400px;
+    }
+
+    /* Atmospheric Deep Space Radial Glow & Nebula */
+    .ca-bg-nebula {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(180, 10, 30, 0.22) 0%, rgba(30, 2, 8, 0.55) 45%, #000000 88%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .ca-ember-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Cyberpunk DJ FX HUD Toast */
+    .ca-dj-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: rgba(14, 4, 8, 0.94);
+      border: 1.5px solid rgba(255, 30, 56, 0.6);
+      color: #ffffff;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.9), 0 0 20px rgba(255,30,56,0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100000;
+    }
+    .ca-dj-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── MASTER CARD PLAYER (PAGE 1 SLIDE-OPEN SUITE) ───────────────── */
+    #cinematic-intro {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      overflow: hidden;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .ca-card {
+      position: relative;
+      width: min(88vw, 1260px);
+      aspect-ratio: 1 / 1;
+      max-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 10;
+    }
+
+    /* 1. Base Master Artwork (Shown in idle closed state) */
+    .ca-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+      z-index: 5;
+      filter: drop-shadow(0 0 35px rgba(220, 15, 35, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9));
+      transition: opacity 0.5s ease;
+    }
+
+    .ca-card.card-opened .ca-poster {
+      opacity: 0;
+    }
+
+    /* 2 & 3. Sliding Hydraulic Shutter Doors */
+    .ca-sliding-door {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 15;
+      transition: transform 0.85s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.35s ease;
+    }
+
+    .ca-sliding-door img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .ca-door-left {
+      transform: translateX(0) translateZ(0);
+    }
+
+    .ca-door-right {
+      transform: translateX(0) translateZ(0);
+    }
+
+    .ca-card.card-opened .ca-sliding-door {
+      opacity: 0.95;
+    }
+
+    .ca-card.card-opened .ca-door-left {
+      transform: translateX(-24%) translateZ(-25px) scale(0.96);
+      filter: brightness(0.85);
+    }
+
+    .ca-card.card-opened .ca-door-right {
+      transform: translateX(24%) translateZ(-25px) scale(0.96);
+      filter: brightness(0.85);
+    }
+
+    /* Vertical Laser Conduit Energy Beams */
+    .ca-energy-beam {
+      position: absolute;
+      top: 15%;
+      height: 57%;
+      width: 4px;
+      background: linear-gradient(180deg, transparent 0%, #ff1e38 30%, #ffffff 50%, #ff1e38 70%, transparent 100%);
+      box-shadow: 0 0 16px #ff1e38, 0 0 30px rgba(255, 30, 56, 0.8);
+      z-index: 18;
+      opacity: 0;
+      transform: scaleY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+    .ca-beam-left { left: 16%; }
+    .ca-beam-right { right: 16%; }
+    .ca-card.card-opened .ca-energy-beam {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    /* Laser Scanner Beam (Ignites across card on open) */
+    .ca-laser-scanline {
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      height: 3px;
+      background: #ff1e38;
+      box-shadow: 0 0 20px #ff1e38, 0 0 40px #ffffff;
+      z-index: 22;
+      opacity: 0;
+      pointer-events: none;
+      top: 18%;
+    }
+
+    .ca-laser-scanline.ignite {
+      animation: laserSweep 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes laserSweep {
+      0% { top: 18%; opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { top: 72%; opacity: 0; }
+    }
+
+    /* 4. Center Video Screen Chamber */
+    .ca-screen-chamber {
+      position: absolute;
+      top: 18%;
+      left: 18%;
+      width: 64%;
+      height: 54%;
+      background: #050203;
+      border: 1.5px solid rgba(255, 30, 56, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 8;
+      box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 30, 56, 0.25);
+    }
+
+    .ca-screen-chamber video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 5. Custom Cockpit Controls (Visible when opened) */
+    .ca-cockpit-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(5, 2, 4, 0.92) 25%, #000000 100%);
+      padding: 12px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 20;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .ca-card.card-opened .ca-cockpit-bar {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .ca-scrubber-wrap {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .ca-scrubber-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff1e38, #ff6b81);
+      border-radius: 3px;
+      box-shadow: 0 0 10px #ff1e38;
+    }
+
+    .ca-vid-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ca-vid-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ca-vid-ctrl-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .ca-vid-ctrl-btn:hover {
+      background: #ff1e38;
+      border-color: #ff1e38;
+      box-shadow: 0 0 12px rgba(255, 30, 56, 0.6);
+    }
+
+    .ca-vid-time {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 1px;
+      font-family: monospace;
+    }
+
+    .ca-vid-tools-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ca-vid-pill-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ca-vid-pill-btn:hover, .ca-vid-pill-btn.active {
+      background: rgba(255, 30, 56, 0.25);
+      border-color: #ff1e38;
+      color: #ffffff;
+    }
+
+    /* ── INVISIBLE CSS HOTSPOTS TECHNIQUE (1:1 mapped over artwork buttons) ── */
+    .ca-invisible-hotspot {
+      position: absolute;
+      display: block;
+      z-index: 25;
+      cursor: pointer;
+      background: transparent;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ca-invisible-hotspot:focus-visible {
+      outline: 2px solid #ff1e38;
+      outline-offset: 2px;
+    }
+
+    /* 1. Main Center Artwork Red "PLAY" Button */
+    #heroPlayHotspot {
+      left: 50.0%;
+      top: 50.0%;
+      transform: translate(-50%, -50%);
+      width: 14.5%;
+      height: 14.5%;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 26;
+    }
+
+    /* When card is opened, hide idle hotspots to avoid blocking video click */
+    .ca-card.card-opened #heroPlayHotspot {
+      display: none;
+    }
+
+    /* 2. Top-Right "DESCRIPTION" Button */
+    #descHotspot {
+      left: 64.5%;
+      top: 17.5%;
+      width: 13.5%;
+      height: 5.5%;
+      border-radius: 6px;
+    }
+
+    /* 3. Bottom Tabs: OVERVIEW, EPISODES & TRACKS, DETAILS & CREDITS */
+    #tabOverviewHotspot {
+      left: 21.0%;
+      top: 66.0%;
+      width: 11.5%;
+      height: 4.8%;
+    }
+    #tabEpisodesHotspot {
+      left: 33.5%;
+      top: 66.0%;
+      width: 18.0%;
+      height: 4.8%;
+    }
+    #tabDetailsHotspot {
+      left: 52.5%;
+      top: 66.0%;
+      width: 17.5%;
+      height: 4.8%;
+    }
+
+    /* 4. Bottom Deck PLAY/PAUSE Button */
+    #bottomPlayHotspot {
+      left: 71.0%;
+      top: 65.5%;
+      width: 8.5%;
+      height: 5.5%;
+      border-radius: 6px;
+    }
+
+    /* 5. Left Circular Scratch Vinyl Platter */
+    #caScratchPlatter {
+      left: 4.5%;
+      top: 73.8%;
+      width: 27.5%;
+      height: 21.0%;
+      border-radius: 50%;
+      cursor: grab;
+    }
+    #caScratchPlatter:active {
+      cursor: grabbing;
+    }
+
+    /* ── HOLOGRAPHIC DESCRIPTION DRAWER MODAL ──────────────────────── */
+    .ca-desc-modal {
+      position: absolute;
+      top: 18%;
+      left: 6%;
+      width: 460px;
+      max-width: 88%;
+      background: rgba(12, 4, 8, 0.95);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 40, 60, 0.45);
+      border-radius: 14px;
+      padding: 24px 26px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.9), 0 0 35px rgba(255,30,56,0.35);
+      z-index: 40;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-20px) scale(0.96);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .ca-desc-modal.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+    .ca-desc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .ca-desc-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ff1e38;
+      background: rgba(255, 30, 56, 0.15);
+      border: 1px solid rgba(255, 30, 56, 0.4);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .ca-desc-close-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 1.6rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+      transition: color 0.2s;
+    }
+    .ca-desc-close-btn:hover {
+      color: #ff3355;
+    }
+    .ca-desc-title {
+      font-family: 'Cinzel Decorative', 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .ca-desc-synopsis {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 14px;
+    }
+    .ca-desc-details {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.78);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 12px;
+    }
+    .ca-desc-details strong {
+      color: #ff2a4b;
+    }
+
+    /* ── TEMPLE DOORS / ENTER THE PORTAL PAGE ───────────────────────── */
+    #cinematic-temple-doors {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 100;
+      overflow: hidden;
+      perspective: 1800px;
+      perspective-origin: 50% 50%;
+      background: #000000 url('/THEDOORPROPER.jpg') no-repeat center center;
+      background-size: cover;
+      pointer-events: auto;
+    }
+
+    #portal-rain-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 42;
+    }
+
+    .intro-door {
+      position: absolute;
+      top: 0;
+      height: 100vh;
+      width: 50.2vw;
+      background-image: url('/THEDOOR2.jpg.png'), url('/Images/THEDOOR2.jpg.png'), url('/THEDOOR2.jpg');
+      background-size: 100vw 100vh;
+      background-repeat: no-repeat;
+      z-index: 41;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    .left-door {
+      left: 0;
+      background-position: left center;
+      transform-origin: left center;
+    }
+
+    .right-door {
+      right: 0;
+      background-position: right center;
+      transform-origin: right center;
+    }
+
+    .door-ui-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 52vh;
+      pointer-events: auto;
+    }
+
+    .door-enter-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 270px;
+      padding: 18px 48px;
+      background: rgba(14, 3, 7, 0.88);
+      border: 2px solid rgba(255, 32, 58, 0.9);
+      border-radius: 40px;
+      color: #ffffff;
+      font-family: 'Outfit', 'Cinzel Decorative', sans-serif;
+      font-size: 1.12rem;
+      font-weight: 900;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 0 40px rgba(255, 32, 58, 0.6), inset 0 0 20px rgba(255, 32, 58, 0.3);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      z-index: 50;
+      text-shadow: 0 0 12px rgba(255, 40, 60, 0.8);
+      animation: doorBtnGlow 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes doorBtnGlow {
+      0% { box-shadow: 0 0 30px rgba(255, 32, 58, 0.5), inset 0 0 15px rgba(255, 32, 58, 0.25); border-color: rgba(255, 32, 58, 0.8); }
+      100% { box-shadow: 0 0 65px rgba(255, 32, 58, 0.95), 0 0 90px rgba(255, 32, 58, 0.4), inset 0 0 25px rgba(255, 32, 58, 0.5); border-color: #ffffff; }
+    }
+
+    .door-enter-btn:hover {
+      background: #ff1e38;
+      border-color: #ffffff;
+      color: #ffffff;
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 0 75px rgba(255, 32, 58, 1), 0 0 120px rgba(255, 32, 58, 0.6);
+    }
+
+    .door-back-btn {
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(10, 4, 8, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #cccccc;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      letter-spacing: 1.5px;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+      z-index: 50;
+    }
+    .door-back-btn:hover {
+      background: rgba(255, 30, 56, 0.2);
+      border-color: #ff1e38;
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 1. Atmospheric Deep Nebula -->
+  <div class="ca-bg-nebula"></div>
+
+  <!-- 2. 3D Cinematic Floating Embers Canvas -->
+  <canvas id="caEmberCanvas" class="ca-ember-canvas active"></canvas>
+
+  <!-- 3. Cyberpunk DJ FX HUD Toast -->
+  <div id="caDjToast" class="ca-dj-toast"></div>
+
+  <!-- ── PAGE 1 STAGE CONTAINER ── -->
+  <div id="cinematic-intro">
+    <div class="ca-card" id="caStage">
+      <!-- 1. Base Master Artwork (Shown in idle closed state) -->
+      <img id="caPoster" class="ca-poster" src="/WICKED3.png" onerror="this.onerror=null; this.src='/WICKED3.jpg';" alt="Chinese Assassin" />
+
+      <!-- 2. Left Hydraulic Shutter Door -->
+      <div id="caDoorLeft" class="ca-sliding-door ca-door-left">
+        <img src="/ca-door-left.png?v=1" onerror="this.onerror=null; this.src='/WICKED3.png';" alt="" />
+      </div>
+
+      <!-- 3. Right Hydraulic Shutter Door -->
+      <div id="caDoorRight" class="ca-sliding-door ca-door-right">
+        <img src="/ca-door-right.png?v=1" onerror="this.onerror=null; this.src='/WICKED3.png';" alt="" />
+      </div>
+
+      <!-- Vertical Energy Conduit Beams -->
+      <div class="ca-energy-beam ca-beam-left"></div>
+      <div class="ca-energy-beam ca-beam-right"></div>
+
+      <!-- 4. Center Widescreen Glass Video Chamber -->
+      <div id="caScreenChamber" class="ca-screen-chamber">
+        <video id="caVideo" src="/AURA 2.O.mp4" onerror="this.onerror=null; this.src='/aura.mp4';" preload="metadata" playsinline></video>
+        <div id="caLaserScanline" class="ca-laser-scanline"></div>
+
+        <!-- In-Cockpit Video Controls Bar -->
+        <div class="ca-video-controls-bar" id="caVideoControls">
+          <!-- Left: Play/Pause, Rewind 10s, Forward 10s -->
+          <button id="caVidPlayPauseBtn" class="ca-vid-ctrl-btn" aria-label="Play / Pause" title="Play / Pause (Space)">
+            <span id="caVidPlayIcon">▶</span>
+            <span id="caVidPauseIcon" style="display:none;">⏸</span>
+          </button>
+          <button id="caVidRewindBtn" class="ca-vid-ctrl-btn" aria-label="Rewind 10s" title="Rewind 10s">⏪</button>
+          <button id="caVidForwardBtn" class="ca-vid-ctrl-btn" aria-label="Forward 10s" title="Forward 10s">⏩</button>
+
+          <!-- Center: Interactive Scrubber -->
+          <div id="caVidScrubberTrack" class="ca-vid-scrubber-track" title="Seek video position">
+            <div id="caVidScrubberFill" class="ca-vid-scrubber-fill"></div>
+          </div>
+          <span id="caVidTimeDisplay" class="ca-vid-time-display">0:00 / 0:00</span>
+
+          <!-- Right: Quality 4K/HDR, Speed, FX, Close -->
+          <div class="ca-vid-tools-group">
+            <button id="caVidQualityBtn" class="ca-vid-pill-btn active" title="Select Resolution">4K HDR</button>
+            <button id="caVidSpeedBtn" class="ca-vid-pill-btn" title="Playback Speed">1.0x</button>
+            <button id="caVidFxBtn" class="ca-vid-pill-btn" title="Cyber Visual Matrix FX">MATRIX FX</button>
+            <button id="caVidCloseBtn" class="ca-vid-ctrl-btn" title="Close Video (Esc)">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 8. INVISIBLE CSS HOTSPOTS TECHNIQUE (<a> anchors mapped 1:1 over artwork buttons) ── -->
+      <a id="heroPlayHotspot" class="ca-invisible-hotspot" href="#play" title="Play AURA 2.0" aria-label="Play video"></a>
+      <a id="descHotspot" class="ca-invisible-hotspot" href="#description" title="View Description" aria-label="View description"></a>
+      <a id="tabOverviewHotspot" class="ca-invisible-hotspot" href="#overview" title="Overview" aria-label="Overview"></a>
+      <a id="tabEpisodesHotspot" class="ca-invisible-hotspot" href="#episodes" title="Episodes & Tracks" aria-label="Episodes & Tracks"></a>
+      <a id="tabDetailsHotspot" class="ca-invisible-hotspot" href="#details" title="Details & Credits" aria-label="Details & Credits"></a>
+      <a id="bottomPlayHotspot" class="ca-invisible-hotspot" href="#deck-play" title="Play / Pause" aria-label="Deck Play"></a>
+      <a id="caScratchPlatter" class="ca-invisible-hotspot" href="#scratch" title="Interactive Vinyl Platter" aria-label="Vinyl Platter"></a>
+
+      <!-- ── 9. VIP ENTER CA UNIVERSE SIDE TAB ── -->
+      <a id="proceedToWebsiteBtn" class="ca-proceed-website-btn" href="#journey" title="Enter CA Universe (Enter The Portal)" aria-label="Enter CA Universe">
+        <span>⚡ ENTER CA UNIVERSE →</span>
+      </a>
+
+      <!-- ── HOLOGRAPHIC DESCRIPTION MODAL ── -->
+      <div id="caDescModal" class="ca-desc-modal">
+        <div class="ca-desc-header">
+          <span class="ca-desc-badge">⛩ VIP ORIGINALS • 99% MATCH</span>
+          <button id="caDescCloseBtn" class="ca-desc-close-btn" title="Close">&times;</button>
+        </div>
+        <h2 class="ca-desc-title">CHINESE ASSASSIN</h2>
+        <p class="ca-desc-synopsis">
+          A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes. When the VIP portal opens, only the worthy unlock the golden master tapes and claim their destiny.
+        </p>
+        <div class="ca-desc-details">
+          <div><strong>Rating:</strong> 18+ &nbsp;•&nbsp; <strong>Year:</strong> 2026 &nbsp;•&nbsp; <strong>Format:</strong> 4K Ultra HD Spatial Audio</div>
+          <div><strong>Genres:</strong> Martial Arts • Cinematic Bass • DJ Turntablism • Blockbuster Soundscapes</div>
+          <div><strong>Cast:</strong> Master DJ, Clan of Assassins, VIP Universe Sound Lab</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TEMPLE DOORS LAYER (ENTER THE PORTAL PAGE) ── -->
+    <div id="cinematic-temple-doors" style="display:none; opacity:0;">
+      <canvas id="portal-rain-canvas"></canvas>
+      <div class="intro-door left-door"></div>
+      <div class="intro-door right-door"></div>
+      <div class="door-ui-wrap">
+        <!-- Initial Button State -->
+        <button id="door-enter-btn" class="door-enter-btn">ENTER THE PORTAL</button>
+        <button id="door-back-btn" class="door-back-btn" title="Return to Intro">← BACK TO INTRO</button>
+
+        <!-- Biometric FaceID Scanner Box Modal (Appears after clicking ENTER THE PORTAL) -->
+        <div class="portal-faceid-box" id="portal-faceid-box" style="display:none; opacity:0;">
+          <div class="hud-corner top-left"></div>
+          <div class="hud-corner top-right"></div>
+          <div class="hud-corner bottom-left"></div>
+          <div class="hud-corner bottom-right"></div>
+
+          <div class="faceid-header">
+            <span class="faceid-lock-icon">🔒</span>
+            <span class="faceid-title">BIOMETRIC IDENTITY SCANNER</span>
+          </div>
+
+          <!-- Scanning Box with Image Port -->
+          <div class="faceid-viewport">
+            <div class="faceid-img-frame">
+              <img id="faceid-scan-img" src="/FACEID1.jpg" onerror="this.onerror=null; this.src='/FACEID1.JPG.png';" alt="Biometric Face Scanner" class="faceid-img">
+              <div class="faceid-laser-sweep"></div>
+              <div class="faceid-grid-overlay"></div>
+              <div class="faceid-match-badge" id="faceid-match-badge">SCANNING 1/4</div>
+            </div>
+          </div>
+
+          <!-- Progress & Status Readout -->
+          <div class="faceid-hud-bottom">
+            <div class="faceid-status-text" id="faceid-status-text">ANALYZING BIOMETRIC SUBJECT 1/4...</div>
+            <div class="faceid-progress-track">
+              <div class="faceid-progress-fill" id="faceid-progress-fill"></div>
+            </div>
+            <div class="faceid-details-row">
+              <span id="faceid-pct-text">0%</span>
+              <span>ENCRYPTING VIP SESSION</span>
+              <span id="faceid-granted-text" class="faceid-granted" style="display:none;">ACCESS GRANTED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="app">
+      <!-- Floating Mega Menu Header -->
+      <header class="site-header floating-header">
+        <div class="logo-wrapper">
+          <div class="logo-rotator" id="rotating-logo">
+            <img src="./logo.png1.png" class="site-logo-img rot-active" alt="Logo 1">
+            <img src="./logo.png2.png" class="site-logo-img" alt="Logo 2">
+            <img src="./logo.png3.png" class="site-logo-img" alt="Logo 3">
+            <img src="./logo.png4.png" class="site-logo-img" alt="Logo 4">
+          </div>
+          <div class="logo">CHINESE<span>ASSASSIN</span></div>
+        </div>
+
+        <nav class="desktop-nav">
+          <div class="nav-item"><a href="#" id="home-link" class="nav-active">HOME</a></div>
+          <div class="nav-item has-mega-menu">
+            <a href="#">EXCLUSIVE <span class="chevron">&#9662;</span></a>
+            <div class="mega-menu">
+              <div class="mega-menu-content">
+                <div class="mega-col">
+                  <h4>VIP Exclusives</h4>
+                  <ul>
+                    <li><a href="#">Street Kings 2026</a></li>
+                    <li><a href="#">Techno Riddim Vol 4</a></li>
+                    <li><a href="#">Assassin Dubplates</a></li>
+                    <li><a href="#">Secret Stash Vol 1</a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <h4>Mix Gallery</h4>
+                  <div class="mix-gallery-grid">
+                    <div class="mix-thumb"><img src="/riddim_new.png" alt="Mix 1"></div>
+                    <div class="mix-thumb"><img src="/vip_new.png" alt="Mix 2"></div>
+                    <div class="mix-thumb"><img src="/mobile_mix_bg.png" alt="Mix 3"></div>
+                    <div class="mix-thumb"><img src="/tv_new.png" alt="Mix 4"></div>
+                  </div>
+                </div>
+                <div class="mega-col featured-set">
+                  <h4>Live Preview (30s)</h4>
+                  <div class="preview-player-wrap">
+                    <div class="featured-img" style="background-image: url('./mobile_mix_bg.png');">
+                      <button class="mega-preview-btn" id="mega-preview-play">
+                         <svg viewBox="0 0 24 24" width="30" height="30"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                      </button>
+                    </div>
+                    <h5>ASSASSIN ELITE MIX</h5>
+                    <p style="font-size: 0.8rem; color: #666;">Flashy transition and heavy bass.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nav-item"><a href="#">SHOP</a></div>
+          <div class="nav-item"><a href="#">ABOUT US</a></div>
+          <div class="nav-item"><a href="#">CONTACT</a></div>
+        </nav>
+
+        <!-- Right Header Action Group: Search | SIGN IN | Hamburger Menu -->
+        <div class="header-actions">
+          <button class="icon-btn search-btn" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </button>
+          <a href="#" class="sign-in-btn" id="sign-in-btn">SIGN IN</a>
+          <button class="icon-btn menu-toggle-btn" aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Full-Screen Mobile Navigation Drawer -->
+      <div id="mobile-nav-drawer" class="mobile-drawer-overlay">
+        <div class="mobile-drawer-card">
+          <div class="mobile-drawer-header">
+            <div class="logo">CHINESE<span>ASSASSIN</span></div>
+            <button id="mobile-drawer-close" class="mobile-drawer-close-btn">&times;</button>
+          </div>
+
+          <nav class="mobile-drawer-nav">
+            <a href="#" id="mobile-home-link" class="mobile-nav-item active"><span class="m-icon">🏠</span> HOME</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">🕹️</span> EXCLUSIVE</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">🛍️</span> SHOP</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">ℹ️</span> ABOUT US</a>
+            <a href="#" class="mobile-nav-item"><span class="m-icon">📞</span> CONTACT</a>
+            <button class="mobile-nav-btn sign-in-btn" id="mobile-sign-in-btn">🔑 SIGN IN TO PORTAL</button>
+          </nav>
+
+          <div class="mobile-drawer-footer">
+            <span>© 2026 CHINESE ASSASSIN VIP UNIVERSE</span>
+          </div>
+        </div>
+      </div>
+      <!-- 3D Background -->
+      <canvas id="webgl-canvas"></canvas>
+      <div id="atmosphere-overlay"></div>
+
+      <!-- ==========================================================================
+           SIGN-IN MODAL  (scanner phase -> auth form phase)
+           ========================================================================== -->
+      <div id="sign-in-modal" class="signin-modal-overlay">
+
+        <!-- —— PHASE 1 : BIOMETRIC SCANNER —————————————————————————— -->
+        <div id="signin-scanner-phase" class="signin-phase active">
+          <div id="biometric-scanner" class="active">
+            <div class="scanner-backdrop"></div>
+            <div class="scanner-top-hud">
+              <div class="hud-bracket left-bracket"></div>
+              <div class="hud-title-wrap">
+                <span class="hud-icon">🔒</span>
+                <span class="hud-text">BIOMETRIC IDENTITY VERIFICATION</span>
+              </div>
+              <div class="hud-bracket right-bracket"></div>
+            </div>
+            <div class="scanner-hero-wrap">
+              <div class="scanner-ring outer-ring"></div>
+              <div class="scanner-ring middle-ring"></div>
+              <div class="scanner-ring inner-ring"></div>
+              <div class="scanner-portrait-container">
+                <img src="/assassin_scanner.jpg" onerror="this.onerror=null; this.src='/Images/assassin_scanner.jpg';" alt="Chinese Assassin" class="scanner-portrait">
+                <div class="scanner-laser-line"></div>
+                <div class="scanner-grid-overlay"></div>
+              </div>
+              <div class="hud-corner top-left"></div>
+              <div class="hud-corner top-right"></div>
+              <div class="hud-corner bottom-left"></div>
+              <div class="hud-corner bottom-right"></div>
+            </div>
+            <div class="scanner-hud-bottom">
+              <div class="scanner-status-tag" id="scanner-status-text">VERIFYING IDENTITY...</div>
+              <div class="scanner-progress-bar-wrap">
+                <div class="scanner-progress-fill" id="signin-progress-fill"></div>
+              </div>
+              <div class="scanner-details-row">
+                <span>CHINESE ASSASSIN PORTAL</span>
+                <span class="scanner-match-text">ENCRYPTING SESSION</span>
+                <span class="scanner-access-granted">ACCESS: GRANTED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- —— PHASE 2 : AUTH FORM —————————————————————————————————————— -->
+        <div id="signin-auth-phase" class="signin-phase" style="display:none;">
+          <div class="auth-modal-card">
+
+            <!-- Close X -->
+            <button class="auth-close-btn" id="auth-close-btn" aria-label="Close">&times;</button>
+
+            <!-- Logo / Title -->
+            <div class="auth-header">
+              <div class="auth-logo-ring">
+                <img src="/assassin_scanner.jpg" onerror="this.onerror=null; this.src='/Images/assassin_scanner.jpg';" alt="Logo" class="auth-logo-img">
+              </div>
+              <h2 class="auth-title">CHINESE <span>ASSASSIN</span></h2>
+              <p class="auth-subtitle">VIP UNIVERSE PORTAL</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+              <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">SIGN IN</button>
+              <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">CREATE ACCOUNT</button>
+            </div>
+
+            <!-- —— LOGIN PANEL —— -->
+            <div class="auth-panel" id="panel-login">
+              <!-- Google -->
+              <button class="google-btn" id="google-signin-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+              </button>
+
+              <div class="auth-divider"><span>OR</span></div>
+
+              <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+                <div class="auth-field">
+                  <label>EMAIL ADDRESS</label>
+                  <input type="email" id="login-email" placeholder="assassin@vip.com" autocomplete="email" required>
+                </div>
+                <div class="auth-field">
+                  <label>PASSWORD</label>
+                  <div class="password-wrap">
+                    <input type="password" id="login-password" placeholder="••••••••••" autocomplete="current-password" required>
+                    <button type="button" class="pwd-toggle" onclick="togglePwd('login-password', this)">👁</button>
+                  </div>
+                </div>
+                <div class="auth-options-row">
+                  <label class="auth-remember">
+                    <input type="checkbox" id="remember-me"> Remember me
+                  </label>
+                  <a href="#" class="auth-forgot">Forgot password?</a>
+                </div>
+                <button type="submit" class="auth-submit-btn">ENTER THE PORTAL</button>
+              </form>
+            </div>
+
+            <!-- —— REGISTER PANEL —— -->
+            <div class="auth-panel" id="panel-register" style="display:none;">
+              <!-- Google -->
+              <button class="google-btn" id="google-register-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Sign up with Google
+              </button>
+
+              <div class="auth-divider"><span>OR</span></div>
+
+              <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+                <div class="auth-field">
+                  <label>DISPLAY NAME</label>
+                  <input type="text" id="reg-name" placeholder="Assassin Name" autocomplete="name" required>
+                </div>
+                <div class="auth-field">
+                  <label>EMAIL ADDRESS</label>
+                  <input type="email" id="reg-email" placeholder="assassin@vip.com" autocomplete="email" required>
+                </div>
+                <div class="auth-field">
+                  <label>PASSWORD</label>
+                  <div class="password-wrap">
+                    <input type="password" id="reg-password" placeholder="Min 8 characters" autocomplete="new-password" required minlength="8">
+                    <button type="button" class="pwd-toggle" onclick="togglePwd('reg-password', this)">👁</button>
+                  </div>
+                </div>
+                <div class="auth-field">
+                  <label>CONFIRM PASSWORD</label>
+                  <div class="password-wrap">
+                    <input type="password" id="reg-confirm" placeholder="Repeat password" autocomplete="new-password" required minlength="8">
+                    <button type="button" class="pwd-toggle" onclick="togglePwd('reg-confirm', this)">👁</button>
+                  </div>
+                </div>
+                <button type="submit" class="auth-submit-btn">CREATE ACCOUNT</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3D Navigation Hub -->
+      <div id="dimension-hub">
+        <div id="hub-container">
+          <!-- Layer 1: Single Master Hero & Background (AAA.jpg) -->
+          <div class="central-master-hero">
+            <div class="master-rim-light rim-red"></div>
+            <div class="master-rim-light rim-cyan"></div>
+            <img src="/Images/ICON PAGE-5.png" onerror="this.onerror=null; this.src='/ICON PAGE-5.png';" alt="Chinese Assassin" class="master-img">
+            <div class="master-vignette-overlay"></div>
+          </div>
+
+          <!-- Fingertip Energy Strands Canvas -->
+          <canvas id="fingertip-energy-canvas"></canvas>
+
+          <!-- Crimson Lightning Strike Flash Canvas -->
+          <canvas id="lightning-flash-canvas"></canvas>
+
+          <!-- Continuous 360° Holographic Music Halo Rings (Saturn's Ring / Doctor Strange Portal Effect) -->
+          <div class="hologram-ring-back"></div>
+          <div class="hologram-ring-front"></div>
+
+          <!-- Floating Curved 3D Glass Cards -->
+          <a class="realm-portal glass-card card-red" href="/vip" data-orbit-index="0">
+            <div class="glass-card-thumb">
+              <img src="/vip_new.png" alt="VIP Citadel">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">VIP Citadel</div>
+                  <div class="portal-artist">Chinese Assassin VIP</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:01</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:35%"></div></div>
+                <span class="time-label">4:22</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/streaming" data-orbit-index="1">
+            <div class="glass-card-thumb">
+              <img src="/mobile.jpg" alt="Streaming">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">24/7 Stream</div>
+                  <div class="portal-artist">Nonstop Reggae &amp; Dancehall</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:12</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:55%"></div></div>
+                <span class="time-label">LIVE</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/tv" data-orbit-index="2">
+            <div class="glass-card-thumb">
+              <img src="/tv_new.png" alt="Chinese Assassin TV">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Assassin TV</div>
+                  <div class="portal-artist">HD Concerts &amp; Documentaries</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">8:30</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:20%"></div></div>
+                <span class="time-label">45:12</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/mobile/" data-orbit-index="3">
+            <div class="glass-card-thumb">
+              <img src="/mobile_mix_bg.png" alt="Mobile Mixes">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Mobile Mixes</div>
+                  <div class="portal-artist">On-The-Go Mixtape Vault</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:02</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:15%"></div></div>
+                <span class="time-label">2:35</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/radio.html" data-orbit-index="4">
+            <div class="glass-card-thumb">
+              <img src="/radio.png" alt="Radio">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Assassin Radio</div>
+                  <div class="portal-artist">Global Live Broadcast</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:01</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:42%"></div></div>
+                <span class="time-label">LIVE</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/lab" data-orbit-index="5">
+            <div class="glass-card-thumb">
+              <img src="/producer_lab.png" alt="Producer Lab">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Producer Lab</div>
+                  <div class="portal-artist">Exclusive Stems &amp; Samples</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">1:05</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:60%"></div></div>
+                <span class="time-label">3:18</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/exclusive" data-orbit-index="6">
+            <div class="glass-card-thumb">
+              <img src="/exclusive.jpg" alt="Exclusives">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Unreleased Stash</div>
+                  <div class="portal-artist">VIP Mixes 2026</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:02</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:25%"></div></div>
+                <span class="time-label">4:55</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red" href="/riddim" data-orbit-index="7">
+            <div class="glass-card-thumb">
+              <img src="/riddim_new.png" alt="Riddim Mixes">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">The Vault</div>
+                  <div class="portal-artist">Heavy Bass Techno Riddims</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:02</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:10%"></div></div>
+                <span class="time-label">5:33</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a class="realm-portal glass-card card-red flash-drive-trigger" href="#usb-builder" id="card-flashdrive-mixes" data-orbit-index="8">
+            <div class="glass-card-thumb">
+              <img src="/Images/FLASHDRIVEBANNER.png" onerror="this.src='/FLASHDRIVEBANNER.png'" alt="Exclusive Flash Drive Mixes">
+            </div>
+            <div class="glass-card-content">
+              <div class="glass-card-toprow">
+                <div class="glass-card-title-wrap">
+                  <div class="portal-title">Flash Drive Mixes</div>
+                  <div class="portal-artist">Custom USB Mixtape Builder</div>
+                </div>
+              </div>
+              <div class="glass-timeline-row">
+                <span class="time-label">0:01</span>
+                <div class="glass-scrubber-track"><div class="glass-scrubber-fill" style="width:5%"></div></div>
+                <span class="time-label">1:12:44</span>
+              </div>
+              <div class="gc-bottom-row">
+                <button class="gc-play-btn" onclick="event.preventDefault()">
+                  <svg viewBox="0 0 24 24" fill="white" width="10" height="10"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="gc-spectrum">
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                  <span class="gc-bar"></span><span class="gc-bar"></span><span class="gc-bar"></span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- (bottom bar moved to direct body child below - position:fixed requires no transform ancestor) -->
+
+      <!-- Live Crimson Lightning Flash Canvas Layer -->
+      <canvas id="lightning-flash-canvas"></canvas>
+
+    </div>
+    <!-- BOTTOM BAR: Direct child of body so position:fixed works (CSS perspective on parent breaks fixed) -->
+    <div id="home-dj-deck">
+      <div class="bottom-bar-wrapper">
+        <!-- Left: Cyber-Deck Mini HUD (Player & EQ Toggle) -->
+        <div class="cyber-deck-widget" id="cyber-deck">
+          <!-- Top Micro Bar: Brand & Segmented Switch -->
+          <div class="cd-top-bar">
+            <div class="cd-brand">CHINESE ASSASSIN</div>
+            <div class="cd-tab-switch">
+              <button class="cd-tab active" id="cd-tab-player">PLAYER</button>
+              <button class="cd-tab" id="cd-tab-eq">EQ</button>
+            </div>
+          </div>
+
+          <!-- VIEW 1: PLAYER HUD -->
+          <div class="cd-view cd-player-view active" id="cd-view-player">
+            <div class="cd-disc-thumb" id="cd-play-trigger" title="Click to Play / Pause">
+              <img src="/vip_new.png" alt="Shadow Warrior">
+              <div class="cd-play-overlay">
+                <svg viewBox="0 0 24 24" class="cd-icon-play" width="16" height="16"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+                <svg viewBox="0 0 24 24" class="cd-icon-pause" width="16" height="16" style="display:none;"><path fill="#fff" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </div>
+            </div>
+            <div class="cd-meta-wrap">
+              <div class="cd-track-name">Shadow Warrior</div>
+              <div class="cd-artist-sub">Chinese Assassin &bull; <span id="ekho-time-cur">1:45</span> / <span id="ekho-time-total">3:14</span></div>
+              <div class="cd-waveform">
+                <span class="ebar eb1"></span><span class="ebar eb2"></span><span class="ebar eb3"></span>
+                <span class="ebar eb4"></span><span class="ebar eb5"></span><span class="ebar eb6"></span>
+                <span class="ebar eb7"></span><span class="ebar eb8"></span><span class="ebar eb9"></span>
+                <span class="ebar eb10"></span><span class="ebar eb11"></span><span class="ebar eb12"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 2: EQ HUD -->
+          <div class="cd-view cd-eq-view" id="cd-view-eq">
+            <div class="cd-faders-grid">
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="75" class="cd-range" id="eq-bench">
+                  <div class="cd-fader-fill" style="height: 75%;"></div>
+                </div>
+                <span class="cd-lbl">BENCH</span>
+              </div>
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="50" class="cd-range" id="eq-low">
+                  <div class="cd-fader-fill" style="height: 50%;"></div>
+                </div>
+                <span class="cd-lbl">LOW</span>
+              </div>
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="85" class="cd-range" id="eq-mid">
+                  <div class="cd-fader-fill" style="height: 85%;"></div>
+                </div>
+                <span class="cd-lbl">MID</span>
+              </div>
+              <div class="cd-fader-unit">
+                <div class="cd-fader-track">
+                  <input type="range" min="0" max="100" value="65" class="cd-range" id="eq-high">
+                  <div class="cd-fader-fill" style="height: 65%;"></div>
+                </div>
+                <span class="cd-lbl">HIGH</span>
+              </div>
+            </div>
+
+            <!-- Dial Knobs -->
+            <div class="cd-knobs-group">
+              <div class="cd-knob-unit">
+                <div class="cd-dial knob-large" id="knob-bass"><div class="cd-dot"></div></div>
+                <span class="cd-lbl">BASS</span>
+              </div>
+              <div class="cd-knob-unit">
+                <span class="cd-hz-val" id="sat-hz-text">44Hz</span>
+                <div class="cd-dial knob-small" id="knob-sat"><div class="cd-dot"></div></div>
+                <span class="cd-lbl">SAT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Center: DJ Controls -->
+        <div class="deck-controls">
+          <button id="home-play-btn" class="play-circle-btn">
+            <svg viewBox="0 0 24 24" class="icon-play" width="22" height="22"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+            <svg viewBox="0 0 24 24" class="icon-pause" width="22" height="22" style="display:none;"><path fill="#fff" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button id="home-fx-btn" class="fx-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+            <span>HOLD FOR LIVE DJ FILTER</span>
+          </button>
+        </div>
+        <!-- Right: Secret Chamber -->
+        <a href="#" id="secret-chamber-widget" class="secret-chamber-widget">
+          <div class="sc-icon-ring">
+            <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="none" stroke="#ff203a" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#ff203a"/><line x1="12" y1="2" x2="12" y2="6" stroke="#ff203a" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="22" stroke="#ff203a" stroke-width="2"/><line x1="2" y1="12" x2="6" y2="12" stroke="#ff203a" stroke-width="2"/><line x1="18" y1="12" x2="22" y2="12" stroke="#ff203a" stroke-width="2"/></svg>
+          </div>
+          <div class="sc-text">
+            <div class="sc-title">JOIN THE SECRET CHAMBER</div>
+            <div class="sc-sub">Unlock Exclusive Mixes & Content</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Secret Chamber Modal: Also direct body child for z-index isolation -->
+    <div id="secret-chamber-modal" class="sc-modal-overlay">
+      <div class="sc-modal-glass">
+        <button id="sc-modal-close" class="sc-close-btn">&times;</button>
+        <div class="sc-modal-header">
+          <div class="sc-reticle-ring">
+            <svg viewBox="0 0 24 24" width="36" height="36"><circle cx="12" cy="12" r="9" fill="none" stroke="#ff203a" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#ff203a"/><line x1="12" y1="2" x2="12" y2="6" stroke="#ff203a" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="22" stroke="#ff203a" stroke-width="2"/><line x1="2" y1="12" x2="6" y2="12" stroke="#ff203a" stroke-width="2"/><line x1="18" y1="12" x2="22" y2="12" stroke="#ff203a" stroke-width="2"/></svg>
+          </div>
+          <h2 class="sc-modal-title">THE SECRET CHAMBER</h2>
+          <p class="sc-modal-subtitle">ACCESS GRANTED &mdash; VIP UNRELEASED VAULT 2026</p>
+        </div>
+        <div class="sc-modal-body">
+          <div class="sc-vip-card">
+            <img src="/vip_new.png" alt="VIP Pass" class="sc-vip-img">
+            <div class="sc-vip-info">
+              <h3>Chinese Assassin VIP Pass</h3>
+              <p>Unlock 100+ Exclusive Dubplates, Stems & Live Sets</p>
+              <div class="sc-badge">AUTHENTICATED</div>
+            </div>
+          </div>
+          <div class="sc-download-grid">
+            <div class="sc-dl-item">
+              <span class="dl-icon">&#9889;</span>
+              <div class="dl-details">
+                <div class="dl-name">Forbidden Temple Dubplate [24-Bit FLAC]</div>
+                <div class="dl-size">48.2 MB &bull; Unreleased</div>
+              </div>
+              <button class="dl-btn">DOWNLOAD</button>
+            </div>
+            <div class="sc-dl-item">
+              <span class="dl-icon">&#127915;</span>
+              <div class="dl-details">
+                <div class="dl-name">Riddim Techno Stem Pack 2026</div>
+                <div class="dl-size">210 MB &bull; Producer Exclusive</div>
+              </div>
+              <button class="dl-btn">DOWNLOAD</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Auth tab switcher
+      function switchAuthTab(tab) {
+        const loginPanel    = document.getElementById('panel-login');
+        const registerPanel = document.getElementById('panel-register');
+        const tabLogin      = document.getElementById('tab-login');
+        const tabRegister   = document.getElementById('tab-register');
+
+        if (tab === 'login') {
+          loginPanel.style.display    = '';
+          registerPanel.style.display = 'none';
+          tabLogin.classList.add('active');
+          tabRegister.classList.remove('active');
+        } else {
+          loginPanel.style.display    = 'none';
+          registerPanel.style.display = '';
+          tabLogin.classList.remove('active');
+          tabRegister.classList.add('active');
+        }
+      }
+
+      // Password visibility toggle
+      function togglePwd(inputId, btn) {
+        const inp = document.getElementById(inputId);
+        if (!inp) return;
+        if (inp.type === 'password') {
+          inp.type = 'text';
+          btn.textContent = '🙈';
+        } else {
+          inp.type = 'password';
+          btn.textContent = '👁';
+        }
+      }
+
+      // â”€â”€ Login form submit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const pass  = document.getElementById('login-password').value;
+        if (!email || !pass) return;
+        
+        const username = email.split('@')[0] || 'Assassin VIP';
+        if (typeof window.triggerBiometricScanSequence === 'function') {
+          window.triggerBiometricScanSequence(username);
+        } else {
+          alert('Welcome back, ' + username);
+        }
+      }
+
+      // â”€â”€ Register form submit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function handleRegister(e) {
+        e.preventDefault();
+        const name    = document.getElementById('reg-name').value;
+        const email   = document.getElementById('reg-email').value;
+        const pass    = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+        if (pass !== confirm) { alert('Passwords do not match!'); return; }
+        
+        if (typeof window.triggerBiometricScanSequence === 'function') {
+          window.triggerBiometricScanSequence(name);
+        } else {
+          alert(`Account created for ${name}! 🎯`);
+        }
+      }
+
+      // â”€â”€ Google Sign-In callback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function handleGoogleCredential(response) {
+        console.log('Google credential received:', response.credential);
+        if (typeof window.triggerBiometricScanSequence === 'function') {
+          window.triggerBiometricScanSequence('Google Assassin');
+        }
+      }
+
+      // Wire Google buttons via Google Identity Services
+      window.addEventListener('load', () => {
+        const googleBtns = document.querySelectorAll('#google-signin-btn, #google-register-btn');
+        googleBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (window.google && window.google.accounts) {
+              google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+                callback: handleGoogleCredential
+              });
+              google.accounts.id.prompt();
+            } else {
+              // Demo fallback for preview testing
+              if (typeof window.triggerBiometricScanSequence === 'function') {
+                window.triggerBiometricScanSequence('Google Assassin');
+              }
+            }
+          });
+        });
+      });
+    </script>
+    <script type="module" src="./src/main.js"></script>
+  
+ <script>
+    // --- 1. Ambient Particle Embers Engine ---
+    (function initEmbers() {
+      const canvas = document.getElementById('caEmberCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const embers = Array.from({ length: 85 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.2 + 0.6,
+        dx: (Math.random() - 0.5) * 0.6,
+        dy: -(Math.random() * 1.2 + 0.4),
+        alpha: Math.random() * 0.8 + 0.2
+      }));
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        embers.forEach(e => {
+          e.x += e.dx;
+          e.y += e.dy;
+          if (e.y < -10) { e.y = h + 10; e.x = Math.random() * w; }
+          if (e.x < -10) e.x = w + 10;
+          if (e.x > w + 10) e.x = -10;
+
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, ${Math.floor(Math.random() * 40 + 20)}, 45, ${e.alpha})`;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#ff1e38';
+          ctx.fill();
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
+    // --- 2. Toast HUD Feedback ---
+    function showToast(msg) {
+      const t = document.getElementById('caDjToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove('visible'), 2200);
+    }
+
+    // --- 3. WebAudio Hydraulic & Scratch Synthesizer ---
+    let audioCtx = null;
+    function playHydraulicSound(type) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+        if (type === 'open') {
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(380, now + 0.4);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.42);
+        } else {
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.38);
+        }
+      } catch (e) {
+        console.warn('Audio FX error:', e);
+      }
+    }
+
+    function playScratchFX() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        osc.frequency.setValueAtTime(320 + Math.random() * 400, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.14);
+      } catch (e) {}
+    }
+
+    // --- 4. Master Slide-Open Controller & Event Wiring ---
+    function initSlideOpenSuite() {
+      const stage = document.getElementById('caStage');
+      const chamber = document.getElementById('caScreenChamber');
+      const video = document.getElementById('caVideo');
+      const laser = document.getElementById('caLaserScanline');
+      const descModal = document.getElementById('caDescModal');
+      const descCloseBtn = document.getElementById('caDescCloseBtn');
+
+      const heroPlay = document.getElementById('heroPlayHotspot');
+      const descBtn = document.getElementById('descHotspot');
+      const bottomPlay = document.getElementById('bottomPlayHotspot');
+      const platter = document.getElementById('caScratchPlatter');
+      const proceedBtn = document.getElementById('proceedToWebsiteBtn');
+
+      // Cockpit controls
+      const vidPlayBtn = document.getElementById('caVidPlayPauseBtn');
+      const vidPlayIcon = document.getElementById('caVidPlayIcon');
+      const vidPauseIcon = document.getElementById('caVidPauseIcon');
+      const vidRewindBtn = document.getElementById('caVidRewindBtn');
+      const vidForwardBtn = document.getElementById('caVidForwardBtn');
+      const vidScrubberTrack = document.getElementById('caVidScrubberTrack');
+      const vidScrubberFill = document.getElementById('caVidScrubberFill');
+      const vidTimeDisplay = document.getElementById('caVidTimeDisplay');
+      const vidQualityBtn = document.getElementById('caVidQualityBtn');
+      const vidSpeedBtn = document.getElementById('caVidSpeedBtn');
+      const vidFxBtn = document.getElementById('caVidFxBtn');
+      const vidCloseBtn = document.getElementById('caVidCloseBtn');
+
+      function formatTime(s) {
+        if (isNaN(s)) return '0:00';
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+      }
+
+      // --- 3D Cursor Parallax on Idle Closed Card ---
+      let targetRotX = 0, targetRotY = 0, currentRotX = 0, currentRotY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        targetRotX = ((cy - e.clientY) / cy) * 5.0;
+        targetRotY = ((e.clientX - cx) / cx) * 6.0;
+      });
+
+      function animateParallax() {
+        if (stage && !stage.classList.contains('card-opened')) {
+          currentRotX += (targetRotX - currentRotX) * 0.08;
+          currentRotY += (targetRotY - currentRotY) * 0.08;
+          stage.style.transform = `perspective(1200px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+        }
+        requestAnimationFrame(animateParallax);
+      }
+      animateParallax();
+
+      // --- Playback Ignition & Door Parting ---
+      function startPlayback() {
+        if (descModal) descModal.classList.remove('open');
+        playHydraulicSound('open');
+        stage.classList.add('card-opened');
+        if (laser) {
+          laser.classList.remove('ignite');
+          void laser.offsetWidth;
+          laser.classList.add('ignite');
+        }
+        showToast('⚡ MECHANICAL DOORS PARTING — LAUNCHING AURA 2.0');
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Autoplay blocked, unmuting on gesture:', err);
+            video.muted = true;
+            video.play();
+          });
+        }
+        if (vidPlayIcon) vidPlayIcon.style.display = 'none';
+        if (vidPauseIcon) vidPauseIcon.style.display = 'inline';
+      }
+
+      function pausePlayback() {
+        video.pause();
+        playHydraulicSound('close');
+        stage.classList.remove('card-opened');
+        showToast('⏹ RESTORED MASTER ARTWORK');
+        if (vidPlayIcon) vidPlayIcon.style.display = 'inline';
+        if (vidPauseIcon) vidPauseIcon.style.display = 'none';
+      }
+
+      function togglePlayback() {
+        if (video.paused || !stage.classList.contains('card-opened')) {
+          startPlayback();
+        } else {
+          pausePlayback();
+        }
+      }
+
+      // Hotspot click bindings
+      if (heroPlay) heroPlay.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        togglePlayback();
+      });
+
+      if (bottomPlay) bottomPlay.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        togglePlayback();
+      });
+
+      // Description Modal Hotspot
+      if (descBtn) descBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        descModal.classList.toggle('open');
+      });
+
+      if (descCloseBtn) descCloseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        descModal.classList.remove('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (descModal && descModal.classList.contains('open')) {
+          if (!descModal.contains(e.target) && !e.target.closest('#descHotspot')) {
+            descModal.classList.remove('open');
+          }
+        }
+      });
+
+      // Tab Hotspots
+      ['tabOverviewHotspot', 'tabEpisodesHotspot', 'tabDetailsHotspot'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', (e) => {
+          e.preventDefault();
+          showToast(`📂 TAB: ${el.title.toUpperCase()}`);
+        });
+      });
+
+      // Scratch Platter Hotspot
+      if (platter) {
+        platter.addEventListener('mousedown', () => {
+          playScratchFX();
+          showToast('🎧 DJ VINYL SCRATCH ACTIVE');
+        });
+      }
+
+      // Video Controls Bar
+      if (vidPlayBtn) vidPlayBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (video.paused) {
+          video.play();
+          vidPlayIcon.style.display = 'none';
+          vidPauseIcon.style.display = 'inline';
+        } else {
+          video.pause();
+          vidPlayIcon.style.display = 'inline';
+          vidPauseIcon.style.display = 'none';
+        }
+      });
+
+      if (vidRewindBtn) vidRewindBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        video.currentTime = Math.max(0, video.currentTime - 10);
+        showToast('⏪ REWIND 10s');
+      });
+
+      if (vidForwardBtn) vidForwardBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        video.currentTime = Math.min(video.duration || 9999, video.currentTime + 10);
+        showToast('⏩ FORWARD 10s');
+      });
+
+      if (vidCloseBtn) vidCloseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        pausePlayback();
+      });
+
+      // Scrubber Track
+      if (vidScrubberTrack) vidScrubberTrack.addEventListener('click', (e) => {
+        const rect = vidScrubberTrack.getBoundingClientRect();
+        const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        if (video.duration) video.currentTime = pos * video.duration;
+      });
+
+      // Quality Cycle
+      const qualities = ['4K HDR', '1080p 60fps', '2K MASTER', '4K ULTRA HD'];
+      let qIdx = 0;
+      if (vidQualityBtn) vidQualityBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        qIdx = (qIdx + 1) % qualities.length;
+        vidQualityBtn.textContent = qualities[qIdx];
+        showToast(`🎥 QUALITY: ${qualities[qIdx]}`);
+      });
+
+      // Speed Cycle
+      const speeds = [1.0, 1.25, 1.5, 2.0];
+      let sIdx = 0;
+      if (vidSpeedBtn) vidSpeedBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        sIdx = (sIdx + 1) % speeds.length;
+        video.playbackRate = speeds[sIdx];
+        vidSpeedBtn.textContent = `${speeds[sIdx].toFixed(1)}x`;
+        showToast(`⚡ SPEED: ${speeds[sIdx]}x`);
+      });
+
+      // Matrix FX Filter Toggle
+      let fxActive = false;
+      if (vidFxBtn) vidFxBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        fxActive = !fxActive;
+        video.style.filter = fxActive ? 'contrast(1.4) saturate(1.6) hue-rotate(15deg)' : 'none';
+        vidFxBtn.classList.toggle('active', fxActive);
+        showToast(fxActive ? '🟩 CYBER MATRIX FX ON' : '⬛ MATRIX FX OFF');
+      });
+
+      // Video Event Listeners
+      video.addEventListener('timeupdate', () => {
+        if (video.duration) {
+          const pct = (video.currentTime / video.duration) * 100;
+          if (vidScrubberFill) vidScrubberFill.style.width = `${pct}%`;
+          if (vidTimeDisplay) vidTimeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+        }
+      });
+
+      video.addEventListener('ended', pausePlayback);
+
+      // Keyboard Shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.key === 'f' || e.key === 'F') {
+          if (stage && stage.classList.contains('card-opened')) {
+            e.preventDefault();
+            if (video.paused) video.play(); else video.pause();
+          }
+        } else if (e.key === 'Escape') {
+          if (templeDoors && templeDoors.style.display !== 'none' && !isFaceIdScanning) {
+            returnToMasterCard();
+          } else if (stage && stage.classList.contains('card-opened')) {
+            pausePlayback();
+          } else if (descModal && descModal.classList.contains('open')) {
+            descModal.classList.remove('open');
+          }
+        } else if (e.key === 'Enter') {
+          const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+          if (activeTag === 'input' || activeTag === 'textarea') return;
+          if (templeDoors && templeDoors.style.display !== 'none') {
+            if (doorEnterBtn && doorEnterBtn.style.display !== 'none') doorEnterBtn.click();
+          } else {
+            if (proceedBtn) proceedBtn.click();
+          }
+        }
+      });
+
+      // ── Audio FX Synthesizer for Scanners & Portals ─────────────────
+      function playSynthTone(freq, dur, type = 'sine', gainVal = 0.15) {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          g.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + dur);
+        } catch(e) {}
+      }
+
+      function playAccessGrantedChime() {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const now = audioCtx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            g.gain.setValueAtTime(0.18, now + i * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.45);
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.46);
+          });
+        } catch(e) {}
+      }
+
+      // ── Rain Engine for Temple Doors ──────────────────────────────
+      let rainRunning = false;
+      let rainRaf = null;
+      function startPortalRain() {
+        const rCanvas = document.getElementById('portal-rain-canvas');
+        if (!rCanvas) return;
+        const rCtx = rCanvas.getContext('2d');
+        let rw = rCanvas.width = window.innerWidth;
+        let rh = rCanvas.height = window.innerHeight;
+
+        const drops = Array.from({ length: 160 }, () => ({
+          x: Math.random() * rw,
+          y: Math.random() * rh,
+          len: 16 + Math.random() * 26,
+          speed: 16 + Math.random() * 14,
+          alpha: 0.2 + Math.random() * 0.4
+        }));
+
+        rainRunning = true;
+        function rainLoop() {
+          if (!rainRunning) return;
+          rCtx.clearRect(0, 0, rw, rh);
+          rCtx.lineWidth = 1;
+          rCtx.strokeStyle = 'rgba(200, 225, 255, 0.4)';
+          rCtx.beginPath();
+          drops.forEach(d => {
+            d.y += d.speed;
+            d.x += 1.5;
+            if (d.y > rh) { d.y = -d.len; d.x = Math.random() * rw; }
+            rCtx.moveTo(d.x, d.y);
+            rCtx.lineTo(d.x + 2, d.y + d.len);
+          });
+          rCtx.stroke();
+          rainRaf = requestAnimationFrame(rainLoop);
+        }
+        rainLoop();
+      }
+
+      function stopPortalRain() {
+        rainRunning = false;
+        if (rainRaf) cancelAnimationFrame(rainRaf);
+      }
+
+      // ── Enter The Portal & FaceID Sequence Handlers ───────────────
+      const templeDoors = document.getElementById('cinematic-temple-doors');
+      const doorEnterBtn = document.getElementById('door-enter-btn');
+      const doorBackBtn = document.getElementById('door-back-btn');
+      const faceBox = document.getElementById('portal-faceid-box');
+      const faceImg = document.getElementById('faceid-scan-img');
+      const faceBadge = document.getElementById('faceid-match-badge');
+      const faceStatus = document.getElementById('faceid-status-text');
+      const faceFill = document.getElementById('faceid-progress-fill');
+      const facePct = document.getElementById('faceid-pct-text');
+      const faceGranted = document.getElementById('faceid-granted-text');
+
+      let isFaceIdScanning = false;
+
+      function openEnterPortalPage() {
+        pausePlayback();
+        playHydraulicSound('open');
+        showToast('⚡ ENTERING THE TEMPLE PORTAL GATEWAY');
+
+        // Animate Page 1 Master Card out
+        gsap.to(stage, {
+          opacity: 0,
+          scale: 0.92,
+          y: -25,
+          duration: 0.55,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            stage.style.display = 'none';
+
+            if (templeDoors) {
+              const leftDoor = templeDoors.querySelector('.left-door');
+              const rightDoor = templeDoors.querySelector('.right-door');
+              if (leftDoor) gsap.set(leftDoor, { rotateY: 0 });
+              if (rightDoor) gsap.set(rightDoor, { rotateY: 0 });
+
+              if (faceBox) {
+                faceBox.style.display = 'none';
+                faceBox.style.opacity = '0';
+              }
+
+              templeDoors.style.display = 'block';
+              templeDoors.style.opacity = '0';
+              gsap.to(templeDoors, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+
+              if (doorEnterBtn) {
+                doorEnterBtn.style.display = 'inline-flex';
+                doorEnterBtn.style.opacity = '1';
+                gsap.fromTo(doorEnterBtn,
+                  { scale: 0.7, opacity: 0, y: 25 },
+                  { scale: 1, opacity: 1, y: 0, duration: 0.55, ease: 'back.out(1.7)', delay: 0.15 }
+                );
+              }
+              if (doorBackBtn) {
+                doorBackBtn.style.display = 'inline-flex';
+                gsap.fromTo(doorBackBtn,
+                  { opacity: 0, y: 15 },
+                  { opacity: 1, y: 0, duration: 0.4, delay: 0.3 }
+                );
+              }
+
+              startPortalRain();
+            }
+          }
+        });
+      }
+
+      function returnToMasterCard() {
+        if (!templeDoors) return;
+        playHydraulicSound('close');
+        showToast('🎴 RETURNING TO MASTER CARD');
+        stopPortalRain();
+
+        gsap.to(templeDoors, {
+          opacity: 0,
+          duration: 0.45,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            templeDoors.style.display = 'none';
+            stage.style.display = 'flex';
+            gsap.fromTo(stage,
+              { opacity: 0, scale: 0.94, y: 25 },
+              { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power2.out' }
+            );
+          }
+        });
+      }
+
+      function startFaceIdScan() {
+        if (isFaceIdScanning) return;
+        isFaceIdScanning = true;
+
+        if (doorEnterBtn) {
+          gsap.to(doorEnterBtn, { opacity: 0, scale: 0.8, duration: 0.25, onComplete: () => { doorEnterBtn.style.display = 'none'; } });
+        }
+        if (doorBackBtn) {
+          gsap.to(doorBackBtn, { opacity: 0, scale: 0.8, duration: 0.25, onComplete: () => { doorBackBtn.style.display = 'none'; } });
+        }
+
+        if (faceBox) {
+          faceBox.style.display = 'flex';
+          gsap.fromTo(faceBox,
+            { opacity: 0, scale: 0.82 },
+            { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)', delay: 0.1 }
+          );
+        }
+
+        if (faceGranted) faceGranted.style.display = 'none';
+        if (faceFill) faceFill.style.width = '0%';
+        if (facePct) facePct.textContent = '0%';
+
+        const scanSteps = [
+          { src: '/FACEID1.jpg', fallback: '/FACEID1.JPG.png', label: 'ANALYZING BIOMETRIC SUBJECT 1/4...', badge: 'SCANNING 1/4', freq: 440 },
+          { src: '/FACEID2.jpg', fallback: '/FACEID2.JPG.png', label: 'VERIFYING NEURAL PATTERNS 2/4...', badge: 'FACEID: 2/4', freq: 580 },
+          { src: '/FACEID3.jpg', fallback: '/FACEID3.JPG.png', label: 'MATCHING ASSASSIN IDENTITY 3/4...', badge: 'MATCH: 98.4%', freq: 720 },
+          { src: '/FACEID4.jpg', fallback: '/FACEID4.JPG.png', label: 'BIOMETRIC VERIFICATION COMPLETE 4/4!', badge: 'VERIFIED 4/4', freq: 880 }
+        ];
+
+        let currentStep = 0;
+        let progress = 0;
+
+        const updateStepUI = (idx) => {
+          const step = scanSteps[idx];
+          if (!step) return;
+          if (faceImg) {
+            gsap.to(faceImg, { opacity: 0.35, duration: 0.08, yoyo: true, repeat: 1, onComplete: () => {
+              faceImg.src = step.src;
+              faceImg.onerror = () => { faceImg.src = step.fallback; };
+            }});
+          }
+          if (faceStatus) faceStatus.textContent = step.label;
+          if (faceBadge) faceBadge.textContent = step.badge;
+          playSynthTone(step.freq, 0.12, 'sawtooth', 0.12);
+        };
+
+        updateStepUI(0);
+
+        const scanInterval = setInterval(() => {
+          progress += 1.4;
+          if (faceFill) faceFill.style.width = `${Math.min(progress, 100)}%`;
+          if (facePct) facePct.textContent = `${Math.min(Math.floor(progress), 100)}%`;
+
+          const stepIdx = Math.min(Math.floor((progress / 100) * scanSteps.length), scanSteps.length - 1);
+          if (stepIdx !== currentStep) {
+            currentStep = stepIdx;
+            updateStepUI(currentStep);
+          }
+
+          if (progress >= 100) {
+            clearInterval(scanInterval);
+            if (faceStatus) {
+              faceStatus.textContent = 'ACCESS: GRANTED — WELCOME ASSASSIN';
+              faceStatus.style.color = '#00e5ff';
+            }
+            if (faceGranted) faceGranted.style.display = 'inline';
+            playAccessGrantedChime();
+            showToast('🔓 VIP ACCESS GRANTED — TEMPLE DOORS UNLOCKED');
+
+            setTimeout(() => {
+              if (faceBox) {
+                gsap.to(faceBox, { scale: 1.25, opacity: 0, duration: 0.45, ease: 'power2.in' });
+              }
+
+              // Swing temple doors open
+              const leftDoor = templeDoors ? templeDoors.querySelector('.left-door') : null;
+              const rightDoor = templeDoors ? templeDoors.querySelector('.right-door') : null;
+              if (leftDoor && rightDoor) {
+                gsap.to(leftDoor, { rotateY: -92, duration: 1.2, ease: 'power3.inOut' });
+                gsap.to(rightDoor, { rotateY: 92, duration: 1.2, ease: 'power3.inOut' });
+              }
+              playHydraulicSound('open');
+
+              // Dispatch portalEntered event
+              window.dispatchEvent(new Event('portalEntered'));
+
+              // Fade out intro & doors, reveal main app
+              const introContainer = document.getElementById('cinematic-intro');
+              if (introContainer) {
+                gsap.to(introContainer, {
+                  opacity: 0,
+                  duration: 0.8,
+                  delay: 0.4,
+                  ease: 'power2.inOut',
+                  onComplete: () => {
+                    introContainer.style.display = 'none';
+                    isFaceIdScanning = false;
+                    stopPortalRain();
+                  }
+                });
+              }
+            }, 550);
+          }
+        }, 32);
+      }
+
+      // Wire Door Enter & Back Buttons
+      if (doorEnterBtn) {
+        doorEnterBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          startFaceIdScan();
+        });
+      }
+
+      if (doorBackBtn) {
+        doorBackBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          returnToMasterCard();
+        });
+      }
+
+      // Wire ENTER CA UNIVERSE Button
+      if (proceedBtn) {
+        proceedBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openEnterPortalPage();
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSlideOpenSuite);
+    } else {
+      initSlideOpenSuite();
+    }
+  </script>
+</body>
+
+</html>

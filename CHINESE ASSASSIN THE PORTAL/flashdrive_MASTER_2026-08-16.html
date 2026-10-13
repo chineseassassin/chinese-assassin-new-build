@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Assassin — Custom Flash Drive Mixes & USB Mixtape Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+  <style>
+    :root {
+      --primary-red: #ff203a;
+      --neon-ruby: #ff0055;
+      --glow-pink: rgba(255, 32, 58, 0.6);
+      --dark-glass: rgba(14, 6, 16, 0.85);
+      --card-border: rgba(255, 60, 90, 0.28);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-y: auto !important;
+      height: auto !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #060208;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      min-height: 100vh;
+      height: auto !important;
+      position: relative;
+    }
+
+    /* Custom Neon Ruby Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060208;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ff203a, #990022);
+      border-radius: 10px;
+      border: 2px solid #060208;
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.7);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff0055;
+      box-shadow: 0 0 16px rgba(255, 0, 85, 0.9);
+    }
+
+    /* Floating Scroll Navigators (Scroll to Catalog / Scroll to Top) */
+    .scroll-nav-dock {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+    }
+
+    .scroll-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(14, 6, 16, 0.85);
+      border: 1.5px solid var(--primary-red);
+      color: #ffffff;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 32, 58, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .scroll-btn:hover {
+      background: var(--primary-red);
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(255, 32, 58, 0.8);
+    }
+
+    /* Ambient Hero Background with flashdrive-page.jpg */
+    .flashdrive-hero-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('/flashdrive-page.jpg') no-repeat center top / cover;
+      opacity: 0.85;
+      z-index: -2;
+      filter: saturate(1.1) brightness(0.9);
+    }
+
+    .flashdrive-overlay-vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(10, 4, 12, 0.4) 0%, rgba(6, 2, 8, 0.95) 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Header Nav */
+    .site-header {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 1400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 28px;
+      z-index: 5000;
+      background: rgba(12, 6, 14, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 32, 58, 0.35);
+      border-radius: 100px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .logo-wrapper { display: flex; align-items: center; gap: 15px; }
+    .logo-rotator { position: relative; width: 45px; height: 45px; perspective: 600px; }
+    .site-logo-img {
+      position: absolute; top: 0; left: 0; height: 45px; width: 45px; border-radius: 50%;
+      box-shadow: 0 0 15px var(--glow-pink); border: 1px solid var(--primary-red);
+      transform: rotateY(-90deg) scale(1.2); opacity: 0; pointer-events: none; object-fit: cover;
+      transition: transform 0.15s ease, opacity 0.1s ease;
+    }
+    .site-logo-img.rot-active { transform: rotateY(0deg) scale(1.2); opacity: 1; pointer-events: auto; }
+    .site-logo-img.rot-exit { transform: rotateY(90deg) scale(1.2); opacity: 0; }
+
+    .logo {
+      font-size: 1.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #ffffff;
+    }
+    .logo span { color: var(--primary-red); text-shadow: 0 0 10px var(--glow-pink); }
+
+    .nav-links-row {
+      display: flex; align-items: center; gap: 18px;
+    }
+    .nav-link-btn {
+      color: #ffffff; text-decoration: none; font-size: 0.95rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.2s;
+    }
+    .nav-link-btn:hover { color: var(--primary-red); }
+
+    .back-hub-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, rgba(255, 32, 58, 0.25) 0%, rgba(200, 10, 40, 0.1) 100%);
+      border: 1px solid var(--primary-red);
+      border-radius: 50px;
+      padding: 8px 22px;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.4);
+      transition: all 0.25s ease;
+    }
+    .back-hub-btn:hover {
+      background: var(--primary-red);
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(255, 32, 58, 0.8);
+    }
+
+    /* Main Content Wrapper */
+    .flashdrive-main-container {
+      max-width: 1400px;
+      margin: 110px auto 40px auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Hero Banner Card with FLASH DRIVE PAGE.jpg shifted down for water flow effect */
+    .flashdrive-hero-card {
+      position: relative;
+      width: 100%;
+      min-height: 580px;
+      background: url('/flashdrive-page.jpg') no-repeat right 32% / cover;
+      border: 1.5px solid rgba(255, 60, 90, 0.45);
+      border-radius: 28px;
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 45px rgba(255, 32, 58, 0.35);
+      overflow: hidden;
+    }
+
+    /* Water Flowing Over Bottom Edge Effect */
+    .flashdrive-hero-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(180deg, transparent 0%, rgba(6, 2, 8, 0.85) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* VIP Hardware Edition Text Column: Frosted Glassmorphic Card on the Left Over the Design */
+    .hero-text-col {
+      position: relative;
+      z-index: 5;
+      max-width: 580px;
+      background: rgba(12, 5, 15, 0.82);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 60, 90, 0.45);
+      border-radius: 26px;
+      padding: 38px 42px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 32, 58, 0.25);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(255, 32, 58, 0.28);
+      border: 1px solid rgba(255, 32, 58, 0.75);
+      border-radius: 50px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.5);
+      color: #ffffff;
+    }
+
+    .hero-heading {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      line-height: 1.12;
+      margin-bottom: 14px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95);
+    }
+    .hero-heading span { color: var(--primary-red); text-shadow: 0 0 20px rgba(255, 32, 58, 0.9); }
+
+    .hero-subheading {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.55;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-chip {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s ease;
+    }
+    .hero-chip:hover {
+      background: rgba(255, 32, 58, 0.3);
+      border-color: var(--primary-red);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 32, 58, 0.5);
+    }
+
+    /* Two-Column Workspace Layout */
+    .builder-workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .builder-workspace-grid { grid-template-columns: 1fr; }
+      .flashdrive-hero-card { flex-direction: column; text-align: center; }
+      .hero-chips-row { justify-content: center; }
+    }
+
+    /* Left: Catalog Panel */
+    .catalog-card-container {
+      background: rgba(16, 7, 16, 0.75);
+      border: 1.5px solid var(--card-border);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+    }
+
+    .cat-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .cat-title-text {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .cat-filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 50px;
+      padding: 8px 18px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-pill.active, .filter-pill:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #0d040a;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    .catalog-albums-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .album-item-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .album-item-card:hover {
+      border-color: var(--primary-red);
+      background: rgba(255, 32, 58, 0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(255, 32, 58, 0.25);
+    }
+
+    .album-cover-img {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 14px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .album-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 6px;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .album-title-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+
+    .album-price-tag {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #00e5ff;
+      margin: 8px 0;
+    }
+
+    .album-add-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .album-add-btn:hover {
+      background: var(--primary-red);
+      border-color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.7);
+    }
+
+    .album-add-btn.added {
+      background: #00e5ff;
+      color: #060208;
+      border-color: #ffffff;
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.7);
+    }
+
+    /* Right: USB Drive Specs & Cart Panel */
+    .sidebar-drive-card {
+      background: radial-gradient(circle at top right, rgba(220, 20, 50, 0.35) 0%, rgba(20, 9, 18, 0.95) 70%, rgba(10, 4, 10, 0.99) 100%);
+      border: 1.5px solid var(--card-border);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 32, 58, 0.25);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .drive-preview-banner {
+      width: 100%;
+      height: 160px;
+      border-radius: 18px;
+      background: url('/flashdrive-banner3.png') no-repeat center center / cover;
+      border: 1px solid rgba(255, 60, 90, 0.35);
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+    }
+
+    .tier-selector-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tier-select-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tier-select-btn.active {
+      background: linear-gradient(135deg, rgba(235, 30, 60, 0.4) 0%, rgba(140, 10, 30, 0.2) 100%);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.4);
+    }
+
+    .storage-bar-wrap {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .storage-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .storage-progress {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .storage-fill {
+      width: 25%;
+      height: 100%;
+      background: linear-gradient(90deg, #00e5ff, #ff203a);
+      transition: width 0.3s ease;
+    }
+
+    .engraving-box label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .engraving-inp {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .engraving-inp:focus {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.5);
+    }
+
+    .pricing-summary-box {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-top: 6px;
+    }
+
+    .total-row span:last-child {
+      color: #00e5ff;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+    }
+
+    .checkout-pill-btn {
+      width: 100%;
+      padding: 14px;
+      background: #ffffff;
+      border: none;
+      border-radius: 50px;
+      color: #0a0308;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .checkout-pill-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.7);
+    }
+
+    /* Toast Notification */
+    .vip-toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: rgba(14, 6, 16, 0.95);
+      border: 1.5px solid var(--primary-red);
+      border-radius: 50px;
+      padding: 12px 24px;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 32, 58, 0.6);
+      z-index: 999999;
+      display: none;
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Imagery -->
+  <div class="flashdrive-hero-bg"></div>
+  <div class="flashdrive-overlay-vignette"></div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="logo-wrapper">
+      <div class="logo-rotator" id="rotating-logo">
+        <img src="/logo.png1.png" class="site-logo-img rot-active" alt="CA Logo 1">
+        <img src="/logo.png2.png" class="site-logo-img" alt="CA Logo 2">
+        <img src="/logo.png3.png" class="site-logo-img" alt="CA Logo 3">
+        <img src="/logo.png4.png" class="site-logo-img" alt="CA Logo 4">
+      </div>
+      <div class="logo">CHINESE<span>ASSASSIN</span></div>
+    </div>
+
+    <nav class="nav-links-row">
+      <a href="/" class="nav-link-btn">HOME</a>
+      <a href="/dimension-hub.html" class="nav-link-btn">DIMENSIONS</a>
+      <a href="/streaming" class="nav-link-btn">24/7 STREAM</a>
+      <a href="/dimension-hub.html" class="back-hub-btn">← BACK TO DIMENSION HUB</a>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flashdrive-main-container">
+
+    <!-- Hero Card Banner with Background Image filling entire card -->
+    <div class="flashdrive-hero-card" id="flashdriveHeroCard">
+      <div class="hero-text-col">
+        <div class="hero-badge-pill">⚡ VIP HARDWARE EDITION</div>
+        <h1 class="hero-heading">CUSTOM METALLIC <span>FLASH DRIVE</span> MIXES</h1>
+        <p class="hero-subheading">Curate your personalized soundclash arsenal on a heavy zinc-alloy laser-engraved USB 3.2 drive. 320kbps MP3s &amp; lossless stems delivered worldwide.</p>
+        <div class="hero-chips-row">
+          <span class="hero-chip">🔊 320 KBPS MASTER QUALITY</span>
+          <span class="hero-chip">🛡️ ZINC-ALLOY WATERPROOF CASING</span>
+          <span class="hero-chip">✈️ WORLDWIDE FAST SHIPPING</span>
+          <span class="hero-chip">🔥 EXCLUSIVE STEM REMIXES</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Builder Grid -->
+    <div class="builder-workspace-grid">
+
+      <!-- Left Column: Albums Catalog -->
+      <div class="catalog-card-container">
+        <div class="cat-bar-header">
+          <h2 class="cat-title-text">SELECT ALBUMS TO LOAD (<span id="selectedCount">0</span> ADDED)</h2>
+          <div class="cat-filter-pills">
+            <button class="filter-pill active" onclick="filterCatalog('ALL', this)">ALL MIXES</button>
+            <button class="filter-pill" onclick="filterCatalog('Old School', this)">OLD SCHOOL</button>
+            <button class="filter-pill" onclick="filterCatalog('New School', this)">NEW SCHOOL</button>
+            <button class="filter-pill" onclick="filterCatalog('Remixes', this)">REMIXES</button>
+          </div>
+        </div>
+
+        <div class="catalog-albums-grid" id="albumsGrid">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Right Column: Flash Drive Specs & Live Cart -->
+      <div class="sidebar-drive-card">
+        <div class="drive-preview-banner"></div>
+
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">1. CHOOSE DRIVE CAPACITY</h3>
+          <div class="tier-selector-box">
+            <button class="tier-select-btn" onclick="selectTier(16, 29.99, this)">
+              <span>16 GB Compact Metal</span>
+              <strong>$29.99</strong>
+            </button>
+            <button class="tier-select-btn" onclick="selectTier(32, 39.99, this)">
+              <span>32 GB Stealth Metallic</span>
+              <strong>$39.99</strong>
+            </button>
+            <button class="tier-select-btn active" onclick="selectTier(64, 59.99, this)">
+              <span>64 GB Pro Assassin (Popular)</span>
+              <strong>$59.99</strong>
+            </button>
+            <button class="tier-select-btn" onclick="selectTier(128, 89.99, this)">
+              <span>128 GB Ultimate Collector</span>
+              <strong>$89.99</strong>
+            </button>
+          </div>
+        </div>
+
+        <div class="storage-bar-wrap">
+          <div class="storage-bar-header">
+            <span>STORAGE USAGE</span>
+            <span id="storageTxt">0.0 GB / 64.0 GB (0%)</span>
+          </div>
+          <div class="storage-progress">
+            <div class="storage-fill" id="storageFill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="engraving-box">
+          <label for="engravingInp">2. CUSTOM LASER ENGRAVING</label>
+          <input type="text" id="engravingInp" class="engraving-inp" value="ASSASSIN VIP 2026" maxlength="24" placeholder="Your DJ Alias or Name" />
+        </div>
+
+        <div class="pricing-summary-box">
+          <div class="price-row">
+            <span>Hardware Drive:</span>
+            <span id="drivePriceTxt">$59.99</span>
+          </div>
+          <div class="price-row">
+            <span>Albums Subtotal:</span>
+            <span id="albumsPriceTxt">$0.00</span>
+          </div>
+          <div class="price-row">
+            <span>Standard Shipping:</span>
+            <span>$4.99</span>
+          </div>
+          <div class="total-row">
+            <span>TOTAL:</span>
+            <span id="totalPriceTxt">$64.98</span>
+          </div>
+        </div>
+
+        <button class="checkout-pill-btn" onclick="handleCheckout()">
+          ⚡ INSTANT VIP CHECKOUT
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="vipToast" class="vip-toast"></div>
+
+  <script>
+    // Rotating Header Logo
+    (function initLogo() {
+      const rotator = document.getElementById('rotating-logo');
+      if (!rotator) return;
+      const images = Array.from(rotator.querySelectorAll('.site-logo-img'));
+      let idx = 0;
+      setInterval(() => {
+        images[idx].classList.remove('rot-active');
+        images[idx].classList.add('rot-exit');
+        idx = (idx + 1) % images.length;
+        images[idx].classList.remove('rot-exit');
+        requestAnimationFrame(() => images[idx].classList.add('rot-active'));
+      }, 450);
+    })();
+
+    // Catalog Data
+    const ALBUMS = [
+      { id: 'alb-1', title: 'Kung Fu Master Stem Remixes', era: 'Remixes', tracks: 16, sizeGB: 5.80, price: 22.50, cover: '/Images/FACEID1.jpg' },
+      { id: 'alb-2', title: "90's Dancehall Anthems", era: 'Old School', tracks: 24, sizeGB: 7.45, price: 24.99, cover: '/Images/FACEID2.jpg' },
+      { id: 'alb-3', title: 'New School Bangers Vol. 1', era: 'New School', tracks: 24, sizeGB: 6.20, price: 19.99, cover: '/Images/FACEID3.jpg' },
+      { id: 'alb-4', title: 'Exclusive VIP Dubplate Stash', era: 'Remixes', tracks: 20, sizeGB: 6.20, price: 19.99, cover: '/Images/FACEID4.jpg' },
+      { id: 'alb-5', title: 'Reggae Lovers Rock Anthology', era: 'Old School', tracks: 18, sizeGB: 7.20, price: 23.50, cover: '/Images/LANDING_PAGE2.png' },
+      { id: 'alb-6', title: 'Street Kings Soundclash Vol. 1', era: 'Old School', tracks: 12, sizeGB: 4.20, price: 19.99, cover: '/Images/THEDOOR2.jpg' },
+      { id: 'alb-7', title: 'The Vault 2026 Riddim Heat', era: 'New School', tracks: 18, sizeGB: 6.80, price: 24.99, cover: '/riddim_new.png' },
+      { id: 'alb-8', title: 'Silent Blade Remix Anthology', era: 'Remixes', tracks: 24, sizeGB: 4.80, price: 29.99, cover: '/vip_new.png' }
+    ];
+
+    let currentTierGB = 64;
+    let currentTierPrice = 59.99;
+    const selectedAlbums = new Set();
+    let currentFilter = 'ALL';
+
+    function renderAlbums() {
+      const grid = document.getElementById('albumsGrid');
+      grid.innerHTML = '';
+      const list = currentFilter === 'ALL' ? ALBUMS : ALBUMS.filter(a => a.era === currentFilter);
+
+      list.forEach(alb => {
+        const isAdded = selectedAlbums.has(alb.id);
+        const card = document.createElement('div');
+        card.className = 'album-item-card';
+        card.innerHTML = `
+          <img src="${alb.cover}" alt="${alb.title}" class="album-cover-img" onerror="this.src='/Images/FACEID1.jpg'" />
+          <div>
+            <div class="album-meta-row">
+              <span>${alb.tracks} TRACKS</span>
+              <span>${alb.sizeGB} GB</span>
+            </div>
+            <h4 class="album-title-name">${alb.title}</h4>
+            <div class="album-price-tag">$${alb.price.toFixed(2)}</div>
+          </div>
+          <button class="album-add-btn ${isAdded ? 'added' : ''}" onclick="toggleAlbum('${alb.id}')">
+            ${isAdded ? '✓ LOADED ON DRIVE' : '+ ADD TO FLASH DRIVE'}
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function toggleAlbum(id) {
+      if (selectedAlbums.has(id)) {
+        selectedAlbums.delete(id);
+      } else {
+        selectedAlbums.add(id);
+      }
+      updateState();
+      renderAlbums();
+    }
+
+    function filterCatalog(era, btn) {
+      currentFilter = era;
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAlbums();
+    }
+
+    function selectTier(gb, price, btn) {
+      currentTierGB = gb;
+      currentTierPrice = price;
+      document.querySelectorAll('.tier-select-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateState();
+    }
+
+    function updateState() {
+      let usedGB = 0;
+      let albumsSubtotal = 0;
+      selectedAlbums.forEach(id => {
+        const alb = ALBUMS.find(a => a.id === id);
+        if (alb) {
+          usedGB += alb.sizeGB;
+          albumsSubtotal += alb.price;
+        }
+      });
+
+      const pct = Math.min(100, Math.round((usedGB / currentTierGB) * 100));
+      document.getElementById('storageFill').style.width = `${pct}%`;
+      document.getElementById('storageTxt').textContent = `${usedGB.toFixed(1)} GB / ${currentTierGB}.0 GB (${pct}%)`;
+      document.getElementById('selectedCount').textContent = selectedAlbums.size;
+
+      document.getElementById('drivePriceTxt').textContent = `$${currentTierPrice.toFixed(2)}`;
+      document.getElementById('albumsPriceTxt').textContent = `$${albumsSubtotal.toFixed(2)}`;
+      const total = currentTierPrice + albumsSubtotal + 4.99;
+      document.getElementById('totalPriceTxt').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('vipToast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
+    function handleCheckout() {
+      const engraving = document.getElementById('engravingInp').value.trim() || 'ASSASSIN VIP';
+      showToast(`🛒 ORDER PLACED! Flash Drive (${currentTierGB}GB) engraved: "${engraving}" with ${selectedAlbums.size} album(s).`);
+    }
+
+    renderAlbums();
+    updateState();
+  </script>
+
+  <!-- Floating Scroll Navigation Controls -->
+  <div class="scroll-nav-dock">
+    <button class="scroll-btn" id="scrollTopBtn" title="Scroll to Top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">▲</button>
+    <button class="scroll-btn" id="scrollBottomBtn" title="Scroll to Catalog" onclick="document.querySelector('.builder-workspace-grid').scrollIntoView({behavior: 'smooth'})">▼</button>
+  </div>
+</body>
+</html>

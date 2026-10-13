@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chinese Assassin | VIP Universe - Page 1 Netflix Glass Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: #000000 radial-gradient(ellipse 75% 65% at 50% 50%, rgba(180, 12, 32, 0.22) 0%, rgba(32, 3, 8, 0.55) 45%, #020002 90%);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      position: relative;
+    }
+
+    /* Ambient Drifting Embers Canvas */
+    #ember-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── PAGE 1 STAGE CONTAINER ─────────────────────────────────────── */
+    #stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    /* Master 16:9 Glass Screen Unit */
+    .ca-stage-unit {
+      position: relative;
+      width: min(88vw, 1360px);
+      max-height: 90vh;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      filter: drop-shadow(0 0 50px rgba(255, 20, 50, 0.4)) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95));
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nf-screen-unit {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12, 4, 8, 0.85);
+      border: 1.5px solid rgba(255, 40, 60, 0.35);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(255, 20, 45, 0.2);
+    }
+
+    /* Master Artwork Backdrop */
+    .nf-screen-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      z-index: 1;
+    }
+
+    /* Gradient Vignette so UI is readable over artwork */
+    .nf-vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.6) 100%),
+                  linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
+      z-index: 2;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Video Player Element */
+    .nf-main-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      z-index: 1;
+      background: #000000;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Playback Active State */
+    .nf-screen-unit.in-playback-mode .nf-screen-img,
+    .nf-screen-unit.in-playback-mode .nf-vignette-overlay,
+    .nf-screen-unit.in-playback-mode .ca-minimal-hero-ui,
+    .nf-screen-unit.in-playback-mode .ca-tab-nav {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nf-screen-unit.in-playback-mode .nf-main-video {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 4;
+    }
+
+    /* ── MINIMAL HERO OVERLAY: TITLE, BADGES, SYNOPSIS, BUTTONS ─────── */
+    .ca-minimal-hero-ui {
+      position: absolute;
+      left: 4.5%;
+      bottom: 12%;
+      max-width: 48%;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: opacity 0.4s ease;
+    }
+
+    .ca-hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ca-hero-badge-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #e50914, #b20710);
+      padding: 4px 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 14px rgba(229, 9, 20, 0.6);
+      text-transform: uppercase;
+    }
+
+    .ca-hero-match-pill {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #46d369;
+      letter-spacing: 0.5px;
+    }
+
+    .ca-hero-title {
+      font-family: 'Cinzel Decorative', 'Outfit', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 2px;
+      line-height: 1.1;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 30, 56, 0.3);
+    }
+
+    .ca-hero-tagline {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ff3355;
+      text-transform: uppercase;
+    }
+
+    .ca-hero-synopsis {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.88);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ca-hero-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .ca-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .ca-play-btn {
+      background: linear-gradient(135deg, #ffffff, #e0e0e0);
+      color: #000000;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.92rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.4);
+      transition: all 0.22s ease;
+    }
+    .ca-play-btn:hover {
+      background: #ff1e38;
+      color: #ffffff;
+      box-shadow: 0 6px 25px rgba(255, 30, 56, 0.7);
+      transform: scale(1.04);
+    }
+
+    .ca-info-btn {
+      background: rgba(109, 109, 110, 0.7);
+      backdrop-filter: blur(10px);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.22s ease;
+    }
+    .ca-info-btn:hover {
+      background: rgba(150, 150, 150, 0.85);
+      border-color: #ffffff;
+      transform: scale(1.04);
+    }
+
+    .ca-audio-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .ca-audio-btn:hover {
+      background: #ff1e38;
+      border-color: #ff1e38;
+      transform: scale(1.1);
+    }
+
+    /* ── TABS NAVIGATION BAR ────────────────────────────────────────── */
+    .ca-tab-nav {
+      position: absolute;
+      left: 4.5%;
+      top: 4.5%;
+      z-index: 5;
+      display: flex;
+      gap: 20px;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 6px;
+      transition: opacity 0.4s ease;
+    }
+
+    .ca-tab {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.65);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      padding: 4px 6px;
+      position: relative;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+    }
+    .ca-tab:hover {
+      color: #ffffff;
+    }
+    .ca-tab.active {
+      color: #ff3355;
+    }
+    .ca-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -7.5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #ff1e38;
+      box-shadow: 0 0 10px #ff1e38;
+      border-radius: 2px;
+    }
+
+    /* ── SLIDE-OUT DESCRIPTION PANEL ───────────────────────────────── */
+    .ca-description-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 480px;
+      max-width: 85%;
+      height: 100%;
+      z-index: 25;
+      background: rgba(12, 4, 8, 0.95);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-right: 1.5px solid rgba(255, 40, 60, 0.4);
+      padding: 32px 30px;
+      box-shadow: 15px 0 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 30, 56, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(-100%);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .ca-description-panel.open {
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    .ca-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+    .ca-panel-close-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+      transition: color 0.2s;
+    }
+    .ca-panel-close-btn:hover {
+      color: #ff3355;
+    }
+    .ca-panel-title {
+      font-family: 'Cinzel Decorative', 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .ca-panel-synopsis {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 20px;
+    }
+    .ca-panel-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.78);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 16px;
+    }
+    .ca-panel-meta-grid strong {
+      color: #ff2a4b;
+    }
+
+    /* ── FULLSCREEN VIDEO HUD OVERLAY ───────────────────────────────── */
+    .nf-player-hud {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 36px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.88) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.94) 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .nf-player-hud.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nf-hud-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nf-hud-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .nf-hud-btn:hover {
+      background: #ff1e38;
+      border-color: #ff1e38;
+      box-shadow: 0 0 15px rgba(255, 30, 56, 0.7);
+    }
+    .nf-hud-bottom-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .nf-hud-scrubber-track {
+      position: relative;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .nf-hud-scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: #ff1e38;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #ff1e38;
+    }
+    .nf-hud-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nf-hud-left-controls {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .nf-hud-icon-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px;
+      transition: transform 0.15s, color 0.15s;
+    }
+    .nf-hud-icon-btn:hover {
+      color: #ff2a4b;
+      transform: scale(1.15);
+    }
+
+    /* ── VIP ENTER CA UNIVERSE SIDE TAB BUTTON ─────────────────────── */
+    .page3-glass-btn-container {
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 25;
+    }
+    .enter-universe-btn {
+      background: linear-gradient(135deg, rgba(220, 15, 35, 0.95), rgba(120, 5, 18, 0.95));
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(255, 20, 45, 0.6), 0 0 20px rgba(0, 0, 0, 0.8);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .enter-universe-btn:hover {
+      transform: scale(1.06) translateX(4px);
+      box-shadow: 0 12px 40px rgba(255, 30, 60, 0.9), 0 0 25px rgba(255, 255, 255, 0.5);
+      border-color: #ffffff;
+    }
+
+    /* Ambient Toast */
+    .ca-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(14, 4, 8, 0.92);
+      border: 1px solid rgba(255, 30, 56, 0.5);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 25px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(255,30,56,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+    .ca-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient Embers Canvas -->
+  <canvas id="ember-canvas"></canvas>
+
+  <div id="stage">
+    <div class="ca-stage-unit" id="ca-stage-unit">
+      <div class="nf-screen-unit" id="nf-screen-unit">
+        <!-- Master Backdrop Artwork (16:9) -->
+        <img src="/WICKED3.png" onerror="this.onerror=null; this.src='/WICKED3.jpg';" alt="Chinese Assassin VIP Artwork" class="nf-screen-img" id="nf-screen-img" />
+
+        <!-- Vignette Shadow Overlay for UI Readability -->
+        <div class="nf-vignette-overlay"></div>
+
+        <!-- Master Video Player (/AURA 2.O.mp4) -->
+        <video id="nf-main-video" class="nf-main-video" src="/AURA 2.O.mp4" onerror="this.onerror=null; this.src='/aura.mp4';" preload="auto" playsinline></video>
+
+        <!-- ── REAL RENDERED TABS NAVIGATION BAR ── -->
+        <nav class="ca-tab-nav">
+          <button class="ca-tab active" data-tab="overview">OVERVIEW</button>
+          <button class="ca-tab" data-tab="episodes">EPISODES & TRACKS</button>
+          <button class="ca-tab" data-tab="details">DETAILS & CREDITS</button>
+        </nav>
+
+        <!-- ── REAL RENDERED NETFLIX HERO OVERLAY ── -->
+        <div class="ca-minimal-hero-ui">
+          <div class="ca-hero-badge-row">
+            <span class="ca-hero-badge-pill">⛩ VIP ORIGINALS</span>
+            <span id="nf-meta-match" class="ca-hero-match-pill">99% Match</span>
+          </div>
+          <h1 id="nf-video-title" class="ca-hero-title">CHINESE ASSASSIN</h1>
+          <p id="nf-video-tagline" class="ca-hero-tagline">EXCLUSIVE SERIES • VIP ORIGINALS</p>
+          <p id="nf-video-synopsis" class="ca-hero-synopsis">
+            A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes.
+          </p>
+          <div class="ca-hero-meta-row">
+            <span class="meta-badge">18+</span>
+            <span class="meta-badge">2026</span>
+            <span class="meta-badge">4K Ultra HD</span>
+            <span class="meta-badge">Spatial Audio</span>
+          </div>
+          <div class="ca-hero-actions">
+            <button id="nf-hero-play-btn" class="ca-play-btn">
+              <span>▶</span> PLAY AURA 2.0
+            </button>
+            <button id="ca-desc-toggle-btn" class="ca-info-btn">
+              <span>ⓘ</span> MORE INFO
+            </button>
+            <button id="nf-audio-btn" class="ca-audio-btn" title="Toggle audio">
+              🔊
+            </button>
+          </div>
+        </div>
+
+        <!-- ── TRANSLUCENT SLIDE-OUT DESCRIPTION PANEL ── -->
+        <div id="ca-description-panel" class="ca-description-panel">
+          <div>
+            <div class="ca-panel-header">
+              <div class="ca-hero-badge-row">
+                <span class="ca-hero-badge-pill">⛩ VIP ORIGINALS</span>
+                <span class="ca-hero-match-pill">99% MATCH</span>
+              </div>
+              <button id="ca-desc-close-btn" class="ca-panel-close-btn" title="Close">&times;</button>
+            </div>
+            <h2 class="ca-panel-title">CHINESE ASSASSIN</h2>
+            <p class="ca-panel-synopsis">
+              A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes. When the VIP portal opens, only the worthy unlock the golden master tapes and claim their destiny.
+            </p>
+            <div class="ca-panel-meta-grid">
+              <div><strong>Rating:</strong> 18+ &nbsp;•&nbsp; <strong>Year:</strong> 2026 &nbsp;•&nbsp; <strong>Quality:</strong> 4K Ultra HD</div>
+              <div><strong>Genres:</strong> Martial Arts • Cinematic Bass • DJ Turntablism • Blockbuster Soundscapes</div>
+              <div><strong>Cast:</strong> Master DJ, Clan of Assassins, VIP Universe Sound Lab</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── FULLSCREEN IN-VIDEO HUD OVERLAY ── -->
+        <div id="nf-player-hud" class="nf-player-hud">
+          <div class="nf-hud-top-bar">
+            <button id="nf-hud-back-btn" class="nf-hud-btn">
+              <span>✕</span> EXIT VIDEO
+            </button>
+            <span style="font-weight:800; letter-spacing:1.5px; color:#ff2a4b;">CHINESE ASSASSIN • AURA 2.0</span>
+            <button id="nf-hud-mute-btn" class="nf-hud-btn">
+              <span id="nf-hud-mute-icon">🔊</span> MUTE
+            </button>
+          </div>
+          <div class="nf-hud-bottom-bar">
+            <div class="nf-hud-scrubber-track" id="nf-scrubber-track">
+              <div class="nf-hud-scrubber-fill" id="nf-scrubber-fill"></div>
+            </div>
+            <div class="nf-hud-controls-row">
+              <div class="nf-hud-left-controls">
+                <button class="nf-hud-icon-btn" id="nf-hud-rewind-btn" title="Rewind 10s">⏪ -10s</button>
+                <button class="nf-hud-icon-btn" id="nf-hud-play-btn" title="Play / Pause">⏸ PAUSE</button>
+                <button class="nf-hud-icon-btn" id="nf-hud-fwd-btn" title="Forward 10s">⏩ +10s</button>
+                <span id="nf-hud-time" style="font-size:0.82rem; color:#ccc;">0:00 / 0:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIP Enter CA Universe Right-Side Extension Tab -->
+      <div class="page3-glass-btn-container">
+        <button id="nf-enter-universe-btn" class="enter-universe-btn" title="Enter CA Universe">
+          ⚡ ENTER CA UNIVERSE ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ca-toast" class="ca-toast"></div>
+
+  <script>
+    // --- 1. Ambient Particle Embers Engine ---
+    (function initEmbers() {
+      const canvas = document.getElementById('ember-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const embers = Array.from({ length: 85 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.2 + 0.6,
+        dx: (Math.random() - 0.5) * 0.6,
+        dy: -(Math.random() * 1.2 + 0.4),
+        alpha: Math.random() * 0.8 + 0.2
+      }));
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        embers.forEach(e => {
+          e.x += e.dx;
+          e.y += e.dy;
+          if (e.y < -10) { e.y = h + 10; e.x = Math.random() * w; }
+          if (e.x < -10) e.x = w + 10;
+          if (e.x > w + 10) e.x = -10;
+
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, ${Math.floor(Math.random() * 40 + 20)}, 45, ${e.alpha})`;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#ff1e38';
+          ctx.fill();
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
+    // --- 2. Toast System ---
+    function showToast(msg) {
+      const t = document.getElementById('ca-toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove('visible'), 2400);
+    }
+
+    // --- 3. Master Page 1 Video & UI Controller ---
+    (function initPage1() {
+      const screenUnit = document.getElementById('nf-screen-unit');
+      const video = document.getElementById('nf-main-video');
+      const hud = document.getElementById('nf-player-hud');
+      const descPanel = document.getElementById('ca-description-panel');
+      const scrubberFill = document.getElementById('nf-scrubber-fill');
+      const scrubberTrack = document.getElementById('nf-scrubber-track');
+      const timeDisplay = document.getElementById('nf-hud-time');
+      const hudPlayBtn = document.getElementById('nf-hud-play-btn');
+      const muteBtn = document.getElementById('nf-hud-mute-btn');
+      const muteIcon = document.getElementById('nf-hud-mute-icon');
+      const audioBtn = document.getElementById('nf-audio-btn');
+
+      let hudTimer = null;
+
+      function formatTime(s) {
+        if (isNaN(s)) return '0:00';
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+      }
+
+      function showHud() {
+        if (!hud) return;
+        hud.classList.add('visible');
+        clearTimeout(hudTimer);
+        hudTimer = setTimeout(() => {
+          if (!video.paused) hud.classList.remove('visible');
+        }, 3200);
+      }
+
+      function playVideo() {
+        if (!video) return;
+        screenUnit.classList.add('in-playback-mode');
+        video.play().then(() => {
+          showToast('▶ PLAYING AURA 2.0');
+          if (hudPlayBtn) hudPlayBtn.textContent = '⏸ PAUSE';
+          showHud();
+        }).catch(err => {
+          console.warn('Playback error:', err);
+        });
+      }
+
+      function pauseVideo() {
+        if (!video) return;
+        video.pause();
+        if (hudPlayBtn) hudPlayBtn.textContent = '▶ PLAY';
+        showToast('⏸ PAUSED');
+      }
+
+      function stopAndCloseVideo() {
+        if (!video) return;
+        video.pause();
+        video.currentTime = 0;
+        screenUnit.classList.remove('in-playback-mode');
+        if (hud) hud.classList.remove('visible');
+        showToast('⏹ RESTORED ARTWORK');
+      }
+
+      function togglePlayPause() {
+        if (!video) return;
+        if (!screenUnit.classList.contains('in-playback-mode') || video.paused) {
+          playVideo();
+        } else {
+          pauseVideo();
+        }
+      }
+
+      // Hero Play Button
+      const heroPlay = document.getElementById('nf-hero-play-btn');
+      if (heroPlay) heroPlay.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        togglePlayPause();
+      });
+
+      // Description Toggle
+      const descBtn = document.getElementById('ca-desc-toggle-btn');
+      if (descBtn) descBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        descPanel.classList.toggle('open');
+      });
+
+      const descClose = document.getElementById('ca-desc-close-btn');
+      if (descClose) descClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        descPanel.classList.remove('open');
+      });
+
+      // Close description panel when clicking outside
+      document.addEventListener('click', (e) => {
+        if (descPanel && descPanel.classList.contains('open')) {
+          if (!descPanel.contains(e.target) && !e.target.closest('#ca-desc-toggle-btn')) {
+            descPanel.classList.remove('open');
+          }
+        }
+      });
+
+      // Navigation Tabs
+      document.querySelectorAll('.ca-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.querySelectorAll('.ca-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          showToast(`📂 ${tab.textContent.trim()}`);
+        });
+      });
+
+      // Audio Toggle in Hero
+      if (audioBtn) audioBtn.addEventListener('click', () => {
+        if (video) {
+          video.muted = !video.muted;
+          audioBtn.textContent = video.muted ? '🔇' : '🔊';
+          showToast(video.muted ? '🔇 AUDIO MUTED' : '🔊 AUDIO UNMUTED');
+        }
+      });
+
+      // Video event listeners
+      if (video) {
+        video.addEventListener('timeupdate', () => {
+          const cur = video.currentTime;
+          const dur = video.duration || 1;
+          if (scrubberFill) scrubberFill.style.width = `${(cur / dur) * 100}%`;
+          if (timeDisplay) timeDisplay.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+        });
+
+        video.addEventListener('ended', stopAndCloseVideo);
+        video.addEventListener('mousemove', showHud);
+        video.addEventListener('click', togglePlayPause);
+      }
+
+      // HUD controls
+      const hudBack = document.getElementById('nf-hud-back-btn');
+      if (hudBack) hudBack.addEventListener('click', stopAndCloseVideo);
+
+      if (hudPlayBtn) hudPlayBtn.addEventListener('click', togglePlayPause);
+
+      const rewBtn = document.getElementById('nf-hud-rewind-btn');
+      if (rewBtn) rewBtn.addEventListener('click', () => {
+        if (video) video.currentTime = Math.max(0, video.currentTime - 10);
+      });
+
+      const fwdBtn = document.getElementById('nf-hud-fwd-btn');
+      if (fwdBtn) fwdBtn.addEventListener('click', () => {
+        if (video) video.currentTime = Math.min(video.duration || 0, video.currentTime + 10);
+      });
+
+      if (muteBtn) muteBtn.addEventListener('click', () => {
+        if (video) {
+          video.muted = !video.muted;
+          muteIcon.textContent = video.muted ? '🔇' : '🔊';
+          if (audioBtn) audioBtn.textContent = video.muted ? '🔇' : '🔊';
+          showToast(video.muted ? '🔇 AUDIO MUTED' : '🔊 AUDIO UNMUTED');
+        }
+      });
+
+      if (scrubberTrack) scrubberTrack.addEventListener('click', (e) => {
+        const rect = scrubberTrack.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        if (video && video.duration) {
+          video.currentTime = pos * video.duration;
+        }
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.key === 'f' || e.key === 'F') {
+          e.preventDefault();
+          togglePlayPause();
+        } else if (e.key === 'Escape') {
+          if (screenUnit.classList.contains('in-playback-mode')) {
+            stopAndCloseVideo();
+          } else if (descPanel.classList.contains('open')) {
+            descPanel.classList.remove('open');
+          }
+        }
+      });
+
+      // Enter CA Universe side button
+      const enterBtn = document.getElementById('nf-enter-universe-btn');
+      if (enterBtn) {
+        enterBtn.addEventListener('click', () => {
+          showToast('⚡ LAUNCHING INTRO: 4-STAGE CANVAS -> TEMPLE DOORS -> DIMENSION HUB');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

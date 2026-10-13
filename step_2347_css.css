@@ -1,0 +1,106 @@
+.page,
+#cinematic-intro {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex !important;
+  opacity: 1 !important;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 999999 !important;
+  background: #020104;
+  perspective: 1400px;
+}
+
+/* Atmospheric Background Layers */
+.ca-bg-nebula {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 55% 45% at 50% 50%, rgba(180, 15, 30, 0.14) 0%, transparent 70%),
+    radial-gradient(circle at 15% 85%, rgba(220, 25, 45, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(180, 20, 35, 0.07) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 1;
+  animation: nebulaPulse 9s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaPulse {
+  0% { opacity: 0.65; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.06); }
+}
+
+/* Perspective Cyber Floor Grid */
+.ca-bg-grid {
+  position: absolute;
+  bottom: 0;
+  left: -20%;
+  right: -20%;
+  height: 48vh;
+  background: 
+    linear-gradient(to top, #020104 0%, transparent 100%),
+    repeating-linear-gradient(90deg, rgba(255, 40, 60, 0.06) 0px, rgba(255, 40, 60, 0.06) 1px, transparent 1px, transparent 48px),
+    repeating-linear-gradient(0deg, rgba(255, 40, 60, 0.06) 0px, rgba(255, 40, 60, 0.06) 1px, transparent 1px, transparent 48px);
+  transform: perspective(500px) rotateX(68deg);
+  transform-origin: bottom center;
+  pointer-events: none;
+  z-index: 2;
+  mask-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 80%);
+}
+
+/* Subtle Breathing Halo behind Card */
+.ca-ambient-halo {
+  position: absolute;
+  width: min(85vh, 68vw, 1300px);
+  height: min(85vh, 68vw, 1300px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 30, 50, 0.10) 0%, rgba(255, 10, 30, 0.02) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 3;
+  animation: haloBreath 6s ease-in-out infinite alternate;
+}
+
+@keyframes haloBreath {
+  0% { transform: scale(0.94); opacity: 0.5; }
+  100% { transform: scale(1.05); opacity: 0.9; }
+}
+
+.ca-card {
+  position: relative;
+  width: min(92vh, 72vw, 1400px);
+  max-width: 1400px;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), filter 0.75s ease;
+  transform-origin: center center;
+  z-index: 10;
+}
+
+/* ── 3D Awakening Mode ── */
+.ca-card.imax-mode {
+  transform: scale(1.04) translateY(-1%) !important;
+  filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95));
+}
+
+/* 3D Cinematic Floating Embers Canvas */
+.ca-ember-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.85;
+  transition: opacity 0.8s ease;
+}
+
+.ca-ember-canvas.active {
+  opacity: 0.85;
+}

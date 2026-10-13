@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:5174/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="module" src="./Chinese Assassin — Master Media Hub Portal_files/client"></script>
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Assassin — Master Media Hub Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./Chinese Assassin — Master Media Hub Portal_files/css2" rel="stylesheet">
+  <script src="./Chinese Assassin — Master Media Hub Portal_files/gsap.min.js.download"></script>
+  <style>
+    :root {
+      --primary-red: #ff203a;
+      --neon-ruby: #ff0055;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── MASTER HOME PAGE WRAPPER ───────────────────────────────────────── */
+    .home-nice-stage {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000000;
+      overflow: hidden;
+    }
+
+    /* Exact Aspect-Ratio Artwork Canvas (16:9 or 1920x1080) */
+    .home-artwork-wrapper {
+      position: relative;
+      width: min(100vw, 177.78vh);
+      height: min(100vh, 56.25vw);
+      max-width: 100vw;
+      max-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .home-nice-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* ── PORTAL CIRCLE VIDEO OVERLAY (ALIGNED INSIDE THE GLOWING RING) ── */
+    .portal-circle-wrapper {
+      position: absolute;
+      left: 50.0%;
+      top: 22.8%;
+      width: 25.4%;
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      overflow: hidden;
+      z-index: 15;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s ease;
+      box-shadow: 0 0 45px rgba(255, 32, 58, 0.9), inset 0 0 35px rgba(0, 0, 0, 0.9);
+      border: 2px solid rgba(255, 32, 58, 0.85);
+      background: #000000;
+    }
+
+    .portal-circle-wrapper.video-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .portal-circle-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    /* Video Vignette & Outer Blending */
+    .portal-circle-vignette {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, transparent 60%, rgba(6, 1, 4, 0.7) 88%, rgba(255, 32, 58, 0.5) 100%);
+      pointer-events: none;
+    }
+
+    /* Sound and Close Controls inside the Portal Video */
+    .portal-vid-ctrls {
+      position: absolute;
+      bottom: 12%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 20;
+    }
+
+    .vid-ctrl-btn {
+      background: rgba(14, 4, 8, 0.88);
+      border: 1.5px solid var(--primary-red);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 15px rgba(255, 32, 58, 0.6);
+      transition: all 0.2s ease;
+    }
+    .vid-ctrl-btn:hover {
+      background: var(--primary-red);
+      transform: scale(1.08);
+      box-shadow: 0 0 25px rgba(255, 32, 58, 1);
+    }
+
+    /* INVISIBLE INTERACTIVE HOTSPOTS LAYER (Zero Double Text) */
+    .hotspots-grid-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      z-index: 18;
+    }
+
+    .hs-btn {
+      position: absolute;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      border-radius: 6px;
+    }
+
+    .hs-btn:hover {
+      background: rgba(255, 32, 58, 0.15);
+      box-shadow: 0 0 12px rgba(255, 32, 58, 0.4);
+    }
+
+    /* Top Left Logo Link */
+    .hs-top-logo {
+      left: 1.0%;
+      top: 1.5%;
+      width: 16%;
+      height: 5.5%;
+    }
+
+    /* Top Right Explore / Discover / Unlock */
+    .hs-top-explore { right: 18.0%; top: 2.2%; width: 4.8%; height: 3.5%; }
+    .hs-top-discover { right: 12.2%; top: 2.2%; width: 5.2%; height: 3.5%; }
+    .hs-top-unlock { right: 7.2%; top: 2.2%; width: 4.5%; height: 3.5%; }
+
+    /* Left Sidebar Navigation Hotspots */
+    .hs-nav-item {
+      left: 1.2%;
+      width: 10.8%;
+      height: 4.4%;
+      border-radius: 6px;
+    }
+
+    /* Social Links Hotspots */
+    .hs-social-twitter { left: 1.5%; top: 76.2%; width: 2.0%; height: 3.8%; }
+    .hs-social-instagram { left: 4.0%; top: 76.2%; width: 2.0%; height: 3.8%; }
+    .hs-social-youtube { left: 6.6%; top: 76.2%; width: 2.0%; height: 3.8%; }
+    .hs-social-discord { left: 9.1%; top: 76.2%; width: 2.0%; height: 3.8%; }
+
+    /* Center PLAY ▶ Button Hotspot (100% Invisible Clickable Hotspot over the printed PLAY button) */
+    .hs-center-play {
+      left: 14.8%;
+      top: 38.2%;
+      width: 8.8%;
+      height: 5.8%;
+      border-radius: 50px;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .hs-center-play:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 0 20px rgba(255, 32, 58, 0.4);
+      transform: scale(1.03);
+    }
+
+    /* Right Sidebar 4 Feature Hotspots */
+    .hs-feat-item {
+      right: 1.2%;
+      width: 15.2%;
+      height: 7.2%;
+      border-radius: 8px;
+    }
+
+    /* Bottom Player Bar Hotspots */
+    .hs-player-shuffle { left: 28.0%; bottom: 4.2%; width: 2.8%; height: 4.8%; }
+    .hs-player-prev { left: 31.6%; bottom: 4.2%; width: 2.8%; height: 4.8%; }
+    .hs-player-play { left: 34.9%; bottom: 3.5%; width: 4.2%; height: 5.8%; border-radius: 50%; }
+    .hs-player-next { left: 39.8%; bottom: 4.2%; width: 2.8%; height: 4.8%; }
+    .hs-player-loop { left: 43.1%; bottom: 4.2%; width: 2.8%; height: 4.8%; }
+
+    /* Toast HUD */
+    .portal-hud-toast {
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14, 6, 16, 0.92);
+      border: 1.5px solid var(--primary-red);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 0 25px rgba(255, 32, 58, 0.6);
+      display: none;
+      z-index: 10000;
+      backdrop-filter: blur(15px);
+    }
+
+    /* ── RETURN TO INTRO VIP GLASS BUTTON (TOP RIGHT) ─────────────── */
+    .ca-return-intro-btn {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 22px;
+      background: rgba(12, 3, 7, 0.88);
+      border: 1.5px solid rgba(255, 32, 58, 0.65);
+      border-radius: 30px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      text-decoration: none;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 32, 58, 0.35);
+      z-index: 10000;
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ca-return-intro-btn:hover {
+      background: rgba(255, 32, 58, 0.22);
+      border-color: #ff203a;
+      box-shadow: 0 0 35px rgba(255, 32, 58, 0.75), inset 0 0 12px rgba(255, 32, 58, 0.35);
+      transform: translateY(-2px) scale(1.04);
+      color: #ffffff;
+    }
+    .ca-return-intro-btn .ca-return-icon {
+      font-size: 0.95rem;
+      filter: drop-shadow(0 0 6px rgba(255, 32, 58, 0.8));
+    }
+    .ca-return-intro-btn .ca-return-text {
+      background: linear-gradient(90deg, #ffffff, #ffb0bc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1.5px;
+    }
+    .ca-return-intro-btn .ca-return-arrow {
+      font-size: 0.9rem;
+      color: #ff203a;
+      transition: transform 0.25s ease;
+    }
+    .ca-return-intro-btn:hover .ca-return-arrow {
+      transform: translateX(-3px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 0. RETURN TO INTRO VIP HUD BUTTON (TOP RIGHT) -->
+  <a href="http://localhost:5174/page1-aug15-morning.html" class="ca-return-intro-btn" id="caReturnIntroBtn" title="Return to Intro / Page 1">
+    <span class="ca-return-icon">⛩️</span>
+    <span class="ca-return-text">RETURN TO INTRO</span>
+    <span class="ca-return-arrow">⮌</span>
+  </a>
+
+  <!-- MASTER HOME PAGE STAGE -->
+  <div class="home-nice-stage">
+    <div class="home-artwork-wrapper">
+      <img src="./Chinese Assassin — Master Media Hub Portal_files/HOME-PAGE-NICE.jpg" alt="Chinese Assassin Media Hub Master Home" class="home-nice-bg-img" onerror="this.src=&#39;/HOME-PAGE-NICE.jpg&#39;">
+
+      <!-- PORTAL CIRCLE VIDEO OVERLAY (AURA 2.0 aligned in circular ring) -->
+      <div class="portal-circle-wrapper" id="portalCircleWrapper">
+        <video id="auraPortalVideo" class="portal-circle-video" src="/AURA 2.O.mp4" playsinline="" loop="" preload="auto" onerror="this.src=&#39;/aura.mp4&#39;;"></video>
+        <div class="portal-circle-vignette"></div>
+        <div class="portal-vid-ctrls">
+          <button class="vid-ctrl-btn" id="portalSoundBtn" onclick="togglePortalSound(event)">🔇 UNMUTE</button>
+          <button class="vid-ctrl-btn" id="portalStopBtn" onclick="stopPortalVideo(event)">⏹ STOP</button>
+        </div>
+      </div>
+
+      <!-- INVISIBLE INTERACTIVE HOTSPOTS LAYER (Zero Duplicate Text) -->
+      <div class="hotspots-grid-layer">
+
+        <!-- Top Left Logo Link -->
+        <a href="http://localhost:5174/" class="hs-btn hs-top-logo" title="Chinese Assassin Home"></a>
+
+        <!-- Top Right Explore / Discover / Unlock -->
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-top-explore" title="Explore Dimensions"></a>
+        <a href="http://localhost:5174/streaming" class="hs-btn hs-top-discover" title="Discover 24/7 Stream"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-top-unlock" title="Unlock VIP Portal"></a>
+
+        <!-- Left Sidebar Navigation Hotspots -->
+        <a href="http://localhost:5174/" class="hs-btn hs-nav-item" style="top: 9.2%;" title="Home"></a>
+        <a href="http://localhost:5174/radio.html" class="hs-btn hs-nav-item" style="top: 14.8%;" title="Live Radio"></a>
+        <a href="http://localhost:5174/streaming" class="hs-btn hs-nav-item" style="top: 20.2%;" title="Streaming"></a>
+        <a href="http://localhost:5174/tv" class="hs-btn hs-nav-item" style="top: 25.5%;" title="TV"></a>
+        <a href="http://localhost:5174/flashdrive.html" class="hs-btn hs-nav-item" style="top: 30.2%;" title="Flash Drive Mixes"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-nav-item" style="top: 35.0%;" title="The Mix Kitchen"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-nav-item" style="top: 39.8%;" title="Podcasts"></a>
+        <a href="http://localhost:5174/flashdrive.html" class="hs-btn hs-nav-item" style="top: 44.5%;" title="Mixtapes"></a>
+        <a href="http://localhost:5174/#" class="hs-btn hs-nav-item" style="top: 49.2%;" onclick="event.preventDefault(); showToast(&#39;📰 LATEST NEWS: VIP 2026 World Tour Announced!&#39;);" title="News"></a>
+        <a href="http://localhost:5174/#" class="hs-btn hs-nav-item" style="top: 54.0%;" onclick="event.preventDefault(); showToast(&#39;📅 UPCOMING EVENT: Soundclash Championship 2026&#39;);" title="Events"></a>
+        <a href="http://localhost:5174/#" class="hs-btn hs-nav-item" style="top: 58.8%;" onclick="event.preventDefault(); showToast(&#39;👥 CA NATION VIP COMMUNITY ACTIVE&#39;);" title="Community"></a>
+        <a href="http://localhost:5174/flashdrive.html" class="hs-btn hs-nav-item" style="top: 63.5%;" title="Downloads"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-nav-item" style="top: 68.2%;" title="Premium"></a>
+
+        <!-- Left Social Media Hotspots -->
+        <a href="https://twitter.com/" target="_blank" class="hs-btn hs-social-twitter" title="Twitter"></a>
+        <a href="https://instagram.com/" target="_blank" class="hs-btn hs-social-instagram" title="Instagram"></a>
+        <a href="https://youtube.com/" target="_blank" class="hs-btn hs-social-youtube" title="YouTube"></a>
+        <a href="https://discord.com/" target="_blank" class="hs-btn hs-social-discord" title="Discord"></a>
+
+        <!-- Center PLAY ▶ Button Hotspot (Controls Circle Video) -->
+        <button class="hs-btn hs-center-play" id="heroPlayBtn" onclick="togglePortalPlay()" title="Play / Stop Portal Video"></button>
+
+        <!-- Right Features Hotspots -->
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-feat-item" style="top: 10.2%;" title="Endless Possibilities"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-feat-item" style="top: 18.2%;" title="Exclusive Access"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-feat-item" style="top: 26.2%;" title="Multiple Worlds"></a>
+        <a href="http://localhost:5174/dimension-hub.html" class="hs-btn hs-feat-item" style="top: 34.2%;" title="Powerful Tools"></a>
+
+        <!-- Bottom Player Controls Hotspots -->
+        <button class="hs-btn hs-player-shuffle" onclick="showToast(&#39;🔀 SHUFFLE MODE ACTIVE&#39;)" title="Shuffle"></button>
+        <button class="hs-btn hs-player-prev" onclick="showToast(&#39;⏮ PREVIOUS TRACK&#39;)" title="Previous Track"></button>
+        <button class="hs-btn hs-player-play" onclick="toggleAudioPlayback()" title="Play/Pause"></button>
+        <button class="hs-btn hs-player-next" onclick="showToast(&#39;⏭ NEXT TRACK&#39;)" title="Next Track"></button>
+        <button class="hs-btn hs-player-loop" onclick="showToast(&#39;🔁 LOOP ACTIVE&#39;)" title="Repeat"></button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD Toast Alert -->
+  <div class="portal-hud-toast" id="portalToast"></div>
+
+  <audio id="homeAudio" src="/audio/mix1.mp3" preload="none"></audio>
+
+  <script>
+    // Portal Circle Video Engine
+    let isVideoPlaying = false;
+    const video = document.getElementById('auraPortalVideo');
+    const circleWrapper = document.getElementById('portalCircleWrapper');
+    const soundBtn = document.getElementById('portalSoundBtn');
+
+    function togglePortalPlay() {
+      if (isVideoPlaying) {
+        stopPortalVideo();
+      } else {
+        playPortalVideo();
+      }
+    }
+
+    function playPortalVideo() {
+      if (!video || !circleWrapper) return;
+      video.muted = false;
+      video.volume = 0.85;
+      video.play().then(() => {
+        isVideoPlaying = true;
+        circleWrapper.classList.add('video-active');
+        if (soundBtn) soundBtn.textContent = '🔊 MUTE';
+        showToast('🌀 AURA 2.0 PORTAL STREAMING LIVE');
+      }).catch(() => {
+        // Autoplay policy fallback with muted
+        video.muted = true;
+        video.play().then(() => {
+          isVideoPlaying = true;
+          circleWrapper.classList.add('video-active');
+          if (soundBtn) soundBtn.textContent = '🔇 UNMUTE';
+          showToast('🌀 AURA 2.0 PORTAL ACTIVE (CLICK UNMUTE FOR AUDIO)');
+        }).catch(err => {
+          console.error(err);
+        });
+      });
+    }
+
+    function stopPortalVideo(e) {
+      if (e) e.stopPropagation();
+      if (!video || !circleWrapper) return;
+      video.pause();
+      video.currentTime = 0;
+      isVideoPlaying = false;
+      circleWrapper.classList.remove('video-active');
+      showToast('⏹ PORTAL VIDEO STOPPED — RETURNED TO ARTWORK');
+    }
+
+    function togglePortalSound(e) {
+      if (e) e.stopPropagation();
+      if (!video) return;
+      video.muted = !video.muted;
+      if (video.muted) {
+        if (soundBtn) soundBtn.textContent = '🔇 UNMUTE';
+        showToast('🔇 PORTAL AUDIO MUTED');
+      } else {
+        video.volume = 0.85;
+        if (soundBtn) soundBtn.textContent = '🔊 MUTE';
+        showToast('🔊 PORTAL AUDIO ON');
+      }
+    }
+
+    // Audio Playback
+    let isAudioPlaying = false;
+    const audio = document.getElementById('homeAudio');
+
+    function toggleAudioPlayback() {
+      if (!audio) return;
+      if (isAudioPlaying) {
+        audio.pause();
+        isAudioPlaying = false;
+        showToast('⏸ AUDIO PAUSED');
+      } else {
+        audio.play().then(() => {
+          isAudioPlaying = true;
+          showToast('🔊 PLAYING CHINESE ASSASSIN LIVE MIX');
+        }).catch(() => {
+          showToast('🔊 AUDIO ACTIVE');
+        });
+      }
+    }
+
+    // Toast Notifications
+    function showToast(msg) {
+      const toast = document.getElementById('portalToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2400);
+    }
+  </script>
+
+
+</body></html>

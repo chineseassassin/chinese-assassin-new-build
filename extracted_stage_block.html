@@ -1,0 +1,156 @@
+<div id="stage">
+
+      <!-- ── GLASS CARD: Artwork Poster + Hero UI ───────────────────── -->
+      <div class="nf-screen-unit">
+
+        <!-- Artwork backdrop image (WICKED3.jpg) -->
+        <img class="nf-screen-img" src="/WICKED3.jpg" alt="Chinese Assassin Artwork" onerror="this.onerror=null;this.src='/MHP.JPG';">
+
+        <!-- Video element (hidden until PLAY clicked) -->
+        <video
+          id="nf-main-video"
+          class="nf-main-video"
+          src="/chinese_assassin_page_1.mp4"
+          onerror="this.onerror=null;this.src='/AURA 2.O.mp4';"
+          preload="auto"
+          playsinline
+        ></video>
+
+        <!-- Minimal Hero Overlay: Title, Synopsis, Action Buttons -->
+        <div class="ca-minimal-hero-ui">
+          <div class="ca-hero-badge-row">
+            <span class="ca-hero-badge-pill">⛩ VIP ORIGINALS</span>
+            <span id="nf-meta-match" class="ca-hero-match-pill">99% Match</span>
+          </div>
+          <h1 id="nf-video-title" class="ca-hero-title">CHINESE ASSASSIN</h1>
+          <p id="nf-video-tagline" class="ca-hero-tagline">EXCLUSIVE SERIES • VIP ORIGINALS</p>
+          <p id="nf-video-synopsis" class="ca-hero-synopsis">A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes.</p>
+          <div class="ca-hero-meta-row">
+            <span id="nf-meta-rating" class="meta-badge">18+</span>
+            <span id="nf-meta-year" class="meta-badge">2026</span>
+            <span id="nf-meta-duration" class="meta-badge">4K Ultra HD</span>
+          </div>
+          <div class="ca-hero-actions">
+            <button id="nf-hero-play-btn" class="ca-play-btn">
+              <svg id="nf-hero-play-icon" viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M8 5v14l11-7z"/></svg>
+              <span id="nf-hero-play-text">PLAY AURA 2.0</span>
+            </button>
+            <button id="ca-desc-toggle-btn" class="ca-info-btn">
+              <svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              MORE INFO
+            </button>
+            <button id="nf-audio-btn" class="ca-audio-btn" title="Toggle sound">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Description Slide Panel -->
+        <div id="ca-description-panel" class="ca-description-panel">
+          <button id="ca-desc-close-btn" class="ca-desc-close-btn">&times;</button>
+          <div class="ca-desc-content">
+            <h2>CHINESE ASSASSIN</h2>
+            <p>A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes. When the VIP portal opens, only the worthy unlock the golden master tapes and claim their destiny.</p>
+            <div class="ca-details-grid">
+              <div><strong>Genres:</strong> <span id="nf-details-genres">Martial Arts • Cinematic Bass • DJ Turntablism</span></div>
+              <div><strong>Cast:</strong> <span id="nf-details-cast">Master DJ, Clan of Assassins, VIP Universe Sound Lab</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Navigation (OVERVIEW / EPISODES & TRACKS / DETAILS) -->
+        <nav class="ca-tab-nav">
+          <a class="ca-nav-item active" data-tab="overview">OVERVIEW</a>
+          <a class="ca-nav-item" data-tab="episodes">EPISODES &amp; TRACKS</a>
+          <a class="ca-nav-item" data-tab="details">DETAILS &amp; CREDITS</a>
+        </nav>
+
+        <!-- Tab Panes -->
+        <div id="nf-pane-episodes" class="ca-tab-pane"></div>
+        <div id="nf-pane-details" class="ca-tab-pane">
+          <div class="nf-details-pane">
+            <div><strong>Genres:</strong> <span id="nf-details-genres-pane">Martial Arts • Cinematic Bass • DJ Turntablism</span></div>
+            <div><strong>Cast:</strong> <span id="nf-details-cast-pane">Master DJ, Clan of Assassins, VIP Universe Sound Lab</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FULLSCREEN VIDEO HUD (hidden until PLAY) ───────────────── -->
+      <div id="nf-player-hud" class="nf-player-hud">
+        <div class="nf-hud-top-bar">
+          <button id="nf-hud-back-btn" class="nf-hud-icon-btn" title="Exit Fullscreen">
+            <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          </button>
+          <span id="nf-hud-title" class="nf-hud-title-text">CHINESE ASSASSIN</span>
+          <div class="nf-hud-top-right">
+            <button id="nf-hud-mute-btn" class="nf-hud-icon-btn" title="Mute / Unmute">
+              <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="nf-hud-bottom-bar">
+          <div id="nf-hud-progress-track" class="nf-progress-track">
+            <div id="nf-hud-progress-fill" class="nf-progress-fill"></div>
+            <div id="nf-hud-progress-thumb" class="nf-progress-thumb"></div>
+          </div>
+          <div class="nf-hud-controls-row">
+            <div class="nf-hud-left-controls">
+              <button id="nf-hud-rewind-btn" class="nf-hud-icon-btn" title="-10s">
+                <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="9" y="15" font-size="5" fill="white">10</text></svg>
+              </button>
+              <button id="nf-hud-play-btn" class="nf-hud-play-btn" title="Play / Pause">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path id="nf-hud-play-icon" d="M8 5v14l11-7z"/></svg>
+              </button>
+              <button id="nf-hud-forward-btn" class="nf-hud-icon-btn" title="+10s">
+                <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+              </button>
+              <div class="nf-hud-volume-wrap">
+                <input type="range" id="nf-hud-volume-slider" class="nf-vol-slider" min="0" max="1" step="0.02" value="1">
+              </div>
+              <span id="nf-hud-time-display" class="nf-time-display">0:00 / 0:00</span>
+            </div>
+            <div class="nf-hud-right-controls">
+              <button id="nf-hud-fullscreen-btn" class="nf-hud-icon-btn" title="Toggle Fullscreen">
+                <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ENTER CA UNIVERSE BUTTON (transitions to temple doors) ─── -->
+      <div id="page3-glass-btn-container" class="page3-glass-btn-container">
+        <button id="nf-enter-universe-btn" class="enter-universe-btn">
+          ENTER CA UNIVERSE ➔
+        </button>
+      </div>
+
+      <!-- Edit metadata modal -->
+      <div id="nf-edit-modal" class="nf-edit-modal-overlay">
+        <div class="nf-edit-modal-box">
+          <button class="nf-edit-close" onclick="document.getElementById('nf-edit-modal').classList.remove('active')">&times;</button>
+          <h3>Edit Description &amp; Details</h3>
+          <label>Title<input id="nf-edit-title-input" class="nf-edit-input" type="text"></label>
+          <label>Tagline<input id="nf-edit-tagline-input" class="nf-edit-input" type="text"></label>
+          <label>Synopsis<textarea id="nf-edit-synopsis-input" class="nf-edit-input" rows="3"></textarea></label>
+          <label>Match Score<input id="nf-edit-match-input" class="nf-edit-input" type="text"></label>
+          <label>Age Rating<input id="nf-edit-rating-input" class="nf-edit-input" type="text"></label>
+          <label>Year<input id="nf-edit-year-input" class="nf-edit-input" type="text"></label>
+          <label>Duration / Format<input id="nf-edit-dur-input" class="nf-edit-input" type="text"></label>
+          <label>Genres<input id="nf-edit-genres-input" class="nf-edit-input" type="text"></label>
+          <label>Cast<input id="nf-edit-cast-input" class="nf-edit-input" type="text"></label>
+          <div class="nf-edit-presets">
+            <button class="nf-preset-btn" data-preset="assassin">Chinese Assassin</button>
+            <button class="nf-preset-btn" data-preset="djset">VIP DJ Set</button>
+            <button class="nf-preset-btn" data-preset="heist">The Heist</button>
+          </div>
+          <div class="nf-edit-actions">
+            <button onclick="document.getElementById('nf-edit-modal').classList.remove('active')" class="nf-edit-cancel-btn">Cancel</button>
+            <button id="nf-edit-save-btn" class="nf-edit-save-btn">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end #stage -->

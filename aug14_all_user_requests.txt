@@ -1,0 +1,179 @@
+### Request #1 [2026-08-14T16:29:01Z] (Session: 1c716229 | Step 1)
+can i see local host 5713
+
+### Request #2 [2026-08-14T18:05:28Z] (Session: 1c716229 | Step 20)
+cinematic-dj
+
+### Request #3 [2026-08-14T18:24:29Z] (Session: 1c716229 | Step 29)
+remove second player at the bottom
+
+### Request #4 [2026-08-14T18:28:19Z] (Session: 1c716229 | Step 81)
+what can we do to make this better and prmium
+
+### Request #5 [2026-08-14T18:32:46Z] (Session: 1c716229 | Step 83)
+add a proceed to website and when you click it goes to the enter the protal page
+
+### Request #6 [2026-08-14T18:45:17Z] (Session: 1c716229 | Step 131)
+Modify ONLY the existing **“PROCEED TO WEBSITE →”** side tab.
+
+**DO NOT modify the main Chinese Assassin player.**
+Do not resize it.
+Do not reposition it.
+Do not modify its artwork.
+Do not modify the media dock.
+Do not modify the Play animation.
+Do not modify the video pop-up behavior.
+Do not modify the page background.
+
+Keep the existing side tab in its current general location and preserve its existing website-link functionality.
+
+### REDESIGN THE TAB
+
+Replace:
+
+**⚡ PROCEED TO WEBSITE →**
+
+with:
+
+**⚡ ENTER CA UNIVERSE →**
+
+Redesign the tab so it visually belongs to the Chinese Assassin player.
+
+Use:
+
+* smoked-black glass background
+* subtle transparency
+* thin chrome/metallic outer edge
+* Chinese Assassin red illuminated border
+* subtle red outer glow
+* crisp white typography
+* red accent on **CA UNIVERSE**
+* compact horizontal shape
+* slightly beveled/angular corners matching the main player's frame
+* small right-facing arrow
+* premium cinematic appearance
+
+The tab should look like a **small extension physically attached to the right side of the Chinese Assassin player frame**.
+
+### HOVER
+
+On hover:
+
+* slightly brighten the red border
+* slightly increase the red glow
+* move the arrow a few pixels to the right
+* very subtle glass reflection/shimmer
+
+Do NOT enlarge the entire button dramatically.
+
+### IMPORTANT
+
+Do not redesign anything else.
+
+This is a **single-component visual modification only**.
+
+Before making the change, identify the existing Proceed to Website component and modify ONLY that component's styling/text. Preserve its existing click destination and functionality.
+
+### Request #7 [2026-08-14T18:46:15Z] (Session: 1c716229 | Step 169)
+remove vip universe chinese assassin -proceed to website
+
+### Request #8 [2026-08-14T19:00:45Z] (Session: 1c716229 | Step 181)
+put it above chinese a starting from the ese
+
+### Request #9 [2026-08-14T19:02:53Z] (Session: 1c716229 | Step 194)
+it think the enter the ca universe  should disppear whe the player is open and return when the player is close
+
+### Request #10 [2026-08-14T19:04:27Z] (Session: 1c716229 | Step 208)
+wrong postion enter the ca universe should sit about the maine title chinese assassin on the right
+
+### Request #11 [2026-08-14T19:08:04Z] (Session: 1c716229 | Step 218)
+move it over to the right a little
+
+### Request #12 [2026-08-14T21:54:20Z] (Session: 1c716229 | Step 226)
+shif it over moe 61%
+
+### Request #13 [2026-08-14T22:03:16Z] (Session: 1c716229 | Step 236)
+the player info like 4k hed etc  needs to be readable also remove the f box is eack coever of the video screen
+
+### Request #14 [2026-08-14T22:04:35Z] (Session: 1c716229 | Step 278)
+repositioned the ⚡ ENTER CA UNIVERSE → tab: more but not too much
+
+### Request #15 [2026-08-14T22:07:12Z] (Session: 1c716229 | Step 288)
+the ⚡ ENTER CA UNIVERSE → tab: is showing up on the description oage. please remove
+
+### Request #16 [2026-08-14T22:07:45Z] (Session: 1c716229 | Step 314)
+repositioned the ⚡ ENTER CA UNIVERSE → tab: more but not too much
+
+### Request #17 [2026-08-14T22:10:20Z] (Session: 1c716229 | Step 324)
+repositioned the ⚡ ENTER CA UNIVERSE → tab: 1 inch to the left
+
+### Request #18 [2026-08-14T22:12:10Z] (Session: 1c716229 | Step 334)
+move it back to where it was
+
+### Request #19 [2026-08-14T22:14:32Z] (Session: 1c716229 | Step 346)
+when you press enter have it go to the enter  the portal page
+
+### Request #20 [2026-08-14T22:19:54Z] (Session: 1c716229 | Step 378)
+take a look nothing happens
+
+### Request #21 [2026-08-14T22:25:18Z] (Session: 1c716229 | Step 384)
+take a look nothing happens
+
+### Request #22 [2026-08-14T22:33:08Z] (Session: 1c716229 | Step 429)
+after the biometric it needs to go o floating icon page
+
+### Request #23 [2026-08-14T22:35:47Z] (Session: 1c716229 | Step 467)
+take a look it goes back to page 1
+
+### Request #24 [2026-08-14T22:42:02Z] (Session: 1c716229 | Step 493)
+can we activate my chinese assassin player to make it play audio and dj filter. i want this at the botton of the 3D Floating Icon page but i need you help with suggestion how to get this to work
+
+### Request #25 [2026-08-14T22:42:58Z] (Session: 1c716229 | Step 503)
+yes
+
+### Request #26 [2026-08-14T22:49:08Z] (Session: 1c716229 | Step 541)
+this is correct player MEDIA PLAYER PNG in the cinematic dj folder. i do not want two play button. tell me what to do
+
+### Request #27 [2026-08-14T22:55:25Z] (Session: 1c716229 | Step 567)
+i want the same way you did page one where you click on the play button it worked without any ring around the play button etc. also player is too small center it right under the guy but make the player go across the bottom of the page without pixalting
+
+### Request #28 [2026-08-14T22:56:00Z] (Session: 1c716229 | Step 600)
+The Technique: Invisible CSS Hotspot (<a id="journey-hotspot">)
+Instead of rendering a duplicate HTML button over your high-res artwork, you place an invisible anchor link (<a>) with position: absolute directly on top of the exact coordinates where the button is printed inside your image.
+
+### Request #29 [2026-08-14T23:04:15Z] (Session: 1c716229 | Step 616)
+not over the image but in the black screen area. player needs to way bigger
+
+### Request #30 [2026-08-14T23:06:25Z] (Session: 1c716229 | Step 634)
+take a look dont see it
+
+### Request #31 [2026-08-14T23:09:11Z] (Session: 1c716229 | Step 662)
+increase the width on the background image. i do not want the floating icons floating outside of the background image
+
+### Request #32 [2026-08-14T23:11:39Z] (Session: 1c716229 | Step 674)
+why is the player so small and there's a volume slider  on the page
+
+### Request #33 [2026-08-14T23:12:55Z] (Session: 1c716229 | Step 697)
+center the player at the bottom
+
+### Request #34 [2026-08-14T23:13:58Z] (Session: 1c716229 | Step 701)
+center the player at the bottom of the page. increase the width of the player. player is way too tiny
+
+### Request #35 [2026-08-14T23:19:00Z] (Session: 936b3f8d | Step 1)
+why is the player on page 1 it's only suppose to be on the floating icon page
+
+### Request #36 [2026-08-14T23:22:15Z] (Session: 936b3f8d | Step 54)
+yes
+
+### Request #37 [2026-08-15T00:17:10Z] (Session: 23b8fc14 | Step 1)
+On Page 1 the video, video player description is not there anymore why??
+
+### Request #38 [2026-08-15T00:19:38Z] (Session: 23b8fc14 | Step 58)
+yes
+
+### Request #39 [2026-08-15T00:22:45Z] (Session: 23b8fc14 | Step 101)
+its wrong it was the player that slides open
+
+### Request #40 [2026-08-15T00:27:43Z] (Session: 936b3f8d | Step 145)
+restore the card palyer to the way it was with the slide open feature, the AURA 2.O video and the video play contols
+
