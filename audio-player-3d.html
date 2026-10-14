@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Chinese Assassin — 3D Studio Audio Player</title>
+  <title>Chinese Assassin — 3D Glass Audio Player</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Rajdhani:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
       justify-content: center;
     }
 
-    /* ── RESPONSIVE VIEWPORT STAGE (2:1 EXACT ARTWORK COMPOSITION) ── */
+    /* ── RESPONSIVE VIEWPORT STAGE (EXACT 1774 x 887 2:1 ARTWORK RATIO) ── */
     .apb-viewport {
       position: relative;
       width: 100vw;
@@ -45,7 +45,7 @@
       width: min(100vw, calc(100vh * (1774 / 887)));
       height: min(100vh, calc(100vw * (887 / 1774)));
       aspect-ratio: 1774 / 887;
-      background: #040103 url('/apb_studio_clean.png') center center / 100% 100% no-repeat;
+      background: #020002 url('/A=P=B-1.png') center center / 100% 100% no-repeat;
       overflow: hidden;
       box-shadow: 0 0 100px rgba(0, 0, 0, 0.98), 0 0 60px rgba(255, 30, 56, 0.3);
       transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -57,165 +57,60 @@
       pointer-events: none;
     }
 
-    /* ── INDEPENDENT FLOATING GLASS CONSOLE ── */
-    .apb-glass-console {
+    /* ── 1. CLOSE BUTTON (X) HOTSPOT ── */
+    .apb-close-hotspot {
       position: absolute;
-      left: 18.2%;
-      top: 24.2%;
-      width: 63.6%;
-      height: 48.6%;
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(20, 2, 7, 0.92) 0%, rgba(10, 0, 4, 0.96) 100%);
-      border: 1px solid rgba(255, 42, 75, 0.55);
-      box-shadow: 
-        0 25px 65px rgba(0, 0, 0, 0.95),
-        0 0 35px rgba(255, 30, 56, 0.35),
-        inset 0 1px 2px rgba(255, 255, 255, 0.25),
-        inset 0 0 25px rgba(255, 20, 45, 0.12);
-      backdrop-filter: blur(24px) saturate(180%);
-      z-index: 20;
-      display: grid;
-      grid-template-columns: 24.5% 48.5% 27.0%;
-      padding: 18px 22px;
-      gap: 16px;
-    }
-
-    /* ── INDEPENDENT LIQUID GLASS CLOSE BUTTON ── */
-    .apb-close-btn {
-      position: absolute;
-      top: -14px;
-      right: -14px;
-      width: 38px;
-      height: 38px;
+      left: 79.20%;
+      top: 27.17%;
+      width: 1.69%;
+      height: 3.38%;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ff2a4b, #990015);
-      border: 2px solid #ffffff;
+      background: transparent;
+      border: none;
       cursor: pointer;
       z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-size: 16px;
-      font-weight: 900;
-      box-shadow: 0 0 18px #ff2a4b, 0 4px 15px rgba(0, 0, 0, 0.8);
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .apb-close-btn:hover {
-      transform: scale(1.15) rotate(90deg);
-      box-shadow: 0 0 30px #ff2a4b, 0 0 50px rgba(255, 42, 75, 0.9);
-      background: #ff1133;
+    .apb-close-hotspot:hover {
+      background: rgba(255, 30, 56, 0.3);
+      box-shadow: 0 0 18px #ff2a4b, 0 0 35px rgba(255, 42, 75, 0.8);
+      transform: scale(1.2);
     }
 
-    /* ── 1. LEFT PANEL: ALBUM ARTWORK CARD ── */
-    .apb-left-panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .apb-album-art-wrap {
-      width: 100%;
-      height: 82%;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-      border: 1px solid rgba(255, 42, 75, 0.6);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 30, 56, 0.4);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      cursor: pointer;
-    }
-
-    .apb-album-art-wrap:hover {
-      transform: scale(1.03);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 42, 75, 0.7);
-    }
-
-    .apb-album-art-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .apb-badge-bottom {
-      margin-top: 8px;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #ff3344;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px rgba(255, 42, 75, 0.6);
-    }
-
-    /* ── 2. CENTER PANEL: TYPOGRAPHY, SEEKBAR, TRANSPORT, DSP ── */
-    .apb-center-panel {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 4px 6px;
-    }
-
-    /* Track Metadata */
-    .apb-meta-block {
-      text-align: center;
-    }
-
-    .apb-track-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(16px, 1.7vw, 24px);
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: #ffffff;
-      text-transform: uppercase;
-      text-shadow: 0 0 14px rgba(255, 42, 75, 0.85);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .apb-artist-name {
-      font-family: 'Outfit', sans-serif;
-      font-size: clamp(11px, 0.95vw, 14px);
-      font-weight: 600;
-      letter-spacing: 2.5px;
-      color: #ff3344;
-      text-transform: uppercase;
-      margin-top: 2px;
-      text-shadow: 0 0 8px rgba(255, 30, 56, 0.5);
-    }
-
-    /* Real Interactive Seekbar */
-    .apb-seekbar-container {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin: 4px 0;
-    }
-
-    .apb-time-row {
+    /* ── 2. LIVE DYNAMIC TIME DISPLAY ── */
+    .apb-time-display {
+      position: absolute;
+      left: 34.50%;
+      top: 38.60%;
+      width: 30.50%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: #b5b5b5;
+      font-size: clamp(10px, 0.85vw, 13px);
+      color: #e0e0e0;
+      pointer-events: none;
+      z-index: 30;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
-    .apb-seekbar-track {
-      position: relative;
-      width: 100%;
-      height: 7px;
-      background: rgba(255, 255, 255, 0.1);
+    /* ── 3. VISIBLE LIVE PROGRESS BAR & DRAGGABLE THUMB ── */
+    .apb-seekbar-slot {
+      position: absolute;
+      left: 38.61%;
+      top: 39.30%;
+      width: 21.42%;
+      height: 1.60%;
+      background: rgba(14, 2, 5, 0.96);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(255, 42, 75, 0.25);
       border-radius: 4px;
+      border: 1px solid rgba(255, 42, 75, 0.4);
       cursor: pointer;
+      z-index: 35;
       touch-action: none;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(255, 42, 75, 0.25);
+      display: flex;
+      align-items: center;
     }
 
     .apb-seekbar-fill {
@@ -224,7 +119,7 @@
       top: 0;
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #ff2a4b, #ff7744);
+      background: linear-gradient(90deg, #ff1e38, #ff6633);
       border-radius: 4px;
       box-shadow: 0 0 10px #ff2a4b;
       pointer-events: none;
@@ -233,264 +128,154 @@
     .apb-seekbar-thumb {
       position: absolute;
       top: 50%;
+      left: 0%;
       transform: translate(-50%, -50%);
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #ffffff;
       box-shadow: 0 0 8px #ff2a4b, 0 0 16px #ffffff;
       pointer-events: none;
-      left: 0%;
       transition: transform 0.1s ease;
     }
 
-    .apb-seekbar-track:hover .apb-seekbar-thumb {
+    .apb-seekbar-slot:hover .apb-seekbar-thumb {
       transform: translate(-50%, -50%) scale(1.25);
     }
 
-    /* Transport Row */
-    .apb-transport-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin: 4px 0;
-    }
-
-    .apb-trans-btn {
-      width: 36px;
-      height: 36px;
+    /* ── 4. TRANSPORT BUTTON HOTSPOTS ── */
+    .apb-trans-hotspot {
+      position: absolute;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 42, 75, 0.3);
       cursor: pointer;
+      z-index: 35;
+      background: transparent;
+      border: none;
+      outline: none;
+      transition: all 0.18s ease;
+    }
+
+    .apb-trans-hotspot:hover {
+      background: rgba(255, 30, 56, 0.22);
+      box-shadow: 0 0 16px rgba(255, 30, 56, 0.7);
+      transform: scale(1.12);
+    }
+
+    .apb-trans-hotspot.active {
+      background: rgba(255, 30, 56, 0.35);
+      box-shadow: 0 0 20px rgba(255, 42, 75, 0.85);
+    }
+
+    /* Big Hero Play/Pause Button */
+    .apb-hero-play-hotspot {
+      position: absolute;
+      left: 48.25%;
+      top: 49.38%;
+      width: 4.17%;
+      height: 8.34%;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 40;
+      background: transparent;
+      border: none;
+      outline: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .apb-hero-play-hotspot:hover {
+      background: rgba(255, 30, 56, 0.25);
+      box-shadow: 0 0 30px rgba(255, 42, 75, 0.85);
+      transform: scale(1.08);
+    }
+
+    .apb-stage.playing .apb-hero-play-hotspot {
+      box-shadow: 0 0 20px rgba(255, 42, 75, 0.6);
+    }
+
+    /* ── 5. DSP ENHANCEMENT BUTTONS (BASS BOOST, 3D SOUND, VOCAL CLEAR) ── */
+    .apb-dsp-hotspot {
+      position: absolute;
+      height: 4.51%;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 35;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      outline: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(10px, 0.8vw, 13px);
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: transparent; /* lets painted text show through cleanly */
     }
 
-    .apb-trans-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: #ffffff;
-      transition: fill 0.2s ease;
+    .apb-dsp-hotspot:hover {
+      background: rgba(255, 30, 56, 0.15);
+      border-color: rgba(255, 42, 75, 0.6);
+      box-shadow: 0 0 14px rgba(255, 30, 56, 0.5);
     }
 
-    .apb-trans-btn:hover {
+    .apb-dsp-hotspot.active {
       background: rgba(255, 30, 56, 0.25);
       border-color: #ff2a4b;
-      box-shadow: 0 0 14px rgba(255, 30, 56, 0.6);
-      transform: scale(1.1);
+      box-shadow: 0 0 18px #ff2a4b, inset 0 0 10px rgba(255, 42, 75, 0.5);
     }
 
-    .apb-trans-btn.active {
-      background: rgba(255, 30, 56, 0.4);
+    /* ── 6. RIGHT SECTION: LIVE, HD, REAL SPECTRUM, VOLUME ── */
+    .apb-badge-hotspot {
+      position: absolute;
+      top: 31.00%;
+      height: 4.20%;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 35;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .apb-badge-hotspot:hover {
+      background: rgba(255, 30, 56, 0.2);
+      border-color: rgba(255, 42, 75, 0.6);
+      box-shadow: 0 0 12px rgba(255, 30, 56, 0.5);
+    }
+
+    .apb-badge-hotspot.active {
+      background: rgba(255, 30, 56, 0.35);
       border-color: #ff2a4b;
       box-shadow: 0 0 16px rgba(255, 42, 75, 0.8);
     }
 
-    .apb-trans-btn.active svg {
-      fill: #ff3344;
-    }
-
-    /* Big Hero Play/Pause Button */
-    .apb-hero-play {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff2a4b 0%, #aa0015 100%);
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 25px rgba(255, 42, 75, 0.8), 0 5px 15px rgba(0, 0, 0, 0.8);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      outline: none;
-    }
-
-    .apb-hero-play svg {
-      width: 24px;
-      height: 24px;
-      fill: #ffffff;
-      margin-left: 2px;
-      transition: transform 0.2s ease;
-    }
-
-    .apb-hero-play:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 40px #ff2a4b, 0 0 60px rgba(255, 42, 75, 0.9);
-      background: linear-gradient(135deg, #ff3b59 0%, #cc001a 100%);
-    }
-
-    /* DSP Enhancements Row */
-    .apb-dsp-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .apb-dsp-pill {
-      height: 34px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 42, 75, 0.35);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      color: rgba(255, 255, 255, 0.7);
-      transition: all 0.2s ease;
-      outline: none;
-    }
-
-    .apb-dsp-pill:hover {
-      background: rgba(255, 30, 56, 0.18);
-      border-color: rgba(255, 42, 75, 0.7);
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(255, 30, 56, 0.5);
-    }
-
-    .apb-dsp-pill.active {
-      background: linear-gradient(135deg, rgba(255, 42, 75, 0.4), rgba(180, 0, 25, 0.5));
-      border-color: #ff2a4b;
-      color: #ffffff;
-      box-shadow: 0 0 20px #ff2a4b, inset 0 0 10px rgba(255, 42, 75, 0.5);
-      text-shadow: 0 0 8px #ff2a4b;
-    }
-
-    /* ── 3. RIGHT PANEL: MODES, SPECTRUM, VOLUME ── */
-    .apb-right-panel {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 4px 6px;
-    }
-
-    .apb-modes-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .apb-mode-btn {
-      flex: 1;
-      height: 28px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 42, 75, 0.3);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.75);
-      transition: all 0.2s ease;
-    }
-
-    .apb-mode-btn:hover {
-      background: rgba(255, 30, 56, 0.2);
-      border-color: #ff2a4b;
-      color: #ffffff;
-    }
-
-    .apb-mode-btn.active {
-      background: rgba(255, 30, 56, 0.4);
-      border-color: #ff2a4b;
-      box-shadow: 0 0 14px rgba(255, 42, 75, 0.75);
-      color: #ffffff;
-      text-shadow: 0 0 6px #ff2a4b;
-    }
-
-    /* Real FFT Spectrum Canvas */
-    .apb-spectrum-box {
-      width: 100%;
-      height: 72px;
-      background: rgba(0, 0, 0, 0.55);
-      border: 1px solid rgba(255, 42, 75, 0.25);
-      border-radius: 6px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
+    /* Real FFT Audio Spectrum Canvas */
     .apb-spectrum-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
+      position: absolute;
+      left: 67.64%;
+      top: 41.71%;
+      width: 12.40%;
+      height: 10.71%;
+      z-index: 32;
+      pointer-events: none;
     }
 
-    /* Real Interactive Volume Slider & Mute */
-    .apb-volume-block {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .apb-vol-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: #b5b5b5;
-    }
-
-    .apb-vol-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .apb-mute-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #ff3344;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      transition: transform 0.2s ease;
-    }
-
-    .apb-mute-btn:hover {
-      transform: scale(1.15);
-      color: #ffffff;
-    }
-
-    .apb-mute-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-    }
-
-    .apb-vol-track {
-      position: relative;
-      flex: 1;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.12);
+    /* Visible Live Volume Slot & Thumb */
+    .apb-vol-slot {
+      position: absolute;
+      left: 68.77%;
+      top: 56.60%;
+      width: 10.43%;
+      height: 2.20%;
+      background: rgba(14, 2, 5, 0.96);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(255, 42, 75, 0.25);
       border-radius: 4px;
+      border: 1px solid rgba(255, 42, 75, 0.4);
       cursor: pointer;
+      z-index: 35;
       touch-action: none;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(255, 42, 75, 0.25);
+      display: flex;
+      align-items: center;
     }
 
     .apb-vol-fill {
@@ -499,7 +284,7 @@
       top: 0;
       height: 100%;
       width: 100%;
-      background: linear-gradient(90deg, #ff2a4b, #ff7744);
+      background: linear-gradient(90deg, #ff1e38, #ff6633);
       border-radius: 4px;
       box-shadow: 0 0 8px #ff2a4b;
       pointer-events: none;
@@ -508,6 +293,7 @@
     .apb-vol-thumb {
       position: absolute;
       top: 50%;
+      left: 100%;
       transform: translate(-50%, -50%);
       width: 14px;
       height: 14px;
@@ -515,12 +301,32 @@
       background: #ffffff;
       box-shadow: 0 0 8px #ff2a4b;
       pointer-events: none;
-      left: 100%;
       transition: transform 0.1s ease;
     }
 
-    .apb-vol-track:hover .apb-vol-thumb {
-      transform: translate(-50%, -50%) scale(1.2);
+    .apb-vol-slot:hover .apb-vol-thumb {
+      transform: translate(-50%, -50%) scale(1.25);
+    }
+
+    /* Mute Hotspot */
+    .apb-mute-hotspot {
+      position: absolute;
+      left: 67.08%;
+      top: 56.37%;
+      width: 2.20%;
+      height: 3.60%;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 35;
+      background: transparent;
+      border: none;
+      outline: none;
+      transition: all 0.18s ease;
+    }
+
+    .apb-mute-hotspot:hover {
+      background: rgba(255, 30, 56, 0.25);
+      box-shadow: 0 0 12px rgba(255, 30, 56, 0.6);
     }
 
     /* Toast HUD */
@@ -556,106 +362,51 @@
   <div class="apb-viewport">
     <div class="apb-stage" id="apbStage">
       
-      <!-- ── INDEPENDENT FLOATING GLASS CONSOLE ── -->
-      <div class="apb-glass-console" id="apbGlassConsole">
-        
-        <!-- CLOSE BUTTON (X) -->
-        <button type="button" class="apb-close-btn" id="apbCloseBtn" title="Close 3D Audio Player (Esc)">✕</button>
+      <!-- ── 1. CLOSE BUTTON (X) HOTSPOT ── -->
+      <button type="button" class="apb-close-hotspot" id="apbCloseBtn" title="Close 3D Glass Audio Player (Esc)"></button>
 
-        <!-- 1. LEFT PANEL: ALBUM ART -->
-        <div class="apb-left-panel">
-          <div class="apb-album-art-wrap" id="apbAlbumCard" title="Current Mix Album Artwork">
-            <img id="apbAlbumImg" src="/public/holographic/card_raise_the_frequency.png" onerror="this.onerror=null; this.src='/public/holographic/card_876_style.png';" alt="Album Cover" />
-          </div>
-          <div class="apb-badge-bottom">CHINESE ASSASSIN VIP</div>
-        </div>
-
-        <!-- 2. CENTER PANEL: TYPOGRAPHY, SEEKBAR, TRANSPORT, DSP -->
-        <div class="apb-center-panel">
-          <!-- Metadata -->
-          <div class="apb-meta-block">
-            <div class="apb-track-title" id="apbTrackTitle">Raise The Frequency (Wulup)</div>
-            <div class="apb-artist-name" id="apbArtistName">Chinese Assassin DJ • VIP Sound</div>
-          </div>
-
-          <!-- Real Interactive Seekbar -->
-          <div class="apb-seekbar-container">
-            <div class="apb-time-row">
-              <span id="apbCurTime">0:00</span>
-              <span id="apbTotTime">1:25</span>
-            </div>
-            <div class="apb-seekbar-track" id="apbSeekbar" title="Seek Audio Track">
-              <div class="apb-seekbar-fill" id="apbSeekFill"></div>
-              <div class="apb-seekbar-thumb" id="apbSeekThumb"></div>
-            </div>
-          </div>
-
-          <!-- Transport Controls -->
-          <div class="apb-transport-row">
-            <!-- Shuffle -->
-            <button type="button" class="apb-trans-btn" id="ctrlShuffle" title="Toggle Shuffle">
-              <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.42l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.12z"/></svg>
-            </button>
-            <!-- Previous -->
-            <button type="button" class="apb-trans-btn" id="ctrlPrev" title="Restart / Previous Track">
-              <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-            </button>
-            <!-- Big Hero Play/Pause Button -->
-            <button type="button" class="apb-hero-play" id="ctrlHeroPlay" title="Play / Pause Audio">
-              <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            <!-- Next -->
-            <button type="button" class="apb-trans-btn" id="ctrlNext" title="Next Mix">
-              <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-            </button>
-            <!-- Repeat -->
-            <button type="button" class="apb-trans-btn" id="ctrlRepeat" title="Toggle Repeat">
-              <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
-            </button>
-          </div>
-
-          <!-- DSP Enhancements (Bass Boost, 3D Sound, Vocal Clear) -->
-          <div class="apb-dsp-row">
-            <button type="button" class="apb-dsp-pill" id="btnBassBoost" title="Toggle Bass Boost (+6dB)">BASS BOOST</button>
-            <button type="button" class="apb-dsp-pill" id="btn3DSound" title="Toggle 3D Spatial Audio">3D SOUND</button>
-            <button type="button" class="apb-dsp-pill" id="btnVocalClear" title="Toggle Vocal Clear DSP">VOCAL CLEAR</button>
-          </div>
-        </div>
-
-        <!-- 3. RIGHT PANEL: MODES, SPECTRUM, VOLUME -->
-        <div class="apb-right-panel">
-          <!-- Modes -->
-          <div class="apb-modes-row">
-            <button type="button" class="apb-mode-btn" id="btnLiveMode" title="Toggle Live DJ Filter (LPF)">LIVE FILTER</button>
-            <button type="button" class="apb-mode-btn active" id="btnHDMode" title="HD Audio Master (24-bit FLAC/WAV)">HD AUDIO</button>
-          </div>
-
-          <!-- Real FFT Audio Spectrum -->
-          <div class="apb-spectrum-box">
-            <canvas class="apb-spectrum-canvas" id="apbSpectrumCanvas" width="240" height="72"></canvas>
-          </div>
-
-          <!-- Volume Controls -->
-          <div class="apb-volume-block">
-            <div class="apb-vol-header">
-              <span>MASTER VOLUME</span>
-              <span id="apbVolText">100%</span>
-            </div>
-            <div class="apb-vol-row">
-              <button type="button" class="apb-mute-btn" id="ctrlMute" title="Mute / Unmute Audio">
-                <svg id="volIcon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                <svg id="muteIcon" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-              </button>
-              <div class="apb-vol-track" id="apbVolTrack" title="Drag to adjust volume">
-                <div class="apb-vol-fill" id="apbVolFill"></div>
-                <div class="apb-vol-thumb" id="apbVolThumb"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <!-- ── 2. LIVE DIGITAL TIME DISPLAY ── -->
+      <div class="apb-time-display">
+        <span id="apbCurTime">0:00</span>
+        <span id="apbTotTime">1:25</span>
       </div>
+
+      <!-- ── 3. VISIBLE LIVE PROGRESS BAR & DRAGGABLE THUMB ── -->
+      <div class="apb-seekbar-slot" id="apbSeekbar" title="Seek Audio Track">
+        <div class="apb-seekbar-fill" id="apbSeekFill"></div>
+        <div class="apb-seekbar-thumb" id="apbSeekThumb"></div>
+      </div>
+
+      <!-- ── 4. TRANSPORT BUTTON HOTSPOTS ── -->
+      <button type="button" class="apb-trans-hotspot" id="ctrlShuffle" style="left: 38.95%; top: 51.41%; width: 1.92%; height: 3.84%;" title="Toggle Shuffle"></button>
+      <button type="button" class="apb-trans-hotspot" id="ctrlPrev" style="left: 43.35%; top: 51.41%; width: 2.14%; height: 4.28%;" title="Restart / Previous Track"></button>
+      
+      <!-- Big Center Play / Pause Button Hotspot -->
+      <button type="button" class="apb-hero-play-hotspot" id="ctrlHeroPlay" title="Play / Pause Audio"></button>
+
+      <button type="button" class="apb-trans-hotspot" id="ctrlNext" style="left: 55.19%; top: 51.41%; width: 2.14%; height: 4.28%;" title="Next Mix"></button>
+      <button type="button" class="apb-trans-hotspot" id="ctrlRepeat" style="left: 59.81%; top: 51.41%; width: 1.92%; height: 3.84%;" title="Toggle Repeat"></button>
+
+      <!-- ── 5. DSP ENHANCEMENT BUTTON HOTSPOTS (BASS, 3D, VOCAL) ── -->
+      <button type="button" class="apb-dsp-hotspot" id="btnBassBoost" style="left: 37.65%; top: 64.83%; width: 6.76%; height: 4.51%;" title="Toggle Bass Boost (+6dB)">BASS BOOST</button>
+      <button type="button" class="apb-dsp-hotspot" id="btn3DSound" style="left: 46.96%; top: 64.83%; width: 6.76%; height: 4.51%;" title="Toggle 3D Spatial Audio">3D SOUND</button>
+      <button type="button" class="apb-dsp-hotspot" id="btnVocalClear" style="left: 56.26%; top: 64.83%; width: 6.76%; height: 4.51%;" title="Toggle Vocal Clear DSP">VOCAL CLEAR</button>
+
+      <!-- ── 6. RIGHT SECTION: LIVE, HD, REAL SPECTRUM, VOLUME ── -->
+      <button type="button" class="apb-badge-hotspot" id="btnLiveMode" style="left: 66.52%; top: 31.00%; width: 5.07%; height: 4.20%;" title="Toggle Live DJ Filter (LPF)"></button>
+      <button type="button" class="apb-badge-hotspot active" id="btnHDMode" style="left: 72.15%; top: 31.00%; width: 3.38%; height: 4.20%;" title="HD Audio Master (24-bit FLAC/WAV)"></button>
+
+      <!-- Real FFT Audio Spectrum Canvas -->
+      <canvas class="apb-spectrum-canvas" id="apbSpectrumCanvas" width="240" height="95"></canvas>
+
+      <!-- Visible Live Volume Slot & Thumb -->
+      <div class="apb-vol-slot" id="apbVolTrack" title="Drag to adjust volume">
+        <div class="apb-vol-fill" id="apbVolFill"></div>
+        <div class="apb-vol-thumb" id="apbVolThumb"></div>
+      </div>
+
+      <!-- Speaker Mute Hotspot -->
+      <button type="button" class="apb-mute-hotspot" id="ctrlMute" title="Mute / Unmute Audio"></button>
 
       <!-- Toast HUD -->
       <div id="apbToast" class="apb-hud-toast"></div>
@@ -673,32 +424,28 @@
         title: 'Raise The Frequency (Wulup)',
         artist: 'Chinese Assassin DJ',
         src: '/wulup.mp3',
-        formatted: '1:25',
-        cover: '/public/holographic/card_raise_the_frequency.png'
+        formatted: '1:25'
       },
       {
         id: 'mix_2',
         title: '876 Style Mix 2024',
         artist: 'Chinese Assassin DJ',
         src: '/demo1.mp3',
-        formatted: '6:12',
-        cover: '/public/holographic/card_876_style.png'
+        formatted: '6:12'
       },
       {
         id: 'mix_3',
         title: 'Celebrate Life Edition',
         artist: 'Chinese Assassin DJ',
         src: '/demo2.mp3',
-        formatted: '7:05',
-        cover: '/public/holographic/card_celebrate_life.png'
+        formatted: '7:05'
       },
       {
         id: 'mix_4',
         title: 'Reggae Good Vibes Live',
         artist: 'Chinese Assassin DJ',
         src: '/background.mp3',
-        formatted: '2:16',
-        cover: '/public/holographic/card_reggae_good_vibes.png'
+        formatted: '2:16'
       }
     ];
 
@@ -714,28 +461,20 @@
     // DOM Elements
     const stage = document.getElementById('apbStage');
     const audio = document.getElementById('caAudioElem');
-    const trackTitle = document.getElementById('apbTrackTitle');
-    const artistName = document.getElementById('apbArtistName');
     const curTimeEl = document.getElementById('apbCurTime');
     const totTimeEl = document.getElementById('apbTotTime');
-    const albumImg = document.getElementById('apbAlbumImg');
     const seekbar = document.getElementById('apbSeekbar');
     const seekFill = document.getElementById('apbSeekFill');
     const seekThumb = document.getElementById('apbSeekThumb');
     const heroPlay = document.getElementById('ctrlHeroPlay');
-    const playIcon = document.getElementById('playIcon');
-    const pauseIcon = document.getElementById('pauseIcon');
     const btnShuffle = document.getElementById('ctrlShuffle');
     const btnPrev = document.getElementById('ctrlPrev');
     const btnNext = document.getElementById('ctrlNext');
     const btnRepeat = document.getElementById('ctrlRepeat');
     const btnMute = document.getElementById('ctrlMute');
-    const volIcon = document.getElementById('volIcon');
-    const muteIcon = document.getElementById('muteIcon');
     const volTrack = document.getElementById('apbVolTrack');
     const volFill = document.getElementById('apbVolFill');
     const volThumb = document.getElementById('apbVolThumb');
-    const volText = document.getElementById('apbVolText');
     const btnBass = document.getElementById('btnBassBoost');
     const btn3D = document.getElementById('btn3DSound');
     const btnVocal = document.getElementById('btnVocalClear');
@@ -849,21 +588,12 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    // Update Play/Pause Icon
-    function updatePlayIcon(isPlaying) {
-      if (playIcon) playIcon.style.display = isPlaying ? 'none' : 'block';
-      if (pauseIcon) pauseIcon.style.display = isPlaying ? 'block' : 'none';
-    }
-
     // Set & Load Track
     function loadTrack(idx, autoPlay = true) {
       currentIdx = idx;
       const m = MIXES[currentIdx];
-      trackTitle.textContent = m.title;
-      artistName.textContent = `${m.artist} • VIP SOUND`;
       totTimeEl.textContent = m.formatted;
       curTimeEl.textContent = '0:00';
-      if (albumImg) albumImg.src = m.cover;
       seekFill.style.width = '0%';
       seekThumb.style.left = '0%';
 
@@ -873,16 +603,13 @@
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         audio.play().then(() => {
           stage.classList.add('playing');
-          updatePlayIcon(true);
           showToast(`▶ NOW PLAYING: ${m.title}`);
         }).catch(err => {
           console.warn('Autoplay prevented:', err);
           stage.classList.remove('playing');
-          updatePlayIcon(false);
         });
       } else {
         stage.classList.remove('playing');
-        updatePlayIcon(false);
       }
     }
 
@@ -894,20 +621,18 @@
       if (audio.paused) {
         audio.play().then(() => {
           stage.classList.add('playing');
-          updatePlayIcon(true);
           showToast(`▶ PLAYING: ${MIXES[currentIdx].title}`);
         }).catch(console.warn);
       } else {
         audio.pause();
         stage.classList.remove('playing');
-        updatePlayIcon(false);
         showToast('⏸ PAUSED');
       }
     }
 
     heroPlay.onclick = togglePlay;
 
-    // Time & Seek Updates
+    // Time & Seek Updates (Visibly advances progress bar and moves thumb)
     audio.ontimeupdate = () => {
       if (!audio.duration || isSeeking) return;
       const pct = (audio.currentTime / audio.duration) * 100;
@@ -1062,9 +787,6 @@
     function updateVolumeUI(val) {
       volFill.style.width = `${val * 100}%`;
       volThumb.style.left = `${val * 100}%`;
-      volText.textContent = `${Math.round(val * 100)}%`;
-      if (volIcon) volIcon.style.display = (audio.muted || val === 0) ? 'none' : 'block';
-      if (muteIcon) muteIcon.style.display = (audio.muted || val === 0) ? 'block' : 'none';
     }
 
     volTrack.addEventListener('pointerdown', (e) => {
@@ -1095,7 +817,7 @@
 
     // Close Button Navigation
     closeBtn.onclick = () => {
-      showToast('🔒 CLOSING 3D STUDIO PLAYER');
+      showToast('🔒 CLOSING 3D GLASS PLAYER');
       stage.classList.add('shutdown');
       setTimeout(() => {
         window.location.href = '/page1-aug15-morning.html';
