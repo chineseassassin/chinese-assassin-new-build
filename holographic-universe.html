@@ -188,76 +188,66 @@
     }
 
     /* ── 4. CONSOLE INTERACTIVE CONTROLS ── */
-    /* Dynamic Scrubber Overlay */
+    /* Transparent Scrubber Seeker Overlay (Preserves Original Painted Track) */
     .holo-scrubber-overlay {
       position: absolute;
       left: 22.53%;
-      top: 78.44%;
+      top: 78.10%;
       width: 23.54%;
-      height: 1.49%;
-      z-index: 30;
+      height: 2.20%;
+      z-index: 32;
       cursor: pointer;
       display: flex;
       align-items: center;
+      background: transparent;
+      touch-action: none;
     }
 
     .holo-scrubber-track-inner {
       position: relative;
       width: 100%;
-      height: 5px;
+      height: 100%;
       background: transparent;
-      border-radius: 3px;
+      border: none;
+      box-shadow: none;
     }
 
+    /* Duplicate visual progress bar and duplicate thumb suppressed */
     .holo-scrubber-fill-bar {
-      position: relative;
-      height: 100%;
-      width: 0%;
-      background: #ff1e38;
-      box-shadow: 0 0 10px #ff2a4b;
-      border-radius: 3px;
+      display: none !important;
     }
 
     .holo-scrubber-head {
-      position: absolute;
-      right: -6px;
-      top: -4px;
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 8px #ff2a4b, 0 0 15px #ffffff;
+      display: none !important;
     }
 
-    /* Transport Buttons */
+    /* Transport Buttons (Clean Transparent Hotspots - Zero Duplicate Borders/Icons) */
     .holo-ctrl-btn {
       position: absolute;
       border-radius: 50%;
       cursor: pointer;
       z-index: 30;
       background: transparent;
-      border: 1px solid transparent;
-      transition: all 0.18s ease;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      transition: background 0.18s ease, box-shadow 0.18s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      outline: none;
     }
 
     .holo-ctrl-btn:hover {
-      background: rgba(255, 30, 56, 0.25);
-      border-color: #ff2a4b;
-      box-shadow: 0 0 14px rgba(255, 30, 56, 0.6);
-      transform: scale(1.1);
+      background: rgba(255, 30, 56, 0.18);
+      box-shadow: 0 0 12px rgba(255, 30, 56, 0.5);
     }
 
     .holo-ctrl-btn.active {
-      background: rgba(255, 30, 56, 0.4);
-      border-color: #ff2a4b;
-      box-shadow: 0 0 16px rgba(255, 30, 56, 0.8);
+      background: rgba(255, 30, 56, 0.30);
+      box-shadow: 0 0 16px rgba(255, 42, 75, 0.7);
     }
 
-    /* Big Center Hero Play/Pause Button */
+    /* Big Center Hero Play/Pause Button (Transparent Hotspot over Original Painted Artwork) */
     .holo-hero-play-btn {
       position: absolute;
       left: 33.67%;
@@ -268,37 +258,59 @@
       cursor: pointer;
       z-index: 35;
       background: transparent;
-      border: 2px solid transparent;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      outline: none;
+      box-shadow: none;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
     }
 
     .holo-hero-play-btn:hover {
-      background: rgba(255, 30, 56, 0.3);
-      border-color: #ff3344;
-      box-shadow: 0 0 25px rgba(255, 42, 75, 0.9);
-      transform: scale(1.08);
+      background: rgba(255, 30, 56, 0.15);
+      box-shadow: 0 0 20px rgba(255, 42, 75, 0.6);
     }
 
-    /* Volume Slider */
+    /* Volume Slider (Transparent Functional Overlay over Painted Artwork) */
     .holo-vol-slider-overlay {
       position: absolute;
       left: 55.90%;
-      top: 84.95%;
+      top: 84.50%;
       width: 8.94%;
-      height: 2.13%;
-      z-index: 30;
+      height: 3.00%;
+      z-index: 32;
       display: flex;
       align-items: center;
+      cursor: pointer;
+      touch-action: none;
     }
 
     .holo-vol-input {
       width: 100%;
-      height: 4px;
+      height: 100%;
       -webkit-appearance: none;
+      appearance: none;
       background: transparent;
       cursor: pointer;
-      accent-color: #ff2a4b;
       outline: none;
+      border: none;
+      margin: 0;
+      padding: 0;
+      opacity: 0.001; /* Completely transparent so only the painted artwork is visible */
+    }
+
+    .holo-vol-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .holo-vol-input::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      background: transparent;
+      cursor: pointer;
     }
 
     /* Up Next Queue Clickable Rows */
@@ -326,20 +338,10 @@
       border-color: #ff2a4b;
     }
 
-    /* Live Dynamic Waveform Equalizer Bars Overlay */
+    /* Duplicate Audio Spectrum Suppressed (Preserves Original Painted Spectrum) */
     .holo-waveform-overlay {
-      position: absolute;
-      left: 50.66%;
-      top: 73.64%;
-      width: 17.28%;
-      height: 9.07%;
-      z-index: 28;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
+      display: none !important;
       pointer-events: none;
-      opacity: 0.75;
     }
 
     .holo-eq-bar {
@@ -708,13 +710,36 @@
       if (!isRepeated) btnNext.click();
     };
 
-    scrubSeeker.onclick = (e) => {
+    // Drag-to-seek and click-to-seek pointer interaction
+    let isSeeking = false;
+    function seekToEvent(e) {
+      if (!audio || !audio.duration) return;
       const rect = scrubSeeker.getBoundingClientRect();
       const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      if (audio.duration) {
-        audio.currentTime = pos * audio.duration;
+      audio.currentTime = pos * audio.duration;
+      const m = Math.floor(audio.currentTime / 60);
+      const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+      curTimeEl.textContent = `${m}:${s}`;
+    }
+
+    scrubSeeker.addEventListener('pointerdown', (e) => {
+      isSeeking = true;
+      try { scrubSeeker.setPointerCapture(e.pointerId); } catch(err){}
+      seekToEvent(e);
+    });
+
+    scrubSeeker.addEventListener('pointermove', (e) => {
+      if (isSeeking) seekToEvent(e);
+    });
+
+    const stopSeeking = (e) => {
+      if (isSeeking) {
+        isSeeking = false;
+        try { scrubSeeker.releasePointerCapture(e.pointerId); } catch(err){}
       }
     };
+    scrubSeeker.addEventListener('pointerup', stopSeeking);
+    scrubSeeker.addEventListener('pointercancel', stopSeeking);
 
     // Prev / Next
     btnPrev.onclick = () => {
