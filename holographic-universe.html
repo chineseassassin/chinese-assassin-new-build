@@ -1,0 +1,814 @@
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Chinese Assassin — 3D Holographic Music Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Rajdhani:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #020002;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── VIEWPORT WRAPPER (RESPONSIVE 16:9 THEATER STAGE) ── */
+    .holo-viewport {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+      overflow: hidden;
+    }
+
+    /* ── 3D HOLOGRAPHIC UNIVERSE STAGE ── */
+    .holo-stage {
+      position: relative;
+      width: min(100vw, calc(100vh * (1678 / 937)));
+      height: min(100vh, calc(100vw * (937 / 1678)));
+      aspect-ratio: 1678 / 937;
+      background: #040103 url('/Chinese%20Assassin%20Holographic%20DJ%20Mixer.png') center center / 100% 100% no-repeat;
+      overflow: hidden;
+      box-shadow: 0 0 100px rgba(0, 0, 0, 0.98), 0 0 50px rgba(255, 30, 56, 0.3);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .holo-stage.shutdown {
+      opacity: 0;
+      transform: scale(0.92) translateY(25px);
+      pointer-events: none;
+    }
+
+    /* Ambient scanline and hologram grain */
+    .holo-scanline-fx {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(255, 30, 56, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,255,0.01), rgba(0,0,255,0.03));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.6;
+    }
+
+    /* ── 1. LIQUID GLASS CLOSE BUTTON (UPPER RIGHT) ── */
+    .holo-close-btn {
+      position: absolute;
+      left: 88.5%;
+      top: 2.2%;
+      width: 10.2%;
+      height: 4.8%;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 12px;
+      background: rgba(14, 2, 6, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 40, 60, 0.6);
+      border-radius: 20px;
+      color: #ffffff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(0.65rem, 1.0vw, 0.85rem);
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 0 15px rgba(255, 30, 56, 0.35);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+    }
+
+    .holo-close-btn:hover {
+      background: rgba(255, 30, 56, 0.3);
+      border-color: #ff2a4b;
+      box-shadow: 0 0 25px rgba(255, 30, 56, 0.7);
+      transform: scale(1.04);
+    }
+
+    .holo-close-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ff2a4b;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: 0 0 8px #ff2a4b;
+    }
+
+    /* ── 2. TOP CATEGORIES HOTSPOTS (INTERACTIVE GLASS TILES) ── */
+    .holo-cat-hotspot {
+      position: absolute;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 20;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .holo-cat-hotspot:hover {
+      background: rgba(255, 30, 56, 0.15);
+      border-color: rgba(255, 40, 60, 0.7);
+      box-shadow: 0 0 20px rgba(255, 30, 56, 0.5), inset 0 0 15px rgba(255, 30, 56, 0.2);
+    }
+
+    .holo-cat-hotspot.active {
+      border-color: #ff2a4b;
+      box-shadow: 0 0 25px rgba(255, 30, 56, 0.8), inset 0 0 20px rgba(255, 30, 56, 0.35);
+    }
+
+    /* ── 3. FLOATING 3D ALBUM CARDS (HOTSPOTS WITH GLOW) ── */
+    .holo-card-hotspot {
+      position: absolute;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 25;
+      background: transparent;
+      border: 2px solid transparent;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .holo-card-hotspot:hover {
+      background: rgba(255, 30, 56, 0.12);
+      border-color: rgba(255, 50, 75, 0.8);
+      box-shadow: 0 0 35px rgba(255, 30, 56, 0.65), inset 0 0 20px rgba(255, 30, 56, 0.3);
+      transform: scale(1.02);
+    }
+
+    .holo-card-hotspot.active {
+      border-color: #ff2a4b;
+      box-shadow: 0 0 45px rgba(255, 30, 56, 0.9), inset 0 0 25px rgba(255, 30, 56, 0.4);
+    }
+
+    /* Live center play button glow overlay */
+    .holo-center-play-ring {
+      position: absolute;
+      bottom: 8%;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      pointer-events: none;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 20px #ff2a4b, 0 0 35px rgba(255, 42, 75, 0.8);
+      animation: centerRingPulse 2s infinite alternate ease-in-out;
+      opacity: 0.85;
+    }
+
+    @keyframes centerRingPulse {
+      0% { transform: scale(0.96); opacity: 0.7; }
+      100% { transform: scale(1.08); opacity: 1; }
+    }
+
+    /* ── 4. CONSOLE INTERACTIVE CONTROLS ── */
+    /* Dynamic Scrubber Overlay */
+    .holo-scrubber-overlay {
+      position: absolute;
+      left: 22.53%;
+      top: 78.44%;
+      width: 23.54%;
+      height: 1.49%;
+      z-index: 30;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .holo-scrubber-track-inner {
+      position: relative;
+      width: 100%;
+      height: 5px;
+      background: transparent;
+      border-radius: 3px;
+    }
+
+    .holo-scrubber-fill-bar {
+      position: relative;
+      height: 100%;
+      width: 0%;
+      background: #ff1e38;
+      box-shadow: 0 0 10px #ff2a4b;
+      border-radius: 3px;
+    }
+
+    .holo-scrubber-head {
+      position: absolute;
+      right: -6px;
+      top: -4px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px #ff2a4b, 0 0 15px #ffffff;
+    }
+
+    /* Transport Buttons */
+    .holo-ctrl-btn {
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 30;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+    }
+
+    .holo-ctrl-btn:hover {
+      background: rgba(255, 30, 56, 0.25);
+      border-color: #ff2a4b;
+      box-shadow: 0 0 14px rgba(255, 30, 56, 0.6);
+      transform: scale(1.1);
+    }
+
+    .holo-ctrl-btn.active {
+      background: rgba(255, 30, 56, 0.4);
+      border-color: #ff2a4b;
+      box-shadow: 0 0 16px rgba(255, 30, 56, 0.8);
+    }
+
+    /* Big Center Hero Play/Pause Button */
+    .holo-hero-play-btn {
+      position: absolute;
+      left: 33.67%;
+      top: 82.18%;
+      width: 4.47%;
+      height: 8.00%;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 35;
+      background: transparent;
+      border: 2px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .holo-hero-play-btn:hover {
+      background: rgba(255, 30, 56, 0.3);
+      border-color: #ff3344;
+      box-shadow: 0 0 25px rgba(255, 42, 75, 0.9);
+      transform: scale(1.08);
+    }
+
+    /* Volume Slider */
+    .holo-vol-slider-overlay {
+      position: absolute;
+      left: 55.90%;
+      top: 84.95%;
+      width: 8.94%;
+      height: 2.13%;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+    }
+
+    .holo-vol-input {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      background: transparent;
+      cursor: pointer;
+      accent-color: #ff2a4b;
+      outline: none;
+    }
+
+    /* Up Next Queue Clickable Rows */
+    .holo-queue-row {
+      position: absolute;
+      left: 70.32%;
+      width: 18.47%;
+      height: 2.99%;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 30;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+    }
+
+    .holo-queue-row:hover {
+      background: rgba(255, 30, 56, 0.2);
+      border-color: rgba(255, 40, 60, 0.6);
+      box-shadow: 0 0 12px rgba(255, 30, 56, 0.4);
+    }
+
+    .holo-queue-row.active {
+      background: rgba(255, 40, 60, 0.35);
+      border-color: #ff2a4b;
+    }
+
+    /* Live Dynamic Waveform Equalizer Bars Overlay */
+    .holo-waveform-overlay {
+      position: absolute;
+      left: 50.66%;
+      top: 73.64%;
+      width: 17.28%;
+      height: 9.07%;
+      z-index: 28;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .holo-eq-bar {
+      width: 3px;
+      height: 8px;
+      background: linear-gradient(180deg, #ff3344, #ff7744);
+      border-radius: 2px;
+      transition: height 0.08s ease;
+    }
+
+    .holo-stage.playing .holo-eq-bar:nth-child(2n) {
+      animation: eqBounce1 0.45s infinite alternate ease-in-out;
+    }
+    .holo-stage.playing .holo-eq-bar:nth-child(2n+1) {
+      animation: eqBounce2 0.58s infinite alternate ease-in-out;
+    }
+    .holo-stage.playing .holo-eq-bar:nth-child(3n) {
+      animation: eqBounce3 0.50s infinite alternate ease-in-out;
+    }
+
+    @keyframes eqBounce1 { 0% { height: 6px; } 100% { height: 38px; } }
+    @keyframes eqBounce2 { 0% { height: 32px; } 100% { height: 8px; } }
+    @keyframes eqBounce3 { 0% { height: 12px; } 100% { height: 44px; } }
+
+    /* Dynamic Now Playing Title Overlay */
+    .holo-now-title-overlay {
+      position: absolute;
+      left: 17.2%;
+      top: 71.0%;
+      width: 25.0%;
+      height: 4.2%;
+      z-index: 28;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .holo-track-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(0.70rem, 1.1vw, 0.95rem);
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 0 10px rgba(255, 30, 56, 0.6);
+    }
+
+    .holo-artist-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(0.55rem, 0.85vw, 0.72rem);
+      font-weight: 700;
+      color: rgba(255, 180, 190, 0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Live Time Display */
+    .holo-time-overlay {
+      position: absolute;
+      left: 13.5%;
+      top: 77.2%;
+      width: 32.5%;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.55rem, 0.8vw, 0.70rem);
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.85);
+      pointer-events: none;
+      z-index: 28;
+    }
+
+    /* Toast HUD Notification */
+    .holo-hud-toast {
+      position: absolute;
+      top: 3.5%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-25px);
+      background: rgba(14, 2, 6, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid #ff2a4b;
+      border-radius: 30px;
+      padding: 7px 22px;
+      color: #ffffff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(0.72rem, 1.0vw, 0.88rem);
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      box-shadow: 0 0 25px rgba(255, 42, 75, 0.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .holo-hud-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="holo-viewport">
+    <div id="caHoloUniverseStage" class="holo-stage">
+      <div class="holo-scanline-fx"></div>
+
+      <!-- ── 1. LIQUID GLASS CLOSE BUTTON (UPPER RIGHT) ── -->
+      <button type="button" id="caHoloCloseBtn" class="holo-close-btn" title="Close Hologram (Esc)" aria-label="Close Hologram">
+        <span>Close Hologram</span>
+        <div class="holo-close-icon">✕</div>
+      </button>
+
+      <!-- ── 2. TOP CATEGORIES HOTSPOTS ── -->
+      <div class="holo-cat-hotspot" id="catDancehall" style="left: 11.62%; top: 6.94%; width: 8.34%; height: 19.74%;" title="Dancehall Mixes"></div>
+      <div class="holo-cat-hotspot" id="catReggae" style="left: 20.56%; top: 10.14%; width: 7.75%; height: 17.08%;" title="Reggae Mixes"></div>
+      <div class="holo-cat-hotspot" id="catHiphop" style="left: 28.90%; top: 12.27%; width: 7.75%; height: 15.47%;" title="Hip-Hop Mixes"></div>
+      <div class="holo-cat-hotspot" id="catSoca1" style="left: 37.25%; top: 13.34%; width: 7.45%; height: 14.94%;" title="Soca Mixes"></div>
+      <div class="holo-cat-hotspot active" id="catFeatured" style="left: 45.29%; top: 12.27%; width: 8.94%; height: 16.01%;" title="Featured Mixes"></div>
+      <div class="holo-cat-hotspot" id="catSoca2" style="left: 54.83%; top: 13.34%; width: 7.45%; height: 14.94%;" title="Afrobeats & Soca"></div>
+      <div class="holo-cat-hotspot" id="catRnb" style="left: 62.87%; top: 12.81%; width: 7.45%; height: 15.47%;" title="R&B Mixes"></div>
+      <div class="holo-cat-hotspot" id="catClassics" style="left: 70.92%; top: 10.67%; width: 8.05%; height: 16.54%;" title="Old School Classics"></div>
+      <div class="holo-cat-hotspot" id="catNew" style="left: 79.56%; top: 8.00%; width: 8.64%; height: 18.68%;" title="New Releases"></div>
+
+      <!-- ── 3. FLOATING 3D ALBUM CARDS ── -->
+      <div class="holo-card-hotspot" id="cardStraightFire" style="left: 7.45%; top: 29.35%; width: 10.13%; height: 28.28%;" title="Straight Fire Mix (DJ Assassin)"></div>
+      <div class="holo-card-hotspot" id="cardReggaeGoodVibes" style="left: 16.98%; top: 32.55%; width: 11.62%; height: 27.75%;" title="Reggae Good Vibes Mix"></div>
+      <div class="holo-card-hotspot" id="card876Style" style="left: 29.20%; top: 34.69%; width: 12.81%; height: 27.75%;" title="876 Style Mix"></div>
+      
+      <!-- Center Hero Active Card: Raise The Frequency Mix -->
+      <div class="holo-card-hotspot active" id="cardRaiseFrequency" style="left: 42.61%; top: 30.42%; width: 14.90%; height: 32.02%;" title="Raise The Frequency Mix (Active Track)">
+        <div class="holo-center-play-ring"></div>
+      </div>
+
+      <div class="holo-card-hotspot" id="cardCelebrateLife" style="left: 58.40%; top: 34.69%; width: 12.81%; height: 27.75%;" title="Celebrate Life Mix"></div>
+      <div class="holo-card-hotspot" id="cardWeekendVibes" style="left: 71.81%; top: 32.55%; width: 11.62%; height: 27.75%;" title="Weekend Vibes Mix"></div>
+      <div class="holo-card-hotspot" id="cardUpInnaDiSky" style="left: 83.43%; top: 29.88%; width: 9.54%; height: 27.75%;" title="Up Inna Di Sky Mix"></div>
+
+      <!-- ── 4. DYNAMIC CONSOLE OVERLAYS ── -->
+      <!-- Now Playing Dynamic Track Title -->
+      <div class="holo-now-title-overlay">
+        <div class="holo-track-name" id="holoTrackName">Raise The Frequency (Wulup)</div>
+        <div class="holo-artist-name" id="holoArtistName">Chinese Assassin DJ • VIP Sound</div>
+      </div>
+
+      <!-- Time Display -->
+      <div class="holo-time-overlay">
+        <span id="holoCurTime">0:00</span>
+        <span id="holoTotTime">1:25</span>
+      </div>
+
+      <!-- Audio Scrubber Seeker -->
+      <div class="holo-scrubber-overlay" id="holoScrubberSeeker" title="Seek Mix Audio">
+        <div class="holo-scrubber-track-inner">
+          <div class="holo-scrubber-fill-bar" id="holoScrubberFill">
+            <div class="holo-scrubber-head"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Reactive Waveform Equalizer -->
+      <div class="holo-waveform-overlay" id="holoWaveformBars">
+        <!-- 28 reactive bars -->
+      </div>
+
+      <!-- Transport Controls -->
+      <button type="button" class="holo-ctrl-btn" id="ctrlShuffle" style="left: 23.24%; top: 84.10%; width: 2.26%; height: 4.06%;" title="Toggle Shuffle"></button>
+      <button type="button" class="holo-ctrl-btn" id="ctrlPrev" style="left: 28.72%; top: 84.10%; width: 2.26%; height: 4.06%;" title="Restart / Previous Track"></button>
+      
+      <!-- Big Center Play / Pause Hero Button -->
+      <button type="button" class="holo-hero-play-btn" id="ctrlHeroPlay" title="Play / Pause Audio"></button>
+
+      <button type="button" class="holo-ctrl-btn" id="ctrlNext" style="left: 41.42%; top: 84.10%; width: 2.26%; height: 4.06%;" title="Next Mix"></button>
+      <button type="button" class="holo-ctrl-btn" id="ctrlRepeat" style="left: 46.19%; top: 84.10%; width: 2.26%; height: 4.06%;" title="Repeat Track"></button>
+      <button type="button" class="holo-ctrl-btn" id="ctrlHeart" style="left: 51.85%; top: 84.10%; width: 2.26%; height: 4.06%;" title="Favorite"></button>
+
+      <!-- Volume Slider -->
+      <div class="holo-vol-slider-overlay">
+        <input type="range" class="holo-vol-input" id="holoVolSlider" min="0" max="1" step="0.05" value="1" title="Volume Slider" />
+      </div>
+      <button type="button" class="holo-ctrl-btn" id="ctrlMute" style="left: 66.03%; top: 84.10%; width: 2.09%; height: 3.74%;" title="Mute / Unmute"></button>
+
+      <!-- Up Next Queue Rows -->
+      <div class="holo-queue-row" id="qRow1" style="left: 70.32%; top: 75.24%; width: 18.47%; height: 2.99%;" title="Play: 876 Style Mix (6:12)"></div>
+      <div class="holo-queue-row" id="qRow2" style="left: 70.32%; top: 78.44%; width: 18.47%; height: 2.99%;" title="Play: Celebrate Life Mix (7:05)"></div>
+      <div class="holo-queue-row" id="qRow3" style="left: 70.32%; top: 81.64%; width: 18.47%; height: 2.99%;" title="Play: Weekend Vibes Mix (2:16)"></div>
+      <div class="holo-queue-row" id="qRow4" style="left: 70.32%; top: 84.85%; width: 18.47%; height: 2.99%;" title="Up Inna Di Sky Mix (Preview)"></div>
+      <div class="holo-queue-row" id="qRow5" style="left: 70.32%; top: 88.05%; width: 18.47%; height: 2.99%;" title="Girl Next Door Mix (Preview)"></div>
+
+      <!-- Toast HUD Banner -->
+      <div id="holoToast" class="holo-hud-toast"></div>
+
+      <!-- SHARED AUDIO ENGINE -->
+      <audio id="caAudioElem" src="/wulup.mp3" preload="metadata"></audio>
+    </div>
+  </div>
+
+  <script>
+    // ── REAL AUDIO PLAYLIST WITH ACTUAL PROJECT ASSETS ──
+    const MIXES = [
+      {
+        id: 'mix_1',
+        title: 'Raise The Frequency (Wulup)',
+        artist: 'Chinese Assassin DJ',
+        src: '/wulup.mp3',
+        formatted: '1:25',
+        cardId: 'cardRaiseFrequency',
+        playable: true
+      },
+      {
+        id: 'mix_2',
+        title: '876 Style Mix',
+        artist: 'Chinese Assassin DJ',
+        src: '/demo1.mp3',
+        formatted: '6:12',
+        cardId: 'card876Style',
+        playable: true
+      },
+      {
+        id: 'mix_3',
+        title: 'Celebrate Life Mix',
+        artist: 'Chinese Assassin DJ',
+        src: '/demo2.mp3',
+        formatted: '7:05',
+        cardId: 'cardCelebrateLife',
+        playable: true
+      },
+      {
+        id: 'mix_4',
+        title: 'Weekend Vibes Mix',
+        artist: 'Chinese Assassin DJ',
+        src: '/background.mp3',
+        formatted: '2:16',
+        cardId: 'cardWeekendVibes',
+        playable: true
+      },
+      {
+        id: 'mix_5',
+        title: 'Straight Fire Mix',
+        artist: 'Chinese Assassin DJ',
+        src: '/demo1.mp3',
+        formatted: '6:12',
+        cardId: 'cardStraightFire',
+        playable: true
+      },
+      {
+        id: 'mix_6',
+        title: 'Reggae Good Vibes Mix',
+        artist: 'Chinese Assassin DJ',
+        src: '/wulup.mp3',
+        formatted: '1:25',
+        cardId: 'cardReggaeGoodVibes',
+        playable: true
+      },
+      {
+        id: 'mix_7',
+        title: 'Up Inna Di Sky Mix',
+        artist: 'Chinese Assassin DJ',
+        src: '/demo2.mp3',
+        formatted: '7:05',
+        cardId: 'cardUpInnaDiSky',
+        playable: true
+      }
+    ];
+
+    let currentIdx = 0;
+    let isShuffled = false;
+    let isRepeated = false;
+
+    // DOM Elements
+    const stage = document.getElementById('caHoloUniverseStage');
+    const audio = document.getElementById('caAudioElem');
+    const closeBtn = document.getElementById('caHoloCloseBtn');
+    const trackNameEl = document.getElementById('holoTrackName');
+    const artistNameEl = document.getElementById('holoArtistName');
+    const curTimeEl = document.getElementById('holoCurTime');
+    const totTimeEl = document.getElementById('holoTotTime');
+    const scrubFill = document.getElementById('holoScrubberFill');
+    const scrubSeeker = document.getElementById('holoScrubberSeeker');
+    const heroPlay = document.getElementById('ctrlHeroPlay');
+    const btnShuffle = document.getElementById('ctrlShuffle');
+    const btnPrev = document.getElementById('ctrlPrev');
+    const btnNext = document.getElementById('ctrlNext');
+    const btnRepeat = document.getElementById('ctrlRepeat');
+    const btnHeart = document.getElementById('ctrlHeart');
+    const btnMute = document.getElementById('ctrlMute');
+    const volSlider = document.getElementById('holoVolSlider');
+    const toast = document.getElementById('holoToast');
+    const waveformContainer = document.getElementById('holoWaveformBars');
+
+    // Init 28 Equalizer bars
+    for (let i = 0; i < 28; i++) {
+      const b = document.createElement('div');
+      b.className = 'holo-eq-bar';
+      waveformContainer.appendChild(b);
+    }
+
+    // Toast HUD
+    let toastTimer;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    // Set Track
+    function loadTrack(idx, autoPlay = true) {
+      currentIdx = idx;
+      const m = MIXES[currentIdx];
+      trackNameEl.textContent = m.title;
+      artistNameEl.textContent = `${m.artist} • VIP SOUND`;
+      totTimeEl.textContent = m.formatted;
+      scrubFill.style.width = '0%';
+      curTimeEl.textContent = '0:00';
+
+      // Update active card highlight
+      document.querySelectorAll('.holo-card-hotspot').forEach(c => c.classList.remove('active'));
+      const activeCard = document.getElementById(m.cardId);
+      if (activeCard) activeCard.classList.add('active');
+
+      audio.src = m.src;
+      if (autoPlay) {
+        audio.play().then(() => {
+          stage.classList.add('playing');
+          showToast(`▶ NOW PLAYING: ${m.title}`);
+        }).catch(err => {
+          console.warn('Autoplay prevented:', err);
+          stage.classList.remove('playing');
+        });
+      } else {
+        stage.classList.remove('playing');
+      }
+    }
+
+    // Play/Pause
+    function togglePlay() {
+      if (!audio) return;
+      if (audio.paused) {
+        audio.play().then(() => {
+          stage.classList.add('playing');
+          showToast(`▶ PLAYING: ${MIXES[currentIdx].title}`);
+        }).catch(console.warn);
+      } else {
+        audio.pause();
+        stage.classList.remove('playing');
+        showToast('⏸ PAUSED');
+      }
+    }
+
+    heroPlay.onclick = togglePlay;
+
+    // Scrubber update
+    audio.ontimeupdate = () => {
+      if (!audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      scrubFill.style.width = `${pct}%`;
+      const m = Math.floor(audio.currentTime / 60);
+      const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+      curTimeEl.textContent = `${m}:${s}`;
+    };
+
+    audio.onended = () => {
+      if (!isRepeated) btnNext.click();
+    };
+
+    scrubSeeker.onclick = (e) => {
+      const rect = scrubSeeker.getBoundingClientRect();
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (audio.duration) {
+        audio.currentTime = pos * audio.duration;
+      }
+    };
+
+    // Prev / Next
+    btnPrev.onclick = () => {
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+        showToast('⏮ RESTARTING TRACK');
+      } else {
+        const p = (currentIdx - 1 + MIXES.length) % MIXES.length;
+        loadTrack(p, true);
+      }
+    };
+
+    btnNext.onclick = () => {
+      let n;
+      if (isShuffled) n = Math.floor(Math.random() * MIXES.length);
+      else n = (currentIdx + 1) % MIXES.length;
+      loadTrack(n, true);
+    };
+
+    btnShuffle.onclick = () => {
+      isShuffled = !isShuffled;
+      btnShuffle.classList.toggle('active', isShuffled);
+      showToast(isShuffled ? '🔀 SHUFFLE: ON' : '🔀 SHUFFLE: OFF');
+    };
+
+    btnRepeat.onclick = () => {
+      isRepeated = !isRepeated;
+      btnRepeat.classList.toggle('active', isRepeated);
+      audio.loop = isRepeated;
+      showToast(isRepeated ? '🔁 REPEAT: ON' : '🔁 REPEAT: OFF');
+    };
+
+    btnHeart.onclick = () => {
+      btnHeart.classList.toggle('active');
+      showToast(btnHeart.classList.contains('active') ? '❤️ FAVORITE SAVED' : '🤍 FAVORITE REMOVED');
+    };
+
+    // Volume
+    volSlider.oninput = (e) => {
+      audio.volume = parseFloat(e.target.value);
+      audio.muted = audio.volume === 0;
+    };
+
+    btnMute.onclick = () => {
+      audio.muted = !audio.muted;
+      showToast(audio.muted ? '🔇 MUTED' : '🔊 UNMUTED');
+    };
+
+    // Category click
+    document.querySelectorAll('.holo-cat-hotspot').forEach(cat => {
+      cat.onclick = () => {
+        document.querySelectorAll('.holo-cat-hotspot').forEach(c => c.classList.remove('active'));
+        cat.classList.add('active');
+        showToast(`📁 CATEGORY: ${cat.title}`);
+      };
+    });
+
+    // 3D Card clicks
+    document.getElementById('cardRaiseFrequency').onclick = () => loadTrack(0, true);
+    document.getElementById('card876Style').onclick = () => loadTrack(1, true);
+    document.getElementById('cardCelebrateLife').onclick = () => loadTrack(2, true);
+    document.getElementById('cardWeekendVibes').onclick = () => loadTrack(3, true);
+    document.getElementById('cardStraightFire').onclick = () => loadTrack(4, true);
+    document.getElementById('cardReggaeGoodVibes').onclick = () => loadTrack(5, true);
+    document.getElementById('cardUpInnaDiSky').onclick = () => loadTrack(6, true);
+
+    // Queue Row clicks
+    document.getElementById('qRow1').onclick = () => loadTrack(1, true);
+    document.getElementById('qRow2').onclick = () => loadTrack(2, true);
+    document.getElementById('qRow3').onclick = () => loadTrack(3, true);
+    document.getElementById('qRow4').onclick = () => loadTrack(6, true);
+    document.getElementById('qRow5').onclick = () => {
+      showToast('🔒 MIX PREVIEW: GIRL NEXT DOOR (COMING SOON)');
+    };
+
+    // CLOSE BUTTON & SHUTDOWN ANIMATION
+    closeBtn.onclick = () => {
+      showToast('🔒 INITIATING HOLOGRAPHIC SHUTDOWN SEQUENCE');
+      stage.classList.add('shutdown');
+      setTimeout(() => {
+        window.location.href = '/page1-aug15-morning.html';
+      }, 650);
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeBtn.click();
+      if (e.key === ' ' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+        togglePlay();
+      }
+    });
+
+    // Initial load: Prepare without autoplay
+    loadTrack(0, false);
+  </script>
+</body>
+</html>`
