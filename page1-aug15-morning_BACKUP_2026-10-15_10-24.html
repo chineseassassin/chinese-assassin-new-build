@@ -1,0 +1,3025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chinese Assassin | VIP Universe - August 15 Morning Master</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: #000000;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      perspective: 1400px;
+    }
+
+    /* Master High-Res Background Image with Cinema Dimming & Depth Blur */
+    .ca-master-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000000 url('/A=P=B-3.png') center center / cover no-repeat;
+      pointer-events: none;
+      z-index: 0;
+      transition: filter 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
+      will-change: filter, transform;
+    }
+
+    /* Playback: Keep Stage Background crisp & vibrant (no dimming or blur) */
+    body.in-playback-mode .ca-master-bg,
+    body:has(.card-opened) .ca-master-bg,
+    body:has(.audio-opened) .ca-master-bg {
+      filter: none !important;
+      transform: none !important;
+    }
+
+    /* Cinema Theater Ambient Dimming Veil (Disabled to prevent black overlay over stage) */
+    .ca-theater-backdrop {
+      display: none !important;
+    }
+
+    body.in-playback-mode .ca-theater-backdrop,
+    body:has(.card-opened) .ca-theater-backdrop,
+    body:has(.audio-opened) .ca-theater-backdrop {
+      opacity: 0 !important;
+      display: none !important;
+    }
+
+    /* Atmospheric Deep Space Radial Glow (Disabled to keep stage lighting pure) */
+    .ca-bg-nebula {
+      display: none !important;
+    }
+
+    body.in-playback-mode .ca-bg-nebula,
+    body:has(.card-opened) .ca-bg-nebula {
+      opacity: 0 !important;
+      display: none !important;
+    }
+
+    .ca-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 30, 56, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 30, 56, 0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 2;
+      transition: opacity 0.7s ease;
+    }
+
+    body.in-playback-mode .ca-bg-grid,
+    body:has(.card-opened) .ca-bg-grid {
+      opacity: 0.2;
+    }
+
+    .ca-ambient-halo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 850px;
+      height: 850px;
+      background: radial-gradient(circle, rgba(255, 20, 45, 0.08) 0%, rgba(200, 10, 30, 0.02) 45%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .ca-ember-canvas {
+      display: none !important;
+      position: fixed;
+      inset: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: -1;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    /* Cyberpunk DJ FX HUD Toast */
+    .ca-dj-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: rgba(14, 4, 8, 0.94);
+      border: 1.5px solid rgba(255, 30, 56, 0.6);
+      color: #ffffff;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.9), 0 0 20px rgba(255,30,56,0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100000;
+    }
+    .ca-dj-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── MASTER CARD CONTAINER ── */
+    #cinematic-intro {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .ca-card {
+      position: relative;
+      width: min(83vw, calc(83vh * (1672 / 941)));
+      height: min(83vh, calc(83vw * (941 / 1672)));
+      aspect-ratio: 1672 / 941;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 10;
+      margin: auto;
+      filter: drop-shadow(0 0 35px rgba(255, 20, 45, 0.4)) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95));
+    }
+
+
+
+    /* 1. Base Master Artwork (Shown in idle closed state) */
+    .ca-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+      z-index: 10;
+      filter: drop-shadow(0 0 35px rgba(220, 15, 35, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9));
+      transition: opacity 0.45s ease;
+    }
+
+    .ca-card.card-opened .ca-poster,
+    .ca-card.card-closing .ca-poster {
+      opacity: 1;
+      clip-path: polygon(0 71.5%, 100% 71.5%, 100% 100%, 0 100%);
+      z-index: 28;
+    }
+
+    /* 2 & 3. Sliding Hydraulic Shutter Doors */
+    .ca-sliding-door {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 15;
+      transition: transform 0.85s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.35s ease;
+    }
+
+    .ca-sliding-door img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    .ca-door-left {
+      transform: translateX(0) translateZ(0);
+      clip-path: polygon(0 0, 50.1% 0, 50.1% 71.5%, 0 71.5%);
+    }
+
+    .ca-door-right {
+      transform: translateX(0) translateZ(0);
+      clip-path: polygon(49.9% 0, 100% 0, 100% 71.5%, 49.9% 71.5%);
+    }
+
+    .ca-card.card-opened .ca-sliding-door,
+    .ca-card.card-closing .ca-sliding-door {
+      opacity: 1;
+    }
+
+    .ca-card.card-opened .ca-door-left {
+      transform: translateX(-24%) translateZ(-20px) scale(0.97);
+      filter: brightness(0.85);
+    }
+
+    .ca-card.card-opened .ca-door-right {
+      transform: translateX(24%) translateZ(-20px) scale(0.97);
+      filter: brightness(0.85);
+    }
+
+    /* Vertical Laser Energy Conduit Beams */
+    .ca-energy-beam {
+      position: absolute;
+      top: 15.0%;
+      height: 56.5%;
+      width: 4px;
+      background: linear-gradient(180deg, transparent 0%, #ff1e38 30%, #ffffff 50%, #ff1e38 70%, transparent 100%);
+      box-shadow: 0 0 16px #ff1e38, 0 0 30px rgba(255, 30, 56, 0.8);
+      z-index: 28;
+      opacity: 0;
+      transform: scaleY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+    .ca-beam-left { left: 14%; }
+    .ca-beam-right { right: 14%; }
+    .ca-card.card-opened .ca-energy-beam {
+      opacity: 1;
+      transform: scaleY(1);
+      animation: beamFlicker 0.15s infinite alternate;
+    }
+    @keyframes beamFlicker {
+      0% { opacity: 0.85; filter: brightness(1.0); }
+      100% { opacity: 1.0; filter: brightness(1.3); }
+    }
+
+    /* 4. Center Widescreen Glass Video Chamber (Matching Crystal Glass Player Bezel) */
+    .ca-screen-chamber {
+      position: absolute;
+      top: 15.0%;
+      left: 5.5%;
+      width: 89.0%;
+      height: 56.5%;
+      border-radius: 12px;
+      overflow: hidden;
+      display: block;
+      opacity: 0;
+      z-index: 25;
+      background: #000000;
+      border: 2px solid rgba(255, 40, 65, 0.85);
+      outline: 1.5px solid rgba(255, 255, 255, 0.35);
+      outline-offset: -3px;
+      box-shadow: 0 0 35px rgba(255, 30, 56, 0.6), inset 0 0 25px rgba(255, 255, 255, 0.12), inset 0 0 45px rgba(0, 0, 0, 0.9), 0 25px 60px rgba(0, 0, 0, 0.98);
+      transform: translateY(22%) scale(0.96) translateZ(-20px);
+      transition: opacity 0.35s ease, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+      pointer-events: none;
+    }
+
+    .ca-screen-chamber::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 30%, transparent 60%, rgba(255, 30, 56, 0.15) 100%);
+      pointer-events: none;
+      z-index: 46;
+    }
+
+    /* Mechanical Emitter Lip & Seam Glow */
+    .ca-screen-chamber::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(0deg, rgba(255, 30, 56, 0.5) 0%, transparent 100%);
+      box-shadow: 0 2px 14px rgba(255, 20, 45, 0.7);
+      pointer-events: none;
+      z-index: 47;
+    }
+
+    .ca-card.card-opened .ca-screen-chamber {
+      opacity: 1;
+      transform: translateY(0%) scale(1.0) translateZ(10px);
+      box-shadow: 0 0 45px rgba(255, 30, 56, 0.75), 0 0 80px rgba(255, 30, 56, 0.3), inset 0 0 30px rgba(255, 255, 255, 0.15), 0 25px 60px rgba(0, 0, 0, 0.98);
+      z-index: 30 !important;
+      pointer-events: auto;
+    }
+
+    .ca-screen-chamber video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      background: #000;
+    }
+
+    /* 4B. BG-1-BLUE PRINT Master Crystal Glass Audio Console */
+    .ca-audio-chamber {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.92);
+      width: min(94vw, 1100px);
+      aspect-ratio: 1672 / 941;
+      display: block;
+      opacity: 0;
+      z-index: 100;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+      pointer-events: none;
+    }
+
+    .ca-card.audio-opened .ca-audio-chamber {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.0);
+      pointer-events: auto;
+    }
+
+    /* When Audio Player is Active: Hide Video Screen, Base Deck & Enter Universe Button */
+    .ca-card.audio-opened {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    .ca-card.audio-opened .ca-screen-chamber,
+    .ca-card.audio-opened .ca-sliding-door,
+    .ca-card.audio-opened .ca-static-chassis,
+    .ca-card.audio-opened .ca-poster,
+    .ca-card.audio-opened .ca-energy-beam,
+    .ca-card.audio-opened #heroPlayHotspot,
+    .ca-card.audio-opened #descHotspot,
+    .ca-card.audio-opened #bottomPlayHotspot,
+    .ca-card.audio-opened #btnEnterUniverse,
+    .ca-card.audio-opened .ca-enter-universe-btn,
+    .ca-card.audio-opened #proceedToWebsiteBtn,
+    .ca-card.audio-opened .ca-proceed-website-btn {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+      display: none !important;
+    }
+
+    /* BG-1-BLUE PRINT Frame Image */
+    .ca-audio-frame-img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      pointer-events: none;
+      filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 45px rgba(255, 30, 56, 0.4));
+    }
+
+    /* Left: Album Cover Chamber (Deep-Inset Hardware Monitor Box) */
+    .ca-audio-album-art {
+      position: absolute;
+      left: 11.0%;
+      top: 35.5%;
+      width: 19.5%;
+      height: 40.0%;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0a0000;
+      /* Outer frame: red glow border */
+      border: 2px solid rgba(255, 30, 56, 0.6) !important;
+      /* Hardware inset depth effect */
+      box-shadow: 
+        0 0 0 4px rgba(0, 0, 0, 0.9),
+        0 0 0 5.5px rgba(255, 30, 56, 0.3),
+        inset 0 0 22px rgba(0, 0, 0, 0.98),
+        inset 0 0 10px rgba(255, 30, 56, 0.18),
+        0 8px 30px rgba(0, 0, 0, 0.98),
+        0 0 20px rgba(255, 30, 56, 0.2);
+      z-index: 10;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ca-audio-album-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 5px;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .ca-card.audio-opened.playing .ca-audio-album-art img {
+      transform: scale(1.04);
+      filter: brightness(1.05) contrast(1.05);
+    }
+
+    /* Center: Track Metadata & Controls Chamber */
+    .ca-audio-center-panel {
+      position: absolute;
+      left: 33.0%;
+      top: 44.5%;
+      width: 38.0%;
+      height: 32.0%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 15;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .ca-audio-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .ca-audio-pill-badge {
+      font-size: clamp(0.50rem, 0.7vw, 0.58rem);
+      font-weight: 800;
+      color: #ff3344;
+      background: rgba(255, 30, 56, 0.16);
+      border: none !important;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .ca-audio-quality-badge {
+      font-size: clamp(0.48rem, 0.65vw, 0.55rem);
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.1);
+      border: none !important;
+      padding: 2px 5px;
+      border-radius: 3px;
+      letter-spacing: 0.4px;
+    }
+
+    .ca-audio-title-block {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .ca-audio-title {
+      font-size: clamp(0.82rem, 1.2vw, 1.05rem);
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 0 24px rgba(255, 30, 56, 0.2);
+      line-height: 1.25;
+    }
+    .ca-audio-artist {
+      font-size: clamp(0.54rem, 0.80vw, 0.66rem);
+      color: rgba(255, 200, 200, 0.80);
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    /* Scrubber & Time */
+    .ca-audio-scrub-section {
+      width: 100%;
+      margin-top: 2px;
+    }
+    .ca-audio-time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: clamp(0.55rem, 0.75vw, 0.64rem);
+      font-family: monospace;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2px;
+    }
+    .ca-audio-scrubber-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+    .ca-audio-scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff1e38, #ff4466);
+      box-shadow: 0 0 8px #ff1e38;
+      border-radius: 2px;
+      position: relative;
+    }
+    .ca-audio-scrubber-fill::after {
+      content: '';
+      position: absolute;
+      right: -4px;
+      top: -3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 6px #ff1e38, 0 0 10px rgba(255, 255, 255, 0.9);
+    }
+
+    /* Modern Glass Transport Buttons — GPU-composited to prevent hover flicker */
+    .ca-audio-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(6px, 1.2vw, 12px);
+      margin-top: 2px;
+    }
+    .ca-audio-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none !important;
+      border-radius: 50%;
+      width: clamp(24px, 3.0vw, 30px);
+      height: clamp(24px, 3.0vw, 30px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      cursor: pointer;
+      /* Smooth transition only for color/bg — NO transform scale to avoid flicker */
+      transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+      padding: 0;
+      will-change: background, box-shadow;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .ca-audio-btn:hover {
+      background: rgba(255, 40, 60, 0.32);
+      color: #ff3344;
+      box-shadow: 0 0 10px rgba(255, 30, 56, 0.35);
+    }
+    .ca-audio-btn.active {
+      background: rgba(255, 30, 56, 0.35);
+      color: #ff3344;
+      box-shadow: 0 0 10px rgba(255, 30, 56, 0.5);
+    }
+    .ca-audio-play-hero {
+      width: clamp(34px, 4.0vw, 40px);
+      height: clamp(34px, 4.0vw, 40px);
+      background: linear-gradient(135deg, rgba(255, 30, 56, 0.95), rgba(180, 10, 30, 0.95));
+      border: none !important;
+      box-shadow: 0 0 18px rgba(255, 30, 56, 0.75);
+      color: #ffffff;
+      will-change: background, box-shadow;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .ca-audio-play-hero:hover {
+      background: linear-gradient(135deg, #ff3344, #d0001f);
+      box-shadow: 0 0 28px rgba(255, 30, 56, 1.0), 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    /* DSP Modes Row — GPU-composited to prevent hover flicker */
+    .ca-audio-dsp-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 1px;
+    }
+    .ca-audio-dsp-btn {
+      font-size: clamp(0.48rem, 0.65vw, 0.56rem);
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none !important;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      /* Transition only bg/color/shadow — no transform to prevent flicker */
+      transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+      will-change: background, box-shadow;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .ca-audio-dsp-btn:hover, .ca-audio-dsp-btn.active {
+      background: rgba(255, 30, 56, 0.32);
+      color: #ff5566;
+      box-shadow: 0 0 8px rgba(255, 30, 56, 0.45);
+    }
+
+    /* Right: Dynamic Spectrum Visualizer & Volume Chamber */
+    .ca-audio-right-panel {
+      position: absolute;
+      left: 71.5%;
+      top: 36.5%;
+      width: 16.5%;
+      height: 40.0%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      z-index: 15;
+    }
+
+    .ca-audio-spectrum-title {
+      font-size: clamp(0.48rem, 0.65vw, 0.56rem);
+      color: #ff4455;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      justify-content: space-between;
+    }
+    .ca-audio-spectrum-title span {
+      color: rgba(255, 255, 255, 0.6);
+      font-family: monospace;
+    }
+
+    /* 20-band Multi-color Dynamic Equalizer (No border) */
+    .ca-audio-waveform-bars {
+      width: 100%;
+      height: 32px;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      padding: 3px 5px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      border: none !important;
+    }
+    .ca-audio-waveform-bars .eq-bar {
+      flex: 1;
+      height: 15%;
+      background: linear-gradient(180deg, #ff1e38 0%, #ff6644 60%, #ffaa00 100%);
+      border-radius: 1px;
+      transition: height 0.08s ease;
+    }
+    .ca-card.audio-opened.playing .ca-audio-waveform-bars .eq-bar:nth-child(3n+1) {
+      animation: eqPulse1 0.45s infinite alternate ease-in-out;
+    }
+    .ca-card.audio-opened.playing .ca-audio-waveform-bars .eq-bar:nth-child(3n+2) {
+      animation: eqPulse2 0.60s infinite alternate ease-in-out;
+    }
+    .ca-card.audio-opened.playing .ca-audio-waveform-bars .eq-bar:nth-child(3n) {
+      animation: eqPulse3 0.52s infinite alternate ease-in-out;
+    }
+    @keyframes eqPulse1 {
+      0% { height: 10%; }
+      50% { height: 95%; }
+      100% { height: 35%; }
+    }
+    @keyframes eqPulse2 {
+      0% { height: 75%; }
+      50% { height: 20%; }
+      100% { height: 100%; }
+    }
+    @keyframes eqPulse3 {
+      0% { height: 40%; }
+      50% { height: 85%; }
+      100% { height: 15%; }
+    }
+
+    /* Volume Section — sits at bottom of right panel, beneath spectrum */
+    .ca-audio-vol-wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 4px 7px;
+      border-radius: 4px;
+      border: none !important;
+    }
+    .ca-audio-vol-btn {
+      background: none;
+      border: none !important;
+      color: #ff3344;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0;
+    }
+    .ca-audio-vol-slider {
+      flex: 1;
+      height: 3px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 2px;
+      cursor: pointer;
+      accent-color: #ff1e38;
+    }
+    .ca-audio-vol-text {
+      font-size: 0.55rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    /* Top Right Close Button */
+    .ca-audio-close-btn {
+      position: absolute;
+      top: 25.5%;
+      right: 7.5%;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.75);
+      border: none !important;
+      color: #ff3344;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 10px rgba(255, 30, 56, 0.4);
+    }
+    .ca-audio-close-btn:hover {
+      background: #ff1e38;
+      color: #ffffff;
+      transform: scale(1.15);
+      box-shadow: 0 0 18px #ff1e38;
+    }
+
+    /* Laser Scanline Effect */
+    .ca-laser-scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #ff1e38 50%, #ffffff 80%, transparent 100%);
+      box-shadow: 0 0 15px #ff1e38;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+    .ca-laser-scanline.ignite {
+      animation: laserSweep 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes laserSweep {
+      0% { top: 0; opacity: 1; }
+      90% { top: 100%; opacity: 0.8; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* 5. Permanent Top Crown & Bottom Deck Chassis */
+    .ca-static-chassis {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 30;
+      transition: opacity 0.35s ease;
+    }
+    .ca-static-chassis img {
+      display: none !important;
+    }
+    .ca-card.card-opened .ca-static-chassis {
+      opacity: 1;
+    }
+
+    /* Rotating Emblem & Scratch Platter */
+    .ca-rotating-emblem {
+      position: absolute;
+      left: 28.5%;
+      top: 75.2%;
+      width: 5.0%;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 35;
+      transition: transform 0.1s linear;
+    }
+    .ca-scratch-platter {
+      position: absolute;
+      left: 28.5%;
+      top: 75.2%;
+      width: 5.0%;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      cursor: grab;
+      z-index: 40;
+    }
+    .ca-scratch-platter:active {
+      cursor: grabbing;
+    }
+
+    /* Live Dynamic Scrubber & Timestamp on Bottom Deck */
+    .ca-live-scrubber-track {
+      position: absolute;
+      left: 33.6%;
+      top: 83.2%;
+      width: 7.2%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 35;
+    }
+
+    .ca-live-scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff1a30, #ff5566, #ffffff);
+      box-shadow: 0 0 6px #ff2233;
+      transition: width 0.15s linear;
+    }
+
+    .ca-live-timestamp {
+      position: absolute;
+      left: 33.6%;
+      top: 81.2%;
+      font-size: 8px;
+      font-family: monospace;
+      font-weight: 700;
+      color: #ff4d60;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+      z-index: 35;
+      text-shadow: 0 0 4px rgba(255, 30, 50, 0.8);
+    }
+
+    /* ── IN-COCKPIT TOP HEADER BAR (Always Visible On Open) ── */
+    .ca-video-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 14px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.65) 65%, transparent 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 52;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .ca-top-bar-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 30, 56, 0.8);
+    }
+
+    .ca-title-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff1e38;
+      box-shadow: 0 0 8px #ff1e38;
+      animation: pulseDot 1.5s infinite alternate;
+    }
+
+    .ca-top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── IN-COCKPIT BOTTOM VIDEO CONTROLS BAR (Always Visible On Open) ── */
+    .ca-video-controls-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 14px;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.98) 100%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 50;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .ca-vid-ctrl-btn {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .ca-vid-ctrl-btn:hover {
+      background: #ff1e38;
+      border-color: #ff1e38;
+    }
+
+    .ca-vid-scrubber-track {
+      position: relative;
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .ca-vid-scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: #ff1e38;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #ff1e38;
+    }
+
+    .ca-vid-time-display {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Outfit', sans-serif;
+      white-space: nowrap;
+    }
+
+    .ca-vid-tools-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ca-video-subtitles {
+      position: absolute;
+      bottom: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      color: #ffffff !important;
+      padding: 0;
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-align: center;
+      max-width: 90%;
+      pointer-events: none;
+      z-index: 60 !important;
+      opacity: 0;
+      display: none;
+      transition: opacity 0.15s ease;
+      text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0 3px 6px rgba(0, 0, 0, 0.95), 0 0 16px rgba(0, 0, 0, 0.9);
+    }
+    .ca-video-subtitles.active {
+      opacity: 1 !important;
+      display: block !important;
+    }
+
+    .video-fx-enhance {
+      filter: contrast(1.18) saturate(1.22) brightness(1.06) drop-shadow(0 0 15px rgba(255, 30, 56, 0.35));
+    }
+
+    .ca-vid-pill-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+    .ca-vid-pill-btn:hover,
+    .ca-vid-pill-btn.active {
+      background: #ff1e38;
+      border-color: #ff1e38;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      background: #00ff66;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #00ff66;
+      display: inline-block;
+    }
+
+    .ca-vid-volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ca-vid-vol-slider {
+      width: 60px;
+      height: 4px;
+      accent-color: #ff1e38;
+      cursor: pointer;
+    }
+
+    /* Video Filter Matrices */
+    .video-fx-crimson { filter: saturate(1.4) contrast(1.15) hue-rotate(330deg); }
+    .video-fx-matrix  { filter: saturate(1.3) contrast(1.2) hue-rotate(90deg); }
+    .video-fx-noir    { filter: grayscale(1) contrast(1.4); }
+    .video-fx-cinema  { filter: saturate(1.2) contrast(1.1); }
+
+    /* ── INVISIBLE CSS HOTSPOTS TECHNIQUE (100% Pure Invisible Hit-Targets) ── */
+    .ca-invisible-hotspot {
+      position: absolute;
+      display: block;
+      cursor: pointer !important;
+      z-index: 99999 !important;
+      pointer-events: auto !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      transition: none !important;
+    }
+
+    .ca-invisible-hotspot:hover,
+    .ca-invisible-hotspot:focus,
+    .ca-invisible-hotspot:active,
+    #heroPlayHotspot:hover,
+    #heroPlayHotspot:focus,
+    #heroPlayHotspot:active,
+    #descHotspot:hover,
+    #descHotspot:focus,
+    #descHotspot:active,
+    #bottomPlayHotspot:hover,
+    #bottomPlayHotspot:focus,
+    #bottomPlayHotspot:active,
+    #proceedToWebsiteBtn:hover,
+    #proceedToWebsiteBtn:focus,
+    #proceedToWebsiteBtn:active {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      filter: none !important;
+      transform: none !important;
+    }
+
+    #heroPlayHotspot {
+      left: 9.1%;
+      top: 61.2%;
+      width: 12.4%;
+      height: 8.5%;
+      border-radius: 12px;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      z-index: 99999 !important;
+    }
+
+    #descHotspot {
+      left: 22.8%;
+      top: 60.5%;
+      width: 11.6%;
+      height: 7.2%;
+      border-radius: 8px;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      z-index: 99999 !important;
+    }
+
+    #bottomPlayHotspot {
+      left: 40.5%;
+      top: 65.5%;
+      width: 19.0%;
+      height: 19.0%;
+      border-radius: 50%;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      z-index: 99999 !important;
+    }
+
+    /* ── VIP ENTER CA UNIVERSE TAB ── */
+    #proceedToWebsiteBtn {
+      position: absolute;
+      left: 72.8%;
+      top: 44.8%;
+      width: 12.2%;
+      height: 8.2%;
+      border-radius: 8px;
+      display: block;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      cursor: pointer !important;
+      text-decoration: none;
+      z-index: 99999 !important;
+      pointer-events: auto !important;
+    }
+    #proceedToWebsiteBtn span {
+      display: none !important;
+    }
+    .ca-card.card-opened #proceedToWebsiteBtn,
+    .ca-card.card-opened #heroPlayHotspot,
+    .ca-card.card-opened #descHotspot,
+    .ca-card.card-opened #bottomPlayHotspot,
+    .ca-card.desc-open #proceedToWebsiteBtn {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: scale(0.9) translateX(15px);
+    }
+
+    /* ── HOLOGRAPHIC DESCRIPTION DRAWER MODAL ── */
+    .ca-desc-modal {
+      position: absolute;
+      top: 18%;
+      left: 6%;
+      width: 460px;
+      max-width: 88%;
+      background: rgba(12, 4, 8, 0.95);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 40, 60, 0.45);
+      border-radius: 14px;
+      padding: 24px 26px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.9), 0 0 35px rgba(255,30,56,0.35);
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-20px) scale(0.96);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .ca-desc-modal.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+    .ca-desc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .ca-desc-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ff1e38;
+      background: rgba(255, 30, 56, 0.15);
+      border: 1px solid rgba(255, 30, 56, 0.4);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .ca-desc-close-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 1.6rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+      transition: color 0.2s;
+    }
+    .ca-desc-close-btn:hover {
+      color: #ff3355;
+    }
+    .ca-desc-title {
+      font-family: 'Cinzel Decorative', 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .ca-desc-synopsis {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 14px;
+    }
+    .ca-desc-details {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.78);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 12px;
+    }
+    .ca-desc-details strong {
+      color: #ff2a4b;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       TEMPLE DOORS / ENTER THE PORTAL OVERLAY
+       ══════════════════════════════════════════════════════════ */
+    #p1-portal-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9000;
+      overflow: hidden;
+      background: #000000 url('/THEDOORPROPER.jpg') no-repeat center center;
+      background-size: cover;
+      display: none;
+      opacity: 0;
+      pointer-events: auto;
+    }
+    #p1-portal-rain-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 42;
+    }
+    .p1-portal-door-ui {
+      position: absolute;
+      inset: 0;
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 52vh;
+      pointer-events: auto;
+    }
+    .p1-door-enter-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 270px;
+      padding: 18px 48px;
+      background: rgba(14, 3, 7, 0.88);
+      border: 2px solid rgba(255, 32, 58, 0.9);
+      border-radius: 40px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.12rem;
+      font-weight: 900;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 0 40px rgba(255, 32, 58, 0.6), inset 0 0 20px rgba(255, 32, 58, 0.3);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      z-index: 50;
+      text-shadow: 0 0 12px rgba(255, 40, 60, 0.8);
+      animation: p1DoorBtnGlow 2.5s infinite alternate ease-in-out;
+    }
+    @keyframes p1DoorBtnGlow {
+      0%   { box-shadow: 0 0 30px rgba(255,32,58,0.5), inset 0 0 15px rgba(255,32,58,0.25); border-color: rgba(255,32,58,0.8); }
+      100% { box-shadow: 0 0 65px rgba(255,32,58,0.95), 0 0 90px rgba(255,32,58,0.4), inset 0 0 25px rgba(255,32,58,0.5); border-color: #ffffff; }
+    }
+    .p1-door-enter-btn:hover {
+      background: #ff1e38;
+      border-color: #ffffff;
+      box-shadow: 0 0 75px rgba(255,32,58,1), 0 0 120px rgba(255,32,58,0.6);
+    }
+    .p1-door-back-btn {
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(10, 4, 8, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #cccccc;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      letter-spacing: 1.5px;
+      font-family: 'Outfit', sans-serif;
+      backdrop-filter: blur(10px);
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+      z-index: 50;
+    }
+    .p1-door-back-btn:hover {
+      background: rgba(255, 30, 56, 0.2);
+      border-color: #ff1e38;
+      color: #ffffff;
+    }
+    /* FaceID Biometric Modal */
+    #p1-portal-faceid-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(94vw, 680px);
+      aspect-ratio: 612 / 408;
+      background: url('/access_granted.png') no-repeat center center / contain !important;
+      filter: drop-shadow(0 25px 75px rgba(0,0,0,0.98)) drop-shadow(0 0 50px rgba(0, 229, 255, 0.65)) !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      display: none;
+      opacity: 0;
+      z-index: 9999;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .p1-faceid-left-portal {
+      position: absolute;
+      left: 7.2%;
+      top: 23.5%;
+      width: 24.8%;
+      height: 52.8%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .p1-faceid-img-frame {
+      position: relative;
+      width: 82%;
+      height: 82%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(0,229,255,0.85);
+      box-shadow: 0 0 25px rgba(0,229,255,0.6);
+      background: #000;
+    }
+    .p1-faceid-img { width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity 0.15s ease; }
+    .p1-faceid-laser {
+      position:absolute; left:0; right:0; height:3px;
+      background:#00e5ff;
+      box-shadow: 0 0 15px #00e5ff, 0 0 30px #ffffff;
+      animation: p1FaceLaser 1.4s ease-in-out infinite alternate; z-index:5;
+    }
+    @keyframes p1FaceLaser {
+      0%   { top:3%;  opacity:0.4; }
+      50%  { opacity:1; }
+      100% { top:94%; opacity:0.4; }
+    }
+    .p1-faceid-grid {
+      position:absolute; inset:0;
+      background: linear-gradient(rgba(0,229,255,0.12) 1px,transparent 1px), linear-gradient(90deg,rgba(0,229,255,0.12) 1px,transparent 1px);
+      background-size:16px 16px;
+      pointer-events:none; z-index:4;
+    }
+    .p1-faceid-badge {
+      position:absolute; bottom:6px; right:6px;
+      background:rgba(8,3,14,0.88); border:1px solid #00e5ff;
+      color:#00e5ff; font-size:0.55rem; font-weight:800;
+      padding:2px 6px; border-radius:4px; letter-spacing:1px; z-index:6;
+      font-family:'Orbitron',sans-serif;
+      box-shadow: 0 0 10px rgba(0,229,255,0.4);
+    }
+    .p1-faceid-right-hud {
+      position: absolute;
+      left: 35.0%;
+      right: 7.5%;
+      top: 17.5%;
+      bottom: 17.5%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      gap: 6px;
+      padding-left: 6px;
+      z-index: 10;
+    }
+    .p1-faceid-header { display:flex; align-items:center; gap:6px; }
+    .p1-faceid-title  { font-size:clamp(0.55rem, 0.85vw, 0.68rem); font-weight:900; color:#00e5ff; letter-spacing:1.8px; text-transform:uppercase; font-family:'Orbitron',sans-serif; text-shadow:0 0 10px rgba(0,229,255,0.6); }
+    .p1-faceid-granted-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.15rem, 2.1vw, 1.6rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 10%, #00e5ff 60%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      margin: 0;
+      filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.7));
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .p1-faceid-status { font-size:clamp(0.68rem, 1.0vw, 0.82rem); font-weight:700; color:rgba(255,255,255,0.88); letter-spacing:0.8px; text-transform:uppercase; font-family:'Orbitron',sans-serif; margin:0; }
+    .p1-faceid-progress-track { width:100%; height:7px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; border:1px solid rgba(0,229,255,0.4); margin: 2px 0; }
+    .p1-faceid-progress-fill  { width:0%; height:100%; background:linear-gradient(90deg,#ff203a,#00e5ff,#00ff88); box-shadow:0 0 15px #00e5ff; border-radius:6px; transition:width 0.12s linear; }
+    .p1-faceid-details-row { display:flex; justify-content:space-between; width:100%; font-size:0.65rem; color:rgba(255,255,255,0.7); letter-spacing:1px; font-family:'Orbitron',monospace; }
+    .p1-faceid-granted { color:#00ff88 !important; font-weight:900 !important; text-shadow:0 0 15px #00ff88; }
+  </style>
+</head>
+
+<body>
+  <!-- 0. FLOATING CODE-1 SECURITY CHECKPOINT BADGE (TOP LEFT) -->
+  <a href="/code1.html" style="position:fixed; top:20px; left:26px; z-index:10000; display:inline-flex; align-items:center; gap:8px; padding:8px 18px; background:rgba(14,6,18,0.85); border:1.5px solid #ff203a; border-radius:30px; color:#ffffff; font-family:'Outfit',sans-serif; font-size:0.75rem; font-weight:800; letter-spacing:1px; text-decoration:none; backdrop-filter:blur(16px); box-shadow:0 0 20px rgba(255,32,58,0.4); transition:all 0.25s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 30px rgba(255,32,58,0.8)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 0 20px rgba(255,32,58,0.4)';">
+    <span style="color:#ff203a; font-size:0.9rem;">🔐</span>
+    <span>CODE-1 GATEWAY</span>
+  </a>
+
+  <!-- 0. Master High-Resolution Background & Cinema Theater Dimming Backdrop -->
+  <div class="ca-master-bg" id="caMasterBg"></div>
+  <div class="ca-theater-backdrop" id="caTheaterBackdrop"></div>
+
+  <!-- 1. Atmospheric Deep Nebula & Grid -->
+  <div class="ca-bg-nebula"></div>
+  <div class="ca-bg-grid"></div>
+  <div class="ca-ambient-halo"></div>
+
+  <!-- 2. Floating Embers Disabled -->
+
+  <!-- 3. Cyberpunk DJ FX HUD Toast -->
+  <div id="caDjToast" class="ca-dj-toast"></div>
+
+  <!-- ── PAGE 1 STAGE CONTAINER ── -->
+  <div id="cinematic-intro">
+    <div class="ca-card" id="caStage">
+
+
+      <!-- 1. Base Master Artwork IP-2 (Glass Player Isolated Cutout) -->
+      <img id="caPoster" class="ca-poster" src="/CHINESE ASSASSIN NEW BUILD/IP-2.png" alt="Chinese Assassin Glass Player" />
+
+      <!-- 2. Left Hydraulic Shutter Door (Slides Left on PLAY) -->
+      <div id="caDoorLeft" class="ca-sliding-door ca-door-left">
+        <img src="/CHINESE ASSASSIN NEW BUILD/IP-2.png" alt="" />
+      </div>
+
+      <!-- 3. Right Hydraulic Shutter Door (Slides Right on PLAY) -->
+      <div id="caDoorRight" class="ca-sliding-door ca-door-right">
+        <img src="/CHINESE ASSASSIN NEW BUILD/IP-2.png" alt="" />
+      </div>
+
+      <!-- Vertical Energy Conduit Beams -->
+      <div class="ca-energy-beam ca-beam-left"></div>
+      <div class="ca-energy-beam ca-beam-right"></div>
+
+      <!-- 4. Center Widescreen Glass Video Chamber (Glides forward with Aura Funny Video) -->
+      <div id="caScreenChamber" class="ca-screen-chamber">
+        <video id="caVideo" src="/AURA-FUNNY.mp4" onerror="this.onerror=null; this.src='/AURA-FUNNY VIDEO..mp4';" preload="metadata" playsinline></video>
+        <div id="caLaserScanline" class="ca-laser-scanline"></div>
+
+        <!-- In-Cockpit Top Cockpit Header Bar (Always Visible On Open) -->
+        <div class="ca-video-top-bar" id="caVideoTopBar">
+          <div class="ca-top-bar-title">
+            <span class="ca-title-dot"></span>
+            <span class="ca-title-text">⛩️ AURA FUNNY • VIP MASTER</span>
+          </div>
+          <div class="ca-top-bar-actions">
+            <!-- Subtitles & Multi-Language Selector -->
+            <button id="caTopCaptionBtn" class="ca-vid-pill-btn active" title="Subtitles & Multi-Language (Toggle / Change Language)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 9H9.5v-.5h-2v3h2V15H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V15H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>
+              <span id="caTopCaptionLabel">SUBTITLES: EN</span>
+            </button>
+
+            <!-- Enhance Video Mode -->
+            <button id="caTopEnhanceBtn" class="ca-vid-pill-btn active" title="AI Cinema HDR Enhancement">
+              <span>✨ ENHANCE</span>
+            </button>
+
+            <!-- Picture-in-Picture -->
+            <button id="caTopPipBtn" class="ca-vid-ctrl-btn" aria-label="Picture-in-Picture" title="Picture in Picture (P)">
+              <svg viewBox="0 0 24 24" width="15" height="15"><path d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z" fill="#ffffff" /></svg>
+            </button>
+
+            <!-- Close Video (Exit back to Glass Player) -->
+            <button id="caTopCloseBtn" class="ca-vid-ctrl-btn close-btn" aria-label="Close Video" title="Close Video (Esc)">
+              <svg viewBox="0 0 24 24" width="15" height="15"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#ff4455" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Cinematic Subtitles Overlay -->
+        <div id="caVideoSubtitles" class="ca-video-subtitles"></div>
+
+        <!-- In-Cockpit Video Controls Bar -->
+        <div class="ca-video-controls-bar" id="caVideoControls">
+          <!-- Left: Play/Pause, Rewind 10s, Forward 10s -->
+          <button id="caVidPlayPauseBtn" class="ca-vid-ctrl-btn" aria-label="Play / Pause" title="Play / Pause (Space)">
+            <svg id="caVidPlayIcon" viewBox="0 0 24 24" width="16" height="16"><polygon points="6,4 20,12 6,20" fill="#ffffff" /></svg>
+            <svg id="caVidPauseIcon" viewBox="0 0 24 24" width="16" height="16" style="display:none;"><rect x="6" y="4" width="4" height="16" fill="#ffffff" /><rect x="14" y="4" width="4" height="16" fill="#ffffff" /></svg>
+          </button>
+          <button id="caVidRewindBtn" class="ca-vid-ctrl-btn" aria-label="Rewind 10s" title="Rewind 10s">
+            <svg viewBox="0 0 24 24" width="15" height="15"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="#ffffff" /></svg>
+          </button>
+          <button id="caVidForwardBtn" class="ca-vid-ctrl-btn" aria-label="Forward 10s" title="Forward 10s">
+            <svg viewBox="0 0 24 24" width="15" height="15"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" fill="#ffffff" /></svg>
+          </button>
+
+          <!-- Center: Interactive Scrubber -->
+          <div id="caVidScrubberTrack" class="ca-vid-scrubber-track" title="Seek video position">
+            <div id="caVidScrubberFill" class="ca-vid-scrubber-fill"></div>
+          </div>
+          <span id="caVidTimeDisplay" class="ca-vid-time-display">0:00 / 0:00</span>
+
+          <!-- Right: Quality, Speed, Matrix FX, Captions/Language, Volume, PiP, Fullscreen, Close -->
+          <div class="ca-vid-tools-group">
+            <button id="caVidQualityBtn" class="ca-vid-pill-btn active" title="Select Resolution">
+              <span class="pill-dot"></span> 4K HDR
+            </button>
+            <button id="caVidSpeedBtn" class="ca-vid-pill-btn" title="Playback Speed">1.0x</button>
+            <button id="caVidFxBtn" class="ca-vid-pill-btn" title="Cyber Visual Matrix FX">⚡ FX</button>
+
+            <!-- Subtitles & Multi-Language Selector -->
+            <button id="caVidCaptionBtn" class="ca-vid-pill-btn active" aria-label="Subtitles & Multi-Language" title="Subtitles & Multi-Language (Toggle / Change Language)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 9H9.5v-.5h-2v3h2V15H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V15H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>
+              <span id="caVidCaptionLabel">SUBTITLES: EN</span>
+            </button>
+
+            <!-- Volume Slider -->
+            <div class="ca-vid-volume-wrap">
+              <button id="caVidMuteBtn" class="ca-vid-ctrl-btn" aria-label="Mute / Unmute" title="Volume">
+                <svg id="caVidVolIcon" viewBox="0 0 24 24" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="#ffffff" /></svg>
+                <svg id="caVidMuteIcon" viewBox="0 0 24 24" width="16" height="16" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" fill="#ff4455" /></svg>
+              </button>
+              <input type="range" id="caVidVolumeSlider" min="0" max="1" step="0.05" value="1" class="ca-vid-vol-slider" title="Volume Slider" />
+            </div>
+
+            <!-- Picture-in-Picture -->
+            <button id="caVidPipBtn" class="ca-vid-ctrl-btn" aria-label="Picture-in-Picture" title="Picture in Picture">
+              <svg viewBox="0 0 24 24" width="15" height="15"><path d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z" fill="#ffffff" /></svg>
+            </button>
+
+            <!-- Fullscreen -->
+            <button id="caVidFullscreenBtn" class="ca-vid-ctrl-btn" aria-label="Fullscreen" title="Cinema Fullscreen (F)">
+              <svg viewBox="0 0 24 24" width="15" height="15"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="#ffffff" /></svg>
+            </button>
+
+            <!-- Close Video (Restores back to Floating Glass Player) -->
+            <button id="caVidCloseBtn" class="ca-vid-ctrl-btn close-btn" aria-label="Close" title="Exit Video (Esc)">
+              <svg viewBox="0 0 24 24" width="15" height="15"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#ff4455" /></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4B. BG-1-BLUE PRINT Master Crystal Glass Audio Console -->
+      <div id="caAudioChamber" class="ca-audio-chamber">
+        <!-- Base Glass Audio Player Frame -->
+        <img class="ca-audio-frame-img" src="/bg-1-blueprint.png" onerror="this.onerror=null; this.src='/BG-1-BLUE PRINT.png';" alt="BG-1 Master Audio Player" />
+
+        <!-- 1. Left Chamber: Album Art Frame (Recessed 3D Bevel Box) -->
+        <div class="ca-audio-album-art">
+          <img src="/raise-the-frequency.jpg" onerror="this.onerror=null; this.src='/RAISE THE FREQUENCY FRONT.jpg';" alt="Raise The Frequency" />
+        </div>
+
+        <!-- 2. Center Chamber: Track Metadata, Scrubber, Transport & DSP -->
+        <div class="ca-audio-center-panel">
+          <!-- Title Block -->
+          <div class="ca-audio-title-block">
+            <div class="ca-audio-title">Raise The Frequency (Wulup)</div>
+            <div class="ca-audio-artist">CHINESE ASSASSIN DJ • VIP SOUND SYSTEM</div>
+          </div>
+
+          <!-- Interactive Scrubber Section -->
+          <div class="ca-audio-scrub-section">
+            <div class="ca-audio-time-row">
+              <span id="caAudioCurrentTime">0:00</span>
+              <span id="caAudioTotalTime">3:34</span>
+            </div>
+            <div id="caAudioScrubberTrack" class="ca-audio-scrubber-track" title="Seek Audio Track">
+              <div id="caAudioScrubberFill" class="ca-audio-scrubber-fill"></div>
+            </div>
+          </div>
+
+          <!-- Glass Transport Controls Row -->
+          <div class="ca-audio-controls-row">
+            <!-- Shuffle -->
+            <button type="button" id="audioShuffleBtn" class="ca-audio-btn" title="Shuffle (Toggle)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+            </button>
+            <!-- Previous Track / Rewind -->
+            <button type="button" id="audioPrevBtn" class="ca-audio-btn" title="Restart Track (⏮)">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <!-- Hero Play / Pause Button -->
+            <button type="button" id="audioPlayPauseBtn" class="ca-audio-btn ca-audio-play-hero" title="Play / Pause Audio">
+              <svg id="audioHeroPlayIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+              <svg id="audioHeroPauseIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+            <!-- Next Track / Forward 15s -->
+            <button type="button" id="audioNextBtn" class="ca-audio-btn" title="Skip Forward 15s (⏭)">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+            <!-- Repeat Loop -->
+            <button type="button" id="audioRepeatBtn" class="ca-audio-btn" title="Repeat Track (🔁)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+            </button>
+          </div>
+
+          <!-- DSP Modes Row -->
+          <div class="ca-audio-dsp-row">
+            <button type="button" id="audioBassBoostBtn" class="ca-audio-dsp-btn" title="Toggle Low-End Bass Resonance">🔥 BASS BOOST</button>
+            <button type="button" id="audioSurroundBtn" class="ca-audio-dsp-btn" title="Toggle 3D Spatial Audio">✨ 3D SPATIAL</button>
+            <button type="button" id="audioVocalBtn" class="ca-audio-dsp-btn" title="Vocal Clarity Filter">🎙️ VOCAL CLEAR</button>
+          </div>
+        </div>
+
+        <!-- 3. Right Chamber: Spectrum Visualizer, Specs & Volume Fader -->
+        <div class="ca-audio-right-panel">
+          <!-- Audio Specs Badges (Positioned beside Spectrum) -->
+          <div class="ca-audio-badge-row">
+            <span class="ca-audio-pill-badge">⚡ VIP MATRIX</span>
+            <span class="ca-audio-quality-badge">24-BIT 96kHz</span>
+            <span class="ca-audio-quality-badge">DOLBY ATMOS</span>
+          </div>
+
+          <div class="ca-audio-spectrum-title">
+            <span>SPECTRUM FX</span>
+            <span id="audioVuMeter">PEAK: -0.2 dB</span>
+          </div>
+
+          <!-- 20-band Multi-Color Equalizer -->
+          <div class="ca-audio-waveform-bars" id="caAudioWaveform">
+            <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+            <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+            <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+            <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+            <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+          </div>
+
+          <!-- Volume Fader Row -->
+          <div class="ca-audio-vol-wrap">
+            <button type="button" id="audioVolMuteBtn" class="ca-audio-vol-btn" title="Mute / Unmute">
+              <svg id="audioVolIcon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+              <svg id="audioMuteIcon" viewBox="0 0 24 24" width="14" height="14" fill="#ff4455" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <input type="range" id="caAudioVolSlider" min="0" max="1" step="0.05" value="1" class="ca-audio-vol-slider" title="Volume Slider" />
+            <span id="audioVolText" class="ca-audio-vol-text">100%</span>
+          </div>
+        </div>
+
+        <!-- Top Right Close Button -->
+        <button id="caAudioCloseBtn" class="ca-audio-close-btn" title="Close Audio Player (Esc)">✕</button>
+
+        <!-- Dedicated Audio Stream -->
+        <audio id="caAudioElem" src="/wulup.mp3" preload="metadata"></audio>
+      </div>
+
+      <!-- 5. Permanent Top Crown Chassis -->
+      <div id="caTopCrown" class="ca-static-chassis ca-top-chassis">
+        <img src="/ca-full-top-crown.png?v=1" onerror="this.onerror=null; this.src='/ca-top-crown.png';" alt="" />
+      </div>
+
+      <!-- 6. Permanent Bottom Console Deck Chassis -->
+      <div id="caBottomDeck" class="ca-static-chassis ca-bottom-chassis">
+        <img src="/ca-full-bottom-deck.png?v=1" onerror="this.onerror=null; this.src='/ca-bottom-deck.png';" alt="" />
+        <!-- Rotating Emblem & Scratch Platter -->
+        <div id="caRotatingEmblem" class="ca-rotating-emblem"></div>
+        <div id="caScratchPlatter" class="ca-scratch-platter" title="Click & Drag to Scratch Vinyl"></div>
+        <!-- Live Dynamic Scrubber Bar & Elapsed Time Sync -->
+        <div id="caLiveScrubberTrack" class="ca-live-scrubber-track">
+          <div id="caLiveScrubberFill" class="ca-live-scrubber-fill"></div>
+        </div>
+        <div id="caLiveTimestamp" class="ca-live-timestamp">0:00 / 0:00</div>
+      </div>
+
+      <!-- ── 7. INVISIBLE CSS HOTSPOTS TECHNIQUE (Mapped 1:1 over Artwork Buttons) ── -->
+      <button type="button" id="heroPlayHotspot" class="ca-invisible-hotspot" title="Play AURA Funny Video" aria-label="Play AURA Funny Video"></button>
+      <button type="button" id="descHotspot" class="ca-invisible-hotspot" title="View Description" aria-label="View description"></button>
+      <button type="button" id="bottomPlayHotspot" class="ca-invisible-hotspot" title="Play / Pause Deck" aria-label="Deck Play"></button>
+
+      <!-- ── 8. VIP ENTER CA UNIVERSE SIDE TAB ── -->
+      <a id="proceedToWebsiteBtn" class="ca-proceed-website-btn" href="#journey" title="Enter CA Universe (Enter The Portal)" aria-label="Enter CA Universe">
+        <span>⚡ ENTER <span style="color: #ff2a4b; font-weight: 900;">CA UNIVERSE</span> →</span>
+      </a>
+
+      <!-- ── 9. HOLOGRAPHIC DESCRIPTION DRAWER MODAL ── -->
+      <div id="caDescModal" class="ca-desc-modal">
+        <div class="ca-desc-header">
+          <span class="ca-desc-badge">⛩ VIP ORIGINALS • 99% MATCH</span>
+          <button id="caDescCloseBtn" class="ca-desc-close-btn" title="Close">&times;</button>
+        </div>
+        <h2 class="ca-desc-title">CHINESE ASSASSIN</h2>
+        <p class="ca-desc-synopsis">
+          A legendary martial arts master and underground turntable assassin unites ancient Kung Fu wisdom with high-energy electronic soundscapes. When the VIP portal opens, only the worthy unlock the golden master tapes and claim their destiny.
+        </p>
+        <div class="ca-desc-details">
+          <div><strong>Rating:</strong> 18+ &nbsp;•&nbsp; <strong>Year:</strong> 2026 &nbsp;•&nbsp; <strong>Format:</strong> 4K Ultra HD Spatial Audio</div>
+          <div><strong>Genres:</strong> Martial Arts • Cinematic Bass • DJ Turntablism • Blockbuster Soundscapes</div>
+          <div><strong>Cast:</strong> Master DJ, Clan of Assassins, VIP Universe Sound Lab</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ENTER THE PORTAL OVERLAY (self-contained, triggered from ENTER CA UNIVERSE btn) ══ -->
+  <div id="p1-portal-overlay">
+    <canvas id="p1-portal-rain-canvas"></canvas>
+    <div class="p1-portal-door-ui">
+      <button id="p1-door-enter-btn" class="p1-door-enter-btn">ENTER THE PORTAL</button>
+      <button id="p1-door-back-btn"  class="p1-door-back-btn" title="Return to Intro">← BACK TO INTRO</button>
+    </div>
+    <!-- FaceID Biometric Modal -->
+    <!-- FaceID Biometric Modal (access_granted.png Template) -->
+    <div id="p1-portal-faceid-box">
+      <!-- Left Biometric Ring & Mugshot Portal -->
+      <div class="p1-faceid-left-portal">
+        <div class="p1-faceid-img-frame">
+          <img id="p1-faceid-img" src="/FACEID1.jpg" onerror="this.onerror=null;this.src='/FACEID1.JPG.png';" alt="Biometric Scan" class="p1-faceid-img">
+          <div class="p1-faceid-laser"></div>
+          <div class="p1-faceid-grid"></div>
+          <div class="p1-faceid-badge" id="p1-faceid-badge">SCANNING 1/4</div>
+        </div>
+      </div>
+
+      <!-- Right Cyber HUD Window -->
+      <div class="p1-faceid-right-hud">
+        <div class="p1-faceid-header">
+          <span>🔒</span>
+          <span class="p1-faceid-title">BIOMETRIC IDENTITY SCANNER</span>
+        </div>
+        <div class="p1-faceid-granted-title">ACCESS GRANTED</div>
+        <div class="p1-faceid-status" id="p1-faceid-status">ANALYZING BIOMETRIC SUBJECT 1/4...</div>
+        <div class="p1-faceid-progress-track">
+          <div class="p1-faceid-progress-fill" id="p1-faceid-fill"></div>
+        </div>
+        <div class="p1-faceid-details-row">
+          <span id="p1-faceid-pct">0%</span>
+          <span>ENCRYPTING VIP SESSION</span>
+          <span id="p1-faceid-granted" class="p1-faceid-granted" style="display:none;">VERIFIED ✓</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- 1. Ambient Floating 3D Embers & Sparks Engine Removed (Floating Dots Disabled) ---
+
+    // --- 2. Toast HUD Feedback ---
+    function showToast(msg) {
+      const t = document.getElementById('caDjToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove('visible'), 2000);
+    }
+
+    // --- 2B. Global Media Playback State Synchronizers (Hoisted) ---
+    function updateVideoPlayState(isPlaying) {
+      const vidPlayIcon = document.getElementById('caVidPlayIcon');
+      const vidPauseIcon = document.getElementById('caVidPauseIcon');
+      if (vidPlayIcon) vidPlayIcon.style.display = isPlaying ? 'none' : 'block';
+      if (vidPauseIcon) vidPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    }
+    window.updateVideoPlayState = updateVideoPlayState;
+
+    function updateAudioPlayIcon(isPlaying) {
+      const audioHeroPlayIcon = document.getElementById('audioHeroPlayIcon');
+      const audioHeroPauseIcon = document.getElementById('audioHeroPauseIcon');
+      if (audioHeroPlayIcon) audioHeroPlayIcon.style.display = isPlaying ? 'none' : 'block';
+      if (audioHeroPauseIcon) audioHeroPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    }
+    window.updateAudioPlayIcon = updateAudioPlayIcon;
+
+    // --- 3. WebAudio Hydraulic & DJ FX Synthesizer ---
+    let audioCtx = null;
+    let sourceNode = null;
+    let lowpassFilter = null;
+    let bassBoostNode = null;
+    let isAudioInit = false;
+
+    function initWebAudio(video) {
+      if (isAudioInit) return;
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        sourceNode = audioCtx.createMediaElementSource(video);
+
+        lowpassFilter = audioCtx.createBiquadFilter();
+        lowpassFilter.type = "lowpass";
+        lowpassFilter.frequency.value = 20000;
+
+        bassBoostNode = audioCtx.createBiquadFilter();
+        bassBoostNode.type = "lowshelf";
+        bassBoostNode.frequency.value = 180;
+        bassBoostNode.gain.value = 0;
+
+        sourceNode.connect(lowpassFilter);
+        lowpassFilter.connect(bassBoostNode);
+        bassBoostNode.connect(audioCtx.destination);
+
+        isAudioInit = true;
+      } catch (e) {
+        console.warn("WebAudio initialization:", e);
+      }
+    }
+
+    function playHydraulicSound(type) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        if (type === 'open') {
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(80, now);
+          osc.frequency.exponentialRampToValueAtTime(320, now + 0.38);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.42);
+        } else {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(45, now + 0.28);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.32);
+        }
+      } catch (e) {
+        console.warn('Audio FX error:', e);
+      }
+    }
+
+    function formatTime(sec) {
+      if (isNaN(sec) || !isFinite(sec)) return "0:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s < 10 ? "0" : ""}${s}`;
+    }
+
+    // --- 4. Master Slide-Open Controller & Video Controls ---
+    function initCardPlayer() {
+      const stage = document.getElementById('caStage');
+      const chamber = document.getElementById('caScreenChamber');
+      const video = document.getElementById('caVideo');
+      const laser = document.getElementById('caLaserScanline');
+      const emblem = document.getElementById('caRotatingEmblem');
+      const descModal = document.getElementById('caDescModal');
+      const descCloseBtn = document.getElementById('caDescCloseBtn');
+
+      const upperPlayBtn = document.getElementById('heroPlayHotspot');
+      const descBtn = document.getElementById('descHotspot');
+      const bottomPlayBtn = document.getElementById('bottomPlayHotspot');
+
+      const scrubberFill = document.getElementById('caLiveScrubberFill');
+      const timestampDisplay = document.getElementById('caLiveTimestamp');
+
+      const vidPlayBtn = document.getElementById('caVidPlayPauseBtn');
+      const vidPlayIcon = document.getElementById('caVidPlayIcon');
+      const vidPauseIcon = document.getElementById('caVidPauseIcon');
+      const vidRewindBtn = document.getElementById('caVidRewindBtn');
+      const vidForwardBtn = document.getElementById('caVidForwardBtn');
+      const vidScrubberTrack = document.getElementById('caVidScrubberTrack');
+      const vidScrubberFill = document.getElementById('caVidScrubberFill');
+      const vidTimeDisplay = document.getElementById('caVidTimeDisplay');
+
+      const vidQualityBtn = document.getElementById('caVidQualityBtn');
+      const vidSpeedBtn = document.getElementById('caVidSpeedBtn');
+      const vidFxBtn = document.getElementById('caVidFxBtn');
+
+      const vidMuteBtn = document.getElementById('caVidMuteBtn');
+      const vidVolIcon = document.getElementById('caVidVolIcon');
+      const vidMuteIcon = document.getElementById('caVidMuteIcon');
+      const vidVolSlider = document.getElementById('caVidVolumeSlider');
+
+      const vidPipBtn = document.getElementById('caVidPipBtn');
+      const vidFsBtn = document.getElementById('caVidFullscreenBtn');
+      const vidCloseBtn = document.getElementById('caVidCloseBtn');
+
+      const scratchPlatter = document.getElementById('caScratchPlatter');
+      const djFilterLow = document.getElementById('djFilterLow');
+      const djFilterBass = document.getElementById('djFilterBass');
+      const djFilterFx = document.getElementById('djFilterFx');
+
+      // ── BG-1-BLUE PRINT MASTER AUDIO PLAYER CONTROLLER (Big Play Button) ──
+      const audioElem = document.getElementById('caAudioElem');
+      const audioChamber = document.getElementById('caAudioChamber');
+      const audioPlayPauseBtn = document.getElementById('audioPlayPauseBtn');
+      const audioHeroPlayIcon = document.getElementById('audioHeroPlayIcon');
+      const audioHeroPauseIcon = document.getElementById('audioHeroPauseIcon');
+      const audioScrubberTrack = document.getElementById('caAudioScrubberTrack');
+      const audioScrubberFill = document.getElementById('caAudioScrubberFill');
+      const audioCurrentTime = document.getElementById('caAudioCurrentTime');
+      const audioTotalTime = document.getElementById('caAudioTotalTime');
+      const audioVolSlider = document.getElementById('caAudioVolSlider');
+      const audioVolText = document.getElementById('audioVolText');
+      const audioVolMuteBtn = document.getElementById('audioVolMuteBtn');
+      const audioVolIcon = document.getElementById('audioVolIcon');
+      const audioMuteIcon = document.getElementById('audioMuteIcon');
+      const audioCloseBtn = document.getElementById('caAudioCloseBtn');
+      const audioShuffleBtn = document.getElementById('audioShuffleBtn');
+      const audioPrevBtn = document.getElementById('audioPrevBtn');
+      const audioNextBtn = document.getElementById('audioNextBtn');
+      const audioRepeatBtn = document.getElementById('audioRepeatBtn');
+      const audioBassBoostBtn = document.getElementById('audioBassBoostBtn');
+      const audioSurroundBtn = document.getElementById('audioSurroundBtn');
+      const audioVocalBtn = document.getElementById('audioVocalBtn');
+      const audioVuMeter = document.getElementById('audioVuMeter');
+
+      function updateVideoPlayState(isPlaying) {
+        if (vidPlayIcon) vidPlayIcon.style.display = isPlaying ? 'none' : 'block';
+        if (vidPauseIcon) vidPauseIcon.style.display = isPlaying ? 'block' : 'none';
+      }
+      window.updateVideoPlayState = updateVideoPlayState;
+
+      function updateAudioPlayIcon(isPlaying) {
+        if (audioHeroPlayIcon) audioHeroPlayIcon.style.display = isPlaying ? 'none' : 'block';
+        if (audioHeroPauseIcon) audioHeroPauseIcon.style.display = isPlaying ? 'block' : 'none';
+      }
+      window.updateAudioPlayIcon = updateAudioPlayIcon;
+
+      function pauseAudioPlayback() {
+        if (audioElem) audioElem.pause();
+        playHydraulicSound('close');
+        document.body.classList.remove('in-playback-mode');
+
+        if (stage) {
+          stage.classList.remove('audio-opened');
+          stage.classList.remove('playing');
+        }
+        updateAudioPlayIcon(false);
+        showToast('🔒 CLOSED TO FLOATING GLASS PLAYER');
+      }
+
+      function startAudioPlayback() {
+        if (video && !video.paused) pausePlayback();
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        playHydraulicSound('open');
+        document.body.classList.add('in-playback-mode');
+
+        if (stage) {
+          stage.classList.remove('card-opened');
+          stage.classList.add('audio-opened');
+          stage.classList.add('playing');
+        }
+
+        if (laser) {
+          laser.classList.remove('ignite');
+          void laser.offsetWidth;
+          laser.classList.add('ignite');
+        }
+
+        if (audioElem) {
+          // Preserve user volume settings (do not force 100%)
+          if (audioVolSlider && audioVolSlider.value) {
+            audioElem.volume = parseFloat(audioVolSlider.value);
+          }
+          const playPromise = audioElem.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.warn("Audio autoplay:", err);
+            });
+          }
+        }
+        updateAudioPlayIcon(true);
+        showToast('🎵 PLAYING: RAISE THE FREQUENCY (WULUP)');
+      }
+
+      function toggleAudioPlayback() {
+        if (!stage.classList.contains('audio-opened')) {
+          startAudioPlayback();
+        } else if (audioElem && audioElem.paused) {
+          audioElem.play();
+          stage.classList.add('playing');
+          updateAudioPlayIcon(true);
+          showToast('▶ RESUME AUDIO');
+        } else {
+          pauseAudioPlayback();
+        }
+      }
+
+      let lastPlayTime = 0;
+
+      // 3D Parallax Swivel on Idle Closed Player Card (Only Player Swivels, Background Stays Still)
+      let targetRotX = 0, targetRotY = 0, currentRotX = 0, currentRotY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        targetRotX = ((cy - e.clientY) / cy) * 7.0;
+        targetRotY = ((e.clientX - cx) / cx) * 8.0;
+      });
+
+      window.addEventListener('mouseleave', () => {
+        targetRotX = 0;
+        targetRotY = 0;
+      });
+
+      function animateParallax() {
+        if (stage && !stage.classList.contains('card-opened') && !stage.classList.contains('audio-opened')) {
+          currentRotX += (targetRotX - currentRotX) * 0.08;
+          currentRotY += (targetRotY - currentRotY) * 0.08;
+          stage.style.transform = `perspective(1200px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+        } else if (stage) {
+          currentRotX += (0 - currentRotX) * 0.1;
+          currentRotY += (0 - currentRotY) * 0.1;
+          stage.style.transform = `perspective(1200px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+        }
+        requestAnimationFrame(animateParallax);
+      }
+      animateParallax();
+
+      // Open Video & Part Doors (Small Play Button)
+      let isStartingVideo = false;
+      function startPlayback() {
+        if (isStartingVideo) return;
+        isStartingVideo = true;
+        setTimeout(() => { isStartingVideo = false; }, 400);
+
+        if (audioElem && !audioElem.paused) pauseAudioPlayback();
+        lastPlayTime = Date.now();
+        playHydraulicSound('open');
+        document.body.classList.add('in-playback-mode');
+
+        if (stage) {
+          stage.classList.remove('card-closing');
+          stage.classList.remove('audio-opened');
+          stage.classList.add('card-opened');
+        }
+        if (chamber) chamber.classList.add('active');
+
+        if (laser) {
+          laser.classList.remove('ignite');
+          void laser.offsetWidth;
+          laser.classList.add('ignite');
+        }
+
+        if (video) {
+          // Preserve user volume settings (do not force 100%)
+          if (vidVolSlider && vidVolSlider.value) {
+            video.volume = parseFloat(vidVolSlider.value);
+          }
+          // Only unmute if not explicitly muted by user
+          if (video.muted && vidMuteBtn && !vidMuteBtn.classList.contains('active-muted')) {
+            video.muted = false;
+          }
+          initWebAudio(video);
+          if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(function (err) {
+              console.warn("Playback error diagnosed:", err.name, err.message);
+              // Only fall back to muted if browser autoplay policy explicitly blocked unmuted playback
+              if (err.name === 'NotAllowedError') {
+                console.warn("Autoplay with sound prevented by browser policy, attempting muted fallback");
+                video.muted = true;
+                video.play().catch(e => console.warn("Muted playback fallback error:", e));
+              }
+            });
+          }
+        }
+        updateVideoPlayState(true);
+        showToast('▶ LAUNCHING AURA FUNNY VIDEO');
+      }
+
+      // Close Video & Restore Floating Glass Player
+      function pausePlayback() {
+        video.pause();
+        playHydraulicSound('close');
+        document.body.classList.remove('in-playback-mode');
+
+        if (stage) {
+          stage.classList.remove('card-opened');
+          stage.classList.remove('imax-mode');
+          stage.classList.add('card-closing');
+          setTimeout(() => {
+            if (stage) stage.classList.remove('card-closing');
+          }, 850);
+        }
+        if (chamber) chamber.classList.remove('active');
+        showToast('🔒 CLOSED TO FLOATING GLASS PLAYER');
+      }
+
+      // Small Play Button Hotspot (Direct trigger for Aura 2.0 video popup)
+      if (upperPlayBtn) {
+        upperPlayBtn.onclick = (e) => {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          startPlayback();
+        };
+      }
+
+      // Big Play Button Hotspot (Direct trigger for BG-1-BLUE PRINT Audio Player popup)
+      if (bottomPlayBtn) {
+        bottomPlayBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleAudioPlayback();
+        };
+      }
+
+      // BG-1-BLUE PRINT Audio Player Controls
+      if (audioPlayPauseBtn) {
+        audioPlayPauseBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!audioElem) return;
+          if (audioElem.paused) {
+            audioElem.play();
+            stage.classList.add('playing');
+            updateAudioPlayIcon(true);
+            showToast('▶ PLAYING AUDIO');
+          } else {
+            audioElem.pause();
+            stage.classList.remove('playing');
+            updateAudioPlayIcon(false);
+            showToast('⏸ PAUSED AUDIO');
+          }
+        };
+      }
+
+      if (audioCloseBtn) {
+        audioCloseBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          pauseAudioPlayback();
+        };
+      }
+
+      if (audioShuffleBtn) {
+        let isShuffled = false;
+        audioShuffleBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          isShuffled = !isShuffled;
+          audioShuffleBtn.classList.toggle('active', isShuffled);
+          showToast(isShuffled ? '🔀 SHUFFLE: ON' : '🔀 SHUFFLE: OFF');
+        };
+      }
+
+      if (audioRepeatBtn) {
+        let isRepeated = false;
+        audioRepeatBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          isRepeated = !isRepeated;
+          audioRepeatBtn.classList.toggle('active', isRepeated);
+          if (audioElem) audioElem.loop = isRepeated;
+          showToast(isRepeated ? '🔁 REPEAT: ON' : '🔁 REPEAT: OFF');
+        };
+      }
+
+      if (audioPrevBtn) {
+        audioPrevBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (audioElem) audioElem.currentTime = 0;
+          showToast('⏮ RESTART TRACK');
+        };
+      }
+
+      if (audioNextBtn) {
+        audioNextBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (audioElem) audioElem.currentTime = Math.min(audioElem.duration || 999, audioElem.currentTime + 15);
+          showToast('⏭ FORWARD 15s');
+        };
+      }
+
+      // DSP Filter Modes
+      if (audioBassBoostBtn) {
+        let isBass = false;
+        audioBassBoostBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          isBass = !isBass;
+          audioBassBoostBtn.classList.toggle('active', isBass);
+          showToast(isBass ? '🔥 BASS BOOST: ACTIVATED (+6dB)' : '🔥 BASS BOOST: STANDARD');
+        };
+      }
+
+      if (audioSurroundBtn) {
+        let isSurround = false;
+        audioSurroundBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          isSurround = !isSurround;
+          audioSurroundBtn.classList.toggle('active', isSurround);
+          showToast(isSurround ? '✨ 3D SPATIAL: WIDE MATRIX' : '✨ 3D SPATIAL: STEREO');
+        };
+      }
+
+      if (audioVocalBtn) {
+        let isVocal = false;
+        audioVocalBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          isVocal = !isVocal;
+          audioVocalBtn.classList.toggle('active', isVocal);
+          showToast(isVocal ? '🎙️ VOCAL CLEAR: ENHANCED' : '🎙️ VOCAL CLEAR: FLAT');
+        };
+      }
+
+      if (audioVolMuteBtn) {
+        audioVolMuteBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (!audioElem) return;
+          audioElem.muted = !audioElem.muted;
+          if (audioVolIcon) audioVolIcon.style.display = audioElem.muted ? 'none' : 'block';
+          if (audioMuteIcon) audioMuteIcon.style.display = audioElem.muted ? 'block' : 'none';
+          showToast(audioElem.muted ? '🔇 AUDIO MUTED' : '🔊 AUDIO UNMUTED');
+        };
+      }
+
+      if (audioVolSlider) {
+        audioVolSlider.oninput = function(e) {
+          e.stopPropagation();
+          if (!audioElem) return;
+          audioElem.volume = parseFloat(this.value);
+          audioElem.muted = audioElem.volume === 0;
+          if (audioVolText) audioVolText.textContent = `${Math.round(audioElem.volume * 100)}%`;
+          if (audioVolIcon) audioVolIcon.style.display = audioElem.muted ? 'none' : 'block';
+          if (audioMuteIcon) audioMuteIcon.style.display = audioElem.muted ? 'block' : 'none';
+        };
+      }
+
+      if (audioScrubberTrack) {
+        audioScrubberTrack.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (!audioElem || !audioElem.duration) return;
+          const rect = audioScrubberTrack.getBoundingClientRect();
+          const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+          audioElem.currentTime = pos * audioElem.duration;
+        };
+      }
+
+      // Dynamic VU Meter Ticker
+      setInterval(() => {
+        if (audioVuMeter && audioElem && !audioElem.paused) {
+          const db = (-0.1 - Math.random() * 2.8).toFixed(1);
+          audioVuMeter.textContent = `PEAK: ${db} dB`;
+        }
+      }, 180);
+
+      if (audioElem) {
+        audioElem.addEventListener('play', () => {
+          if (stage) stage.classList.add('playing');
+          updateAudioPlayIcon(true);
+        });
+        audioElem.addEventListener('pause', () => {
+          if (stage) stage.classList.remove('playing');
+          updateAudioPlayIcon(false);
+        });
+        audioElem.addEventListener('timeupdate', () => {
+          if (audioElem.duration) {
+            const pct = (audioElem.currentTime / audioElem.duration) * 100;
+            if (audioScrubberFill) audioScrubberFill.style.width = `${pct}%`;
+            if (audioCurrentTime) audioCurrentTime.textContent = formatTime(audioElem.currentTime);
+            if (audioTotalTime) audioTotalTime.textContent = formatTime(audioElem.duration);
+          }
+        });
+        audioElem.addEventListener('ended', () => {
+          pauseAudioPlayback();
+          audioElem.currentTime = 0;
+        });
+      }
+
+      // Description Modal
+      if (descBtn) {
+        descBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (descModal) descModal.classList.toggle('open');
+        };
+      }
+      if (descCloseBtn) {
+        descCloseBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (descModal) descModal.classList.remove('open');
+        };
+      }
+
+      // Video Controls
+      if (vidPlayBtn) {
+        vidPlayBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (video.paused) { video.play(); updateVideoPlayState(true); }
+          else { video.pause(); updateVideoPlayState(false); }
+        };
+      }
+
+      if (vidRewindBtn) {
+        vidRewindBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          video.currentTime = Math.max(0, video.currentTime - 10);
+          showToast('⏪ REWIND 10s');
+        };
+      }
+
+      if (vidForwardBtn) {
+        vidForwardBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          video.currentTime = Math.min(video.duration || 9999, video.currentTime + 10);
+          showToast('⏩ FORWARD 10s');
+        };
+      }
+
+      if (vidScrubberTrack) {
+        vidScrubberTrack.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          const rect = vidScrubberTrack.getBoundingClientRect();
+          const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+          if (video.duration) video.currentTime = pos * video.duration;
+        };
+      }
+
+      // Quality Selector Cycle
+      const qualities = ["4K HDR", "1080p 60fps", "2K MASTER", "4K ULTRA HD"];
+      let qIdx = 0;
+      if (vidQualityBtn) {
+        vidQualityBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          qIdx = (qIdx + 1) % qualities.length;
+          vidQualityBtn.innerHTML = `<span class="pill-dot"></span> ${qualities[qIdx]}`;
+          showToast(`📺 RESOLUTION: ${qualities[qIdx]}`);
+        };
+      }
+
+      // Speed Selector Cycle
+      const speeds = [1.0, 1.25, 1.5, 0.75];
+      let sIdx = 0;
+      if (vidSpeedBtn) {
+        vidSpeedBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          sIdx = (sIdx + 1) % speeds.length;
+          const spd = speeds[sIdx];
+          video.playbackRate = spd;
+          vidSpeedBtn.textContent = `${spd}x`;
+          showToast(`⚡ SPEED: ${spd}x`);
+        };
+      }
+
+      // Cyber FX Matrix Cycle
+      const fxFilters = [
+        { name: "⚡ FX", cls: "" },
+        { name: "🔥 CRIMSON", cls: "video-fx-crimson" },
+        { name: "🟢 MATRIX", cls: "video-fx-matrix" },
+        { name: "⚫ NOIR", cls: "video-fx-noir" },
+        { name: "🎬 CINEMA", cls: "video-fx-cinema" }
+      ];
+      let fxIdx = 0;
+      if (vidFxBtn) {
+        vidFxBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          fxIdx = (fxIdx + 1) % fxFilters.length;
+          const fx = fxFilters[fxIdx];
+          video.className = fx.cls;
+          vidFxBtn.textContent = fx.name;
+          showToast(`🎨 VISUAL MATRIX: ${fx.name}`);
+        };
+      }
+
+      // ── MULTI-LANGUAGE LIVE SUBTITLE SYNCHRONIZATION SYSTEM (Option 1: Exact Scene-by-Scene Translations) ──
+      const subtitleTracks = {
+        en: {
+          code: "EN",
+          label: "SUBTITLES: EN",
+          langName: "English (Dolby Atmos)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [Deep Bass Pulse] Chinese Assassin VIP Universe — Activating Holographic Matrix." },
+            { start: 2.8, end: 6.5, text: "🔥 Aura 2.0 Master Deck Online — Sound System Output at Maximum Resonance." },
+            { start: 6.5, end: 11.0, text: "⚔️ Martial Precision meets Electro-Cyber Heavy Bass — The Grand Master Clan." },
+            { start: 11.0, end: 15.5, text: "⛩️ Multi-Dimensional Portal Sequence Engaged — Step into the Unknown." },
+            { start: 15.5, end: 21.0, text: "🎧 [Drop Phase: Sub-Harmonics & Cybernetic Visual FX Ignition]" },
+            { start: 21.0, end: 9999, text: "⚡ Chinese Assassin VIP — Welcome to the Experience. Enter The Universe." }
+          ]
+        },
+        es: {
+          code: "ES",
+          label: "SUBTITLES: ES",
+          langName: "Español (Spanish)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [Pulso de bajo profundo] Universo VIP Chinese Assassin — Activando matriz holográfica." },
+            { start: 2.8, end: 6.5, text: "🔥 Consola Master Aura 2.0 en línea — Salida del sistema de sonido en máxima resonancia." },
+            { start: 6.5, end: 11.0, text: "⚔️ La precisión marcial se une al bajo electro-cyber — El Clan del Gran Maestro." },
+            { start: 11.0, end: 15.5, text: "⛩️ Secuencia del portal multidimensional activada — Da un paso hacia lo desconocido." },
+            { start: 15.5, end: 21.0, text: "🎧 [Fase de caída: Sub-armónicos y encendido de efectos visuales cibernéticos]" },
+            { start: 21.0, end: 9999, text: "⚡ Chinese Assassin VIP — Bienvenido a la experiencia. Entra al Universo." }
+          ]
+        },
+        cn: {
+          code: "中文",
+          label: "SUBTITLES: 中文",
+          langName: "简体中文 (Mandarin)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [重低音能量震荡] 华裔刺客 VIP 宇宙 — 全息视听矩阵已激活。" },
+            { start: 2.8, end: 6.5, text: "🔥 灵气 2.0 终极主控台已就绪 — 音响系统输出已达最大共鸣峰值。" },
+            { start: 6.5, end: 11.0, text: "⚔️ 纯粹武道精准与电音赛博重低音共鸣 — 宗师门派殿堂级现场。" },
+            { start: 11.0, end: 15.5, text: "⛩️ 多维时空传送序列已锁定 — 步入未知全息境界。" },
+            { start: 15.5, end: 21.0, text: "🎧 [低频音浪爆发：次重低音谐波与赛博视觉特效全面点燃]" },
+            { start: 21.0, end: 9999, text: "⚡ 华裔刺客 VIP — 欢迎来到极致视听盛宴。开启传奇宇宙。" }
+          ]
+        },
+        jp: {
+          code: "日本語",
+          label: "SUBTITLES: 日本語",
+          langName: "日本語 (Japanese)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [重低音パルス] チャイニーズ・アサシン VIP ユニバース — ホログラフィック・マトリクス起動。" },
+            { start: 2.8, end: 6.5, text: "🔥 オーラ 2.0 マスターデッキ稼働 — サウンドシステム出力が最大共鳴値に到達。" },
+            { start: 6.5, end: 11.0, text: "⚔️ 武術の精密さとエレクトロ・サイバー重低音の融合 — グランドマスター一門。" },
+            { start: 11.0, end: 15.5, text: "⛩️ 多次元ポータル・シーケンス作動 — 未知なる領域へ足を踏み入れよ。" },
+            { start: 15.5, end: 21.0, text: "🎧 [ドロップ・フェーズ：サブハーモニクス＆サイバー視覚FX点火]" },
+            { start: 21.0, end: 9999, text: "⚡ チャイニーズ・アサシン VIP — 体験の世界へようこそ。ユニバースへ突入せよ。" }
+          ]
+        },
+        fr: {
+          code: "FR",
+          label: "SUBTITLES: FR",
+          langName: "Français (French)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [Impulsion de basse] Univers VIP Chinese Assassin — Activation de la matrice holographique." },
+            { start: 2.8, end: 6.5, text: "🔥 Platine Master Aura 2.0 en ligne — Puissance acoustique en résonance maximale." },
+            { start: 6.5, end: 11.0, text: "⚔️ La précision martiale rencontre les basses électro-cyber — Le Clan du Grand Maître." },
+            { start: 11.0, end: 15.5, text: "⛩️ Séquence du portail multidimensionnel engagée — Entrez dans l'inconnu." },
+            { start: 15.5, end: 21.0, text: "🎧 [Phase de Drop : Sous-harmoniques et allumage des effets visuels cybernétiques]" },
+            { start: 21.0, end: 9999, text: "⚡ Chinese Assassin VIP — Bienvenue dans l'expérience. Entrez dans l'univers." }
+          ]
+        },
+        de: {
+          code: "DE",
+          label: "SUBTITLES: DE",
+          langName: "Deutsch (German)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [Tiefer Bassimpuls] Chinese Assassin VIP-Universum — Holografische Matrix aktiviert." },
+            { start: 2.8, end: 6.5, text: "🔥 Aura 2.0 Masterdeck online — Soundsystem-Ausgang auf maximaler Resonanz." },
+            { start: 6.5, end: 11.0, text: "⚔️ Kampfkunst-Präzision trifft auf Elektro-Cyber-Bass — Der Großmeister-Clan." },
+            { start: 11.0, end: 15.5, text: "⛩️ Mehrdimensionale Portal-Sequenz aktiviert — Tritt ein ins Unbekannte." },
+            { start: 15.5, end: 21.0, text: "🎧 [Drop-Phase: Sub-Harmonische & Zündung kybernetischer visueller Effekte]" },
+            { start: 21.0, end: 9999, text: "⚡ Chinese Assassin VIP — Willkommen im Erlebnis. Betreten Sie das Universum." }
+          ]
+        },
+        it: {
+          code: "IT",
+          label: "SUBTITLES: IT",
+          langName: "Italiano (Italian)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [Impulso di bassi profondi] Universo VIP Chinese Assassin — Attivazione della matrice olografica." },
+            { start: 2.8, end: 6.5, text: "🔥 Console Master Aura 2.0 online — Uscita del sistema sonoro alla massima risonanza." },
+            { start: 6.5, end: 11.0, text: "⚔️ La precisione marziale incontra i bassi elettro-cyber — Il Clan del Gran Maestro." },
+            { start: 11.0, end: 15.5, text: "⛩️ Sequenza del portale multidimensionale avviata — Entra nell'ignoto." },
+            { start: 15.5, end: 21.0, text: "🎧 [Fase Drop: Sub-armoniche e accensione degli effetti visivi cibernetici]" },
+            { start: 21.0, end: 9999, text: "⚡ Chinese Assassin VIP — Benvenuto nell'esperienza. Entra nell'universo." }
+          ]
+        },
+        pt: {
+          code: "PT",
+          label: "SUBTITLES: PT",
+          langName: "Português (Portuguese)",
+          cues: [
+            { start: 0.0, end: 2.8, text: "⚡ [Pulso de graves profundos] Universo VIP Chinese Assassin — Ativando matriz holográfica." },
+            { start: 2.8, end: 6.5, text: "🔥 Plataforma Master Aura 2.0 online — Saída do sistema de som em ressonância máxima." },
+            { start: 6.5, end: 11.0, text: "⚔️ A precisão marcial encontra os graves eletro-cibernéticos — O Clã do Grão-Mestre." },
+            { start: 11.0, end: 15.5, text: "⛩️ Sequência do portal multidimensional ativada — Dê um passo em direção ao desconhecido." },
+            { start: 15.5, end: 21.0, text: "🎧 [Fase de Drop: Sub-harmônicos e ignição de efeitos visuais cibernéticos]" },
+            { start: 21.0, end: 9999, text: "⚡ Chinese Assassin VIP — Bem-vindo à experiência. Entre no universo." }
+          ]
+        },
+        off: {
+          code: "OFF",
+          label: "SUBTITLES: OFF",
+          langName: "Subtitles Off",
+          cues: []
+        }
+      };
+
+      const langKeys = ["en", "es", "cn", "jp", "fr", "de", "it", "pt", "off"];
+      let currentLangIndex = 0;
+      const vidCaptionBtn = document.getElementById("caVidCaptionBtn");
+      const vidCaptionLabel = document.getElementById("caVidCaptionLabel");
+      const topCaptionBtn = document.getElementById("caTopCaptionBtn");
+      const topCaptionLabel = document.getElementById("caTopCaptionLabel");
+      const topEnhanceBtn = document.getElementById("caTopEnhanceBtn");
+      const topPipBtn = document.getElementById("caTopPipBtn");
+      const topCloseBtn = document.getElementById("caTopCloseBtn");
+      const subtitlesEl = document.getElementById("caVideoSubtitles");
+
+      function updateSubtitles() {
+        if (!subtitlesEl) return;
+        const currentKey = langKeys[currentLangIndex];
+        const track = subtitleTracks[currentKey];
+        if (currentKey === "off" || video.paused) {
+          subtitlesEl.classList.remove("active");
+          return;
+        }
+
+        const t = video.currentTime;
+        const activeCue = track.cues.find(c => t >= c.start && t < c.end);
+        if (activeCue) {
+          subtitlesEl.textContent = activeCue.text;
+          subtitlesEl.classList.add("active");
+        } else {
+          subtitlesEl.classList.remove("active");
+        }
+      }
+
+      function cycleLanguage() {
+        currentLangIndex = (currentLangIndex + 1) % langKeys.length;
+        const key = langKeys[currentLangIndex];
+        const track = subtitleTracks[key];
+        if (vidCaptionLabel) vidCaptionLabel.textContent = track.label;
+        if (topCaptionLabel) topCaptionLabel.textContent = track.label;
+        if (key !== "off") {
+          if (vidCaptionBtn) vidCaptionBtn.classList.add("active");
+          if (topCaptionBtn) topCaptionBtn.classList.add("active");
+          showToast(`💬 SUBTITLES: ${track.langName}`);
+        } else {
+          if (vidCaptionBtn) vidCaptionBtn.classList.remove("active");
+          if (topCaptionBtn) topCaptionBtn.classList.remove("active");
+          showToast("🔇 SUBTITLES: OFF");
+        }
+        updateSubtitles();
+      }
+
+      if (vidCaptionBtn) {
+        vidCaptionBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); cycleLanguage(); };
+      }
+      if (topCaptionBtn) {
+        topCaptionBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); cycleLanguage(); };
+      }
+
+      // Top Enhance Mode Toggle
+      let isEnhanced = false;
+      if (topEnhanceBtn) {
+        topEnhanceBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          isEnhanced = !isEnhanced;
+          if (isEnhanced) {
+            video.classList.add("video-fx-enhance");
+            topEnhanceBtn.classList.add("active");
+            showToast("✨ AI CINEMA HDR: ENHANCED");
+          } else {
+            video.classList.remove("video-fx-enhance");
+            topEnhanceBtn.classList.remove("active");
+            showToast("✨ AI CINEMA: STANDARD");
+          }
+        };
+      }
+
+      // Volume & Mute
+      if (vidVolSlider) {
+        vidVolSlider.oninput = function (e) {
+          e.stopPropagation();
+          video.volume = parseFloat(this.value);
+          video.muted = video.volume === 0;
+          if (vidVolIcon) vidVolIcon.style.display = video.muted ? "none" : "block";
+          if (vidMuteIcon) vidMuteIcon.style.display = video.muted ? "block" : "none";
+        };
+      }
+      if (vidMuteBtn) {
+        vidMuteBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          video.muted = !video.muted;
+          if (vidVolIcon) vidVolIcon.style.display = video.muted ? "none" : "block";
+          if (vidMuteIcon) vidMuteIcon.style.display = video.muted ? "block" : "none";
+          showToast(video.muted ? "🔇 MUTED" : "🔊 UNMUTED");
+        };
+      }
+
+      // PiP & Fullscreen Handlers
+      const togglePiP = async (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        try {
+          if (document.pictureInPictureElement) await document.exitPictureInPicture();
+          else if (document.pictureInPictureEnabled) { await video.requestPictureInPicture(); showToast("⧉ PiP ACTIVATED"); }
+        } catch (err) { console.warn(err); }
+      };
+
+      if (vidPipBtn) vidPipBtn.onclick = togglePiP;
+      if (topPipBtn) topPipBtn.onclick = togglePiP;
+
+      if (vidFsBtn) {
+        vidFsBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          if (!document.fullscreenElement) {
+            if (chamber.requestFullscreen) chamber.requestFullscreen();
+            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+            showToast("⛶ CINEMA FULLSCREEN");
+          } else {
+            document.exitFullscreen();
+          }
+        };
+      }
+
+      // Close Buttons (Restores back to Floating Glass Player)
+      if (vidCloseBtn) {
+        vidCloseBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          pausePlayback();
+        };
+      }
+      if (topCloseBtn) {
+        topCloseBtn.onclick = (e) => {
+          e.preventDefault(); e.stopPropagation();
+          pausePlayback();
+        };
+      }
+
+      // Global Escape Key to Exit Video or Audio Player
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (stage && stage.classList.contains('card-opened')) pausePlayback();
+          if (stage && stage.classList.contains('audio-opened')) pauseAudioPlayback();
+        }
+      });
+
+      // Video event listeners
+      video.addEventListener('play', () => {
+        updateVideoPlayState(true);
+        updateSubtitles();
+      });
+      video.addEventListener('pause', () => {
+        updateVideoPlayState(false);
+        updateSubtitles();
+      });
+      video.addEventListener('timeupdate', () => {
+        updateSubtitles();
+        if (video.duration) {
+          const pct = (video.currentTime / video.duration) * 100;
+          if (scrubberFill) scrubberFill.style.width = `${pct}%`;
+          if (vidScrubberFill) vidScrubberFill.style.width = `${pct}%`;
+          const timeStr = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+          if (timestampDisplay) timestampDisplay.textContent = timeStr;
+          if (vidTimeDisplay) vidTimeDisplay.textContent = timeStr;
+        }
+      });
+
+      video.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (video.paused) {
+          video.play();
+          updateVideoPlayState(true);
+        } else {
+          video.pause();
+          updateVideoPlayState(false);
+        }
+      };
+
+      video.addEventListener('ended', () => {
+        pausePlayback();
+        video.currentTime = 0;
+      });
+
+      // High-Frequency Subtitle Synchronizer Loop
+      setInterval(() => {
+        if (video && !video.paused) {
+          updateSubtitles();
+        }
+      }, 100);
+
+      // DJ Filter Sliders
+      if (djFilterLow) {
+        djFilterLow.oninput = function () {
+          const freq = parseFloat(this.value);
+          if (lowpassFilter && audioCtx) lowpassFilter.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          const pct = Math.round((freq / 20000) * 100);
+          showToast(`LOWPASS FILTER: ${pct}% (${Math.round(freq)}Hz)`);
+        };
+      }
+      if (djFilterBass) {
+        djFilterBass.oninput = function () {
+          const gain = parseFloat(this.value);
+          if (bassBoostNode && audioCtx) bassBoostNode.gain.setValueAtTime(gain, audioCtx.currentTime);
+          showToast(`BASS BOOST: +${gain.toFixed(1)}dB`);
+        };
+      }
+      if (djFilterFx) {
+        let stutterTimer = null;
+        djFilterFx.oninput = function () {
+          const val = parseFloat(this.value);
+          showToast(`STUTTER CHOP: ${val}%`);
+          if (val > 20) {
+            clearInterval(stutterTimer);
+            stutterTimer = setInterval(() => {
+              if (!video.paused) video.muted = !video.muted;
+            }, Math.max(40, 200 - val * 1.5));
+          } else {
+            clearInterval(stutterTimer);
+            video.muted = false;
+          }
+        };
+      }
+
+      // Turntable Vinyl Scratching
+      if (scratchPlatter) {
+        let isDragging = false;
+        let lastY = 0;
+        scratchPlatter.onmousedown = (e) => {
+          isDragging = true;
+          lastY = e.clientY;
+          video.playbackRate = 0.4;
+          showToast("🎛️ SCRATCHING VINYL");
+          e.preventDefault();
+        };
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          const delta = (e.clientY - lastY) * 0.08;
+          lastY = e.clientY;
+          video.currentTime = Math.max(0, video.currentTime - delta);
+          if (emblem) emblem.style.transform = `rotate(${video.currentTime * 180}deg)`;
+        });
+        window.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            video.playbackRate = 1.0;
+            showToast("▶ VINYL RELEASED");
+          }
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCardPlayer);
+    } else {
+      initCardPlayer();
+    }
+    // ══════════════════════════════════════════════════════════
+    //  ENTER THE PORTAL — Transition Engine (self-contained)
+    // ══════════════════════════════════════════════════════════
+    function initPortalTransition() {
+      const portalOverlay  = document.getElementById('p1-portal-overlay');
+      const enterBtn       = document.getElementById('p1-door-enter-btn');
+      const backBtn        = document.getElementById('p1-door-back-btn');
+      const faceBox        = document.getElementById('p1-portal-faceid-box');
+      const faceImg        = document.getElementById('p1-faceid-img');
+      const faceBadge      = document.getElementById('p1-faceid-badge');
+      const faceStatus     = document.getElementById('p1-faceid-status');
+      const faceFill       = document.getElementById('p1-faceid-fill');
+      const facePct        = document.getElementById('p1-faceid-pct');
+      const faceGranted    = document.getElementById('p1-faceid-granted');
+      const stage          = document.getElementById('caStage');
+      const proceedBtn     = document.getElementById('proceedToWebsiteBtn');
+
+      function playSynthTone(freq, duration = 0.12, type = 'sawtooth', gainVal = 0.12) {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          g.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      function playAccessGrantedChime() {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const now = audioCtx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            g.gain.setValueAtTime(0.18, now + i * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.45);
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.46);
+          });
+        } catch (e) {}
+      }
+
+      // --- Rain Engine ---
+      let rainRunning = false, rainRaf = null;
+      function startPortalRain() {
+        const rCanvas = document.getElementById('p1-portal-rain-canvas');
+        if (!rCanvas) return;
+        const rCtx = rCanvas.getContext('2d');
+        rCanvas.width  = window.innerWidth;
+        rCanvas.height = window.innerHeight;
+        const rw = rCanvas.width, rh = rCanvas.height;
+        const drops = Array.from({ length: 160 }, () => ({
+          x: Math.random() * rw, y: Math.random() * rh,
+          len: 16 + Math.random() * 26,
+          speed: 16 + Math.random() * 14,
+          alpha: 0.2 + Math.random() * 0.4
+        }));
+        rainRunning = true;
+        function rainLoop() {
+          if (!rainRunning) return;
+          rCtx.clearRect(0, 0, rw, rh);
+          rCtx.lineWidth = 1;
+          rCtx.strokeStyle = 'rgba(200,225,255,0.4)';
+          rCtx.beginPath();
+          drops.forEach(d => {
+            d.y += d.speed; d.x += 1.5;
+            if (d.y > rh) { d.y = -d.len; d.x = Math.random() * rw; }
+            rCtx.moveTo(d.x, d.y);
+            rCtx.lineTo(d.x + 2, d.y + d.len);
+          });
+          rCtx.stroke();
+          rainRaf = requestAnimationFrame(rainLoop);
+        }
+        rainLoop();
+      }
+      function stopPortalRain() {
+        rainRunning = false;
+        if (rainRaf) cancelAnimationFrame(rainRaf);
+      }
+
+      // --- Open Portal Page ---
+      function openPortalPage() {
+        const pOverlay = document.getElementById('p1-portal-overlay');
+        const pStage   = document.getElementById('caStage');
+        if (!pOverlay) return;
+
+        // Pause media if playing
+        const pAudio = document.getElementById('caAudioElem');
+        if (pAudio && !pAudio.paused) pAudio.pause();
+        const pVideo = document.getElementById('caVideo');
+        if (pVideo && !pVideo.paused) pVideo.pause();
+
+        playHydraulicSound('open');
+        showToast('⚡ ENTERING THE TEMPLE PORTAL GATEWAY');
+
+        if (pStage) {
+          gsap.to(pStage, {
+            opacity: 0,
+            scale: 0.92,
+            y: -25,
+            duration: 0.55,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              pStage.style.display = 'none';
+            }
+          });
+        }
+
+        // Reset FaceID Modal state
+        if (faceBox)    { faceBox.style.display = 'none'; faceBox.style.opacity = '0'; }
+        if (faceGranted){ faceGranted.style.display = 'none'; }
+        if (faceFill)   { faceFill.style.width = '0%'; }
+        if (facePct)    { facePct.textContent = '0%'; }
+        if (faceStatus) { faceStatus.textContent = 'ANALYZING BIOMETRIC SUBJECT 1/4...'; faceStatus.style.color = '#ff203a'; }
+        if (enterBtn)   {
+          enterBtn.style.display = 'inline-flex';
+          enterBtn.style.opacity = '1';
+          gsap.fromTo(enterBtn, { scale: 0.7, opacity: 0, y: 25 }, { scale: 1, opacity: 1, y: 0, duration: 0.55, ease: 'back.out(1.7)', delay: 0.2 });
+        }
+        if (backBtn)    {
+          backBtn.style.display  = 'inline-flex';
+          gsap.fromTo(backBtn, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.35 });
+        }
+        isFaceIdScanning = false;
+
+        pOverlay.style.display = 'block';
+        pOverlay.style.opacity = '0';
+        gsap.to(pOverlay, { opacity: 1, duration: 0.65, ease: 'power2.out', delay: 0.25 });
+        startPortalRain();
+      }
+
+      // --- Return to Master Card ---
+      function returnToCard() {
+        const pOverlay = document.getElementById('p1-portal-overlay');
+        const pStage   = document.getElementById('caStage');
+        if (!pOverlay) return;
+
+        playHydraulicSound('close');
+        showToast('⛩️ RETURNING TO INTRO');
+        stopPortalRain();
+
+        gsap.to(pOverlay, {
+          opacity: 0,
+          duration: 0.45,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            pOverlay.style.display = 'none';
+            if (pStage) {
+              pStage.style.display = 'flex';
+              gsap.fromTo(pStage, { opacity: 0, scale: 0.94, y: 25 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power2.out' });
+            }
+          }
+        });
+      }
+
+      // --- FaceID Scan Sequence ---
+      let isFaceIdScanning = false;
+      function startFaceIdScan() {
+        if (isFaceIdScanning) return;
+        isFaceIdScanning = true;
+
+        if (enterBtn) gsap.to(enterBtn, { opacity: 0, scale: 0.8, duration: 0.25, onComplete: () => { enterBtn.style.display = 'none'; } });
+        if (backBtn)  gsap.to(backBtn,  { opacity: 0, scale: 0.8, duration: 0.25, onComplete: () => { backBtn.style.display  = 'none'; } });
+
+        if (faceBox) {
+          faceBox.style.display = 'flex';
+          gsap.fromTo(faceBox, { opacity: 0, scale: 0.82 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)', delay: 0.1 });
+        }
+
+        const scanSteps = [
+          { src:'/FACEID1.jpg', fb:'/FACEID1.JPG.png', label:'ANALYZING BIOMETRIC SUBJECT 1/4...', badge:'SCANNING 1/4', freq: 440 },
+          { src:'/FACEID2.jpg', fb:'/FACEID2.JPG.png', label:'VERIFYING NEURAL PATTERNS 2/4...',   badge:'FACEID: 2/4',  freq: 580 },
+          { src:'/FACEID3.jpg', fb:'/FACEID3.JPG.png', label:'MATCHING ASSASSIN IDENTITY 3/4...',  badge:'MATCH: 98.4%', freq: 720 },
+          { src:'/FACEID4.jpg', fb:'/FACEID4.JPG.png', label:'BIOMETRIC VERIFICATION COMPLETE 4/4!',badge:'VERIFIED 4/4', freq: 880 }
+        ];
+
+        let step = 0, progress = 0;
+        const updateStep = (i) => {
+          if (!scanSteps[i]) return;
+          if (faceImg) {
+            gsap.to(faceImg, { opacity: 0.35, duration: 0.08, yoyo: true, repeat: 1, onComplete: () => {
+              faceImg.src = scanSteps[i].src;
+              faceImg.onerror = () => { faceImg.src = scanSteps[i].fb; };
+            }});
+          }
+          if (faceStatus) faceStatus.textContent = scanSteps[i].label;
+          if (faceBadge)  faceBadge.textContent  = scanSteps[i].badge;
+          playSynthTone(scanSteps[i].freq, 0.12, 'sawtooth', 0.12);
+        };
+
+        updateStep(0);
+
+        const scanInterval = setInterval(() => {
+          progress += 1.4;
+          if (faceFill) faceFill.style.width = `${Math.min(progress, 100)}%`;
+          if (facePct)  facePct.textContent   = `${Math.min(Math.floor(progress), 100)}%`;
+
+          const si = Math.min(Math.floor((progress / 100) * scanSteps.length), scanSteps.length - 1);
+          if (si !== step) { step = si; updateStep(step); }
+
+          if (progress >= 100) {
+            clearInterval(scanInterval);
+            if (faceStatus) {
+              faceStatus.textContent = 'ACCESS: GRANTED — WELCOME ASSASSIN';
+              faceStatus.style.color = '#00e5ff';
+            }
+            if (faceGranted) faceGranted.style.display = 'inline';
+            playAccessGrantedChime();
+            showToast('🔓 VIP ACCESS GRANTED — TEMPLE PORTAL UNLOCKED');
+
+            setTimeout(() => {
+              if (faceBox) gsap.to(faceBox, { scale: 1.25, opacity: 0, duration: 0.45, ease: 'power2.in' });
+              
+              // Swing temple doors open
+              const leftDoor = document.querySelector('.p1-left-door');
+              const rightDoor = document.querySelector('.p1-right-door');
+              if (leftDoor && rightDoor) {
+                gsap.to(leftDoor, { rotateY: -92, duration: 1.2, ease: 'power3.inOut' });
+                gsap.to(rightDoor, { rotateY: 92, duration: 1.2, ease: 'power3.inOut' });
+              }
+              playHydraulicSound('open');
+              showToast('🌀 ENTERING DIMENSION HUB...');
+
+              setTimeout(() => {
+                window.location.href = '/dimension-hub.html';
+              }, 750);
+            }, 600);
+          }
+        }, 32);
+      }
+
+      // --- Wire Buttons ---
+      if (proceedBtn) {
+        proceedBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openPortalPage();
+        });
+      }
+      if (enterBtn) enterBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); startFaceIdScan(); });
+      if (backBtn)  backBtn.addEventListener('click',  (e) => { e.preventDefault(); e.stopPropagation(); returnToCard(); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPortalTransition);
+    } else {
+      initPortalTransition();
+    }
+  </script>
+</body>
+
+</html>
