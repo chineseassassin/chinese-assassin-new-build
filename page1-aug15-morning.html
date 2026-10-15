@@ -37,54 +37,42 @@
       inset: 0;
       width: 100vw;
       height: 100vh;
-      background: #000000 url('/CHINESE ASSASSIN NEW BUILD/IP-3.png') center center / cover no-repeat;
+      background: #000000 url('/A=P=B-3.png') center center / cover no-repeat;
       pointer-events: none;
       z-index: 0;
       transition: filter 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
       will-change: filter, transform;
     }
 
+    /* Playback: Keep Stage Background crisp & vibrant (no dimming or blur) */
     body.in-playback-mode .ca-master-bg,
     body:has(.card-opened) .ca-master-bg,
     body:has(.audio-opened) .ca-master-bg {
-      filter: brightness(0.14) contrast(1.15) blur(12px);
-      transform: scale(1.02);
+      filter: none !important;
+      transform: none !important;
     }
 
-    /* Cinema Theater Ambient Dimming Veil */
+    /* Cinema Theater Ambient Dimming Veil (Disabled to prevent black overlay over stage) */
     .ca-theater-backdrop {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(ellipse at 50% 50%, rgba(6, 1, 3, 0.65) 0%, rgba(0, 0, 0, 0.88) 100%);
-      pointer-events: none;
-      z-index: 5;
-      opacity: 0;
-      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      display: none !important;
     }
 
     body.in-playback-mode .ca-theater-backdrop,
     body:has(.card-opened) .ca-theater-backdrop,
     body:has(.audio-opened) .ca-theater-backdrop {
-      opacity: 1;
+      opacity: 0 !important;
+      display: none !important;
     }
 
-    /* Atmospheric Deep Space Radial Glow & Cyber Grid */
+    /* Atmospheric Deep Space Radial Glow (Disabled to keep stage lighting pure) */
     .ca-bg-nebula {
-      position: absolute;
-      inset: -20%;
-      width: 140%;
-      height: 140%;
-      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(180, 10, 30, 0.04) 0%, rgba(30, 2, 8, 0.12) 45%, rgba(0,0,0,0.28) 88%);
-      pointer-events: none;
-      z-index: 1;
-      transition: opacity 0.7s ease;
+      display: none !important;
     }
 
     body.in-playback-mode .ca-bg-nebula,
     body:has(.card-opened) .ca-bg-nebula {
-      opacity: 0.3;
+      opacity: 0 !important;
+      display: none !important;
     }
 
     .ca-bg-grid {
